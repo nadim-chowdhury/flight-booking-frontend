@@ -1,7 +1,9 @@
-import { useRouter } from "next/router";
+"use client";
+
+import { useRouter } from "next/navigation";
 import { useState } from "react";
-import ReviewForm from "../../components/ReviewForm";
-import Reviews from "../../components/Reviews";
+import ReviewForm from "@/components/ReviewForm";
+import Reviews from "@/components/Reviews";
 
 export default function FlightDetails() {
   const router = useRouter();

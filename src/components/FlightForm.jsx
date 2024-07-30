@@ -1,6 +1,8 @@
+"use client";
+
 import { useForm } from "react-hook-form";
 import { useMutation } from "@apollo/client";
-import { CREATE_FLIGHT, UPDATE_FLIGHT } from "../graphql/queries";
+import { CREATE_FLIGHT, UPDATE_FLIGHT } from "@/graphql/mutation";
 
 export default function FlightForm({ flight, onCompleted }) {
   const { register, handleSubmit, reset } = useForm({

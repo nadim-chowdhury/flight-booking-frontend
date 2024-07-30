@@ -1,7 +1,9 @@
+"use client";
+
 import { useState } from "react";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { useMutation } from "@apollo/client";
-import { UPLOAD_PROFILE_PICTURE } from "../graphql/queries";
+import { UPLOAD_PROFILE_PICTURE } from "@/graphql/query";
 
 export default function ProfilePictureUpload() {
   const [files, setFiles] = useState([]);

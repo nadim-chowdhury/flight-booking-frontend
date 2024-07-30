@@ -1,14 +1,17 @@
+"use client";
+
 import { useQuery } from "@apollo/client";
-import { GET_DASHBOARD_OVERVIEW } from "../graphql/queries";
+import { GET_DASHBOARD_OVERVIEW } from "@/graphql/query";
+import { mocksAdminDashboardData } from "@/utils/demoData";
 
 export default function Dashboard() {
   const { data, loading, error } = useQuery(GET_DASHBOARD_OVERVIEW);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
+  // if (loading) return <p>Loading...</p>;
+  // if (error) return <p>Error: {error.message}</p>;
 
   const { bookingsCount, usersCount, flightsCount, revenue } =
-    data.dashboardOverview;
+    mocksAdminDashboardData.dashboardOverview;
 
   return (
     <div>

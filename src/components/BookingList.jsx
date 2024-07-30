@@ -1,6 +1,10 @@
+"use client";
+
 import { useQuery, useMutation } from "@apollo/client";
-import { GET_BOOKINGS, UPDATE_BOOKING_STATUS } from "../graphql/queries";
 import { useForm } from "react-hook-form";
+import { GET_BOOKINGS } from "@/graphql/query";
+import { mocksBookingList } from "@/utils/demoData";
+import { UPDATE_BOOKING_STATUS } from "@/graphql/mutation";
 
 export default function BookingList() {
   const { data, loading, error } = useQuery(GET_BOOKINGS);
@@ -9,8 +13,8 @@ export default function BookingList() {
   });
   const { register, handleSubmit } = useForm();
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
+  // if (loading) return <p>Loading...</p>;
+  // if (error) return <p>Error: {error.message}</p>;
 
   const onSubmit = async (formData) => {
     await updateBookingStatus({
@@ -22,7 +26,7 @@ export default function BookingList() {
     <div>
       <h2>Booking Management</h2>
       <ul>
-        {data.bookings.map((booking) => (
+        {mocksBookingList.bookings.map((booking) => (
           <li key={booking.id}>
             <p>
               Flight: {booking.flight.airline} from {booking.flight.from} to{" "}

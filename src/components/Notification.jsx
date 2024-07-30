@@ -1,5 +1,7 @@
+"use client";
+
 import { useForm } from "react-hook-form";
-import { useNotification } from "../hooks/useNotification";
+import { useNotification } from "@/hooks/useNotification";
 
 export default function Notification() {
   const { register, handleSubmit } = useForm();

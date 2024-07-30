@@ -1,19 +1,22 @@
+"use client";
+
 import { useState } from "react";
 import { useMutation } from "@apollo/client";
-import { REGISTER_USER } from "../graphql/queries";
+import { REGISTER_USER } from "@/graphql/mutation";
 import { useRouter } from "next/router";
 
 export default function Register() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [register, { data, loading, error }] = useMutation(REGISTER_USER);
+
+  // const [register, { data, loading, error }] = useMutation(REGISTER_USER);
   const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await register({ variables: { username, email, password } });
+      // await register({ variables: { username, email, password } });
       router.push("/login");
     } catch (error) {
       console.error("Registration failed", error);

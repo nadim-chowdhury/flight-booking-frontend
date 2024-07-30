@@ -1,13 +1,17 @@
+"use client";
+
 import { useQuery } from "@apollo/client";
-import { GET_REPORTS } from "../graphql/queries";
+import { GET_REPORTS } from "@/graphql/query";
+import { mocksAdminReportsData } from "@/utils/demoData";
 
 export default function Reports() {
   const { data, loading, error } = useQuery(GET_REPORTS);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
+  // if (loading) return <p>Loading...</p>;
+  // if (error) return <p>Error: {error.message}</p>;
 
-  const { bookingsCount, revenue, userActivity } = data.reports;
+  const { bookingsCount, revenue, userActivity } =
+    mocksAdminReportsData.reports;
 
   return (
     <div>

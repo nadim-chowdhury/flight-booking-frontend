@@ -1,5 +1,7 @@
+"use client";
+
+import { SEND_NOTIFICATION } from "@/graphql/query";
 import { useMutation } from "@apollo/client";
-import { SEND_NOTIFICATION } from "../graphql/queries";
 
 export const useNotification = () => {
   const [sendNotification, { loading, error }] = useMutation(SEND_NOTIFICATION);

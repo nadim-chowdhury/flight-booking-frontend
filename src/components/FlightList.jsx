@@ -1,5 +1,7 @@
+"use client";
+
+import { BOOK_FLIGHT } from "@/graphql/mutation";
 import { useMutation } from "@apollo/client";
-import { BOOK_FLIGHT } from "../graphql/queries";
 
 export default function FlightList({ flights, userId }) {
   const [bookFlight] = useMutation(BOOK_FLIGHT);

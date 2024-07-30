@@ -112,10 +112,12 @@
 //   );
 // }
 
+"use client";
+
 import { useState } from "react";
-import FlightSearch from "../components/FlightSearch";
-import FlightList from "../components/FlightList";
-import { useRouter } from "next/router";
+import FlightSearch from "@/components/FlightSearch";
+import FlightList from "@/components/FlightList";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const [flights, setFlights] = useState([]);

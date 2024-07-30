@@ -1,6 +1,8 @@
+"use client";
+
 import { useForm } from "react-hook-form";
 import { useMutation } from "@apollo/client";
-import { CREATE_REVIEW } from "../graphql/queries";
+import { CREATE_REVIEW } from "@/graphql/query";
 
 export default function ReviewForm({ flightId, onReviewSubmitted }) {
   const { register, handleSubmit } = useForm();

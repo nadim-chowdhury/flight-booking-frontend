@@ -1,7 +1,10 @@
+"use client";
+
 import { useState } from "react";
 import { useMutation } from "@apollo/client";
-import { LOGIN_USER } from "../graphql/queries";
-import { useRouter } from "next/router";
+// import { LOGIN_USER } from "@/graphql/query";
+import { useRouter } from "next/navigation";
+import { LOGIN_USER } from "@/graphql/mutation";
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -49,19 +52,19 @@ export default function Login() {
   );
 }
 
-  //  import { signIn } from 'next-auth/client';
+//  import { signIn } from 'next-auth/client';
 
-  //  export default function Login() {
-  //    // ...existing code
+//  export default function Login() {
+//    // ...existing code
 
-  //    return (
-  //      <div>
-  //        <h1>Login</h1>
-  //        <form onSubmit={handleSubmit}>
-  //          {/* ...existing code */}
-  //        </form>
-  //        <button onClick={() => signIn('google')}>Login with Google</button>
-  //        <button onClick={() => signIn('facebook')}>Login with Facebook</button>
-  //      </div>
-  //    );
-  //  }
+//    return (
+//      <div>
+//        <h1>Login</h1>
+//        <form onSubmit={handleSubmit}>
+//          {/* ...existing code */}
+//        </form>
+//        <button onClick={() => signIn('google')}>Login with Google</button>
+//        <button onClick={() => signIn('facebook')}>Login with Facebook</button>
+//      </div>
+//    );
+//  }

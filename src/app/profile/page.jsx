@@ -1,22 +1,26 @@
+"use client";
+
 import { useQuery, useMutation } from "@apollo/client";
 import { useState } from "react";
-import { GET_USER_PROFILE, UPDATE_USER_PROFILE } from "../graphql/queries";
+import { GET_USER_PROFILE } from "@/graphql/query";
 import { useRouter } from "next/router";
+import { UPDATE_USER_PROFILE } from "@/graphql/mutation";
 
 export default function Profile() {
-  const { data, loading, error } = useQuery(GET_USER_PROFILE);
-  const [updateProfile] = useMutation(UPDATE_USER_PROFILE);
+  // const { data, loading, error } = useQuery(GET_USER_PROFILE);
+  // const [updateProfile] = useMutation(UPDATE_USER_PROFILE);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
+  
   const router = useRouter();
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
+  // if (loading) return <p>Loading...</p>;
+  // if (error) return <p>Error: {error.message}</p>;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await updateProfile({ variables: { username, email } });
+      // await updateProfile({ variables: { username, email } });
       router.push("/");
     } catch (error) {
       console.error("Update failed", error);

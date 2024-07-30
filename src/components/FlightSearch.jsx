@@ -1,7 +1,9 @@
+"use client";
+
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useLazyQuery } from "@apollo/client";
-import { SEARCH_FLIGHTS } from "../graphql/queries";
+import { SEARCH_FLIGHTS } from "@/graphql/query";
 import { format } from "date-fns";
 
 export default function FlightSearch({ onFlightsFound }) {
@@ -50,7 +52,7 @@ export default function FlightSearch({ onFlightsFound }) {
 }
 
 // import { useQuery, useMutation } from '@apollo/client';
-// import { GET_FLIGHTS, DELETE_FLIGHT } from '../graphql/queries';
+// import { GET_FLIGHTS, DELETE_FLIGHT } from '@/graphql/query';
 
 // export default function FlightList({ onEdit }) {
 //   const { data, loading, error } = useQuery(GET_FLIGHTS);
