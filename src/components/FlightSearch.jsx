@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useLazyQuery } from "@apollo/client";
 import { SEARCH_FLIGHTS } from "@/graphql/query";
@@ -20,72 +20,59 @@ export default function FlightSearch({ onFlightsFound }) {
         departureDate: format(new Date(departureDate), "yyyy-MM-dd"),
       },
     });
+  };
 
+  useEffect(() => {
     if (data) {
       onFlightsFound(data.searchFlights);
     }
-  };
+  }, [data, onFlightsFound]);
 
   return (
-    <div>
-      <h2>Search Flights</h2>
-      <form onSubmit={handleSubmit(onSubmit)}>
+    <div className="bg-white p-6 rounded-lg shadow-md">
+      <h2 className="text-2xl font-bold mb-6">Search Flights</h2>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div>
-          <label>From:</label>
-          <input type="text" {...register("from")} required />
+          <label className="block text-sm font-medium text-gray-700">
+            From:
+          </label>
+          <input
+            type="text"
+            {...register("from", { required: true })}
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+            placeholder="Enter departure city"
+          />
         </div>
         <div>
-          <label>To:</label>
-          <input type="text" {...register("to")} required />
+          <label className="block text-sm font-medium text-gray-700">To:</label>
+          <input
+            type="text"
+            {...register("to", { required: true })}
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+            placeholder="Enter destination city"
+          />
         </div>
         <div>
-          <label>Departure Date:</label>
-          <input type="date" {...register("departureDate")} required />
+          <label className="block text-sm font-medium text-gray-700">
+            Departure Date:
+          </label>
+          <input
+            type="date"
+            {...register("departureDate", { required: true })}
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+          />
         </div>
-        <button type="submit" disabled={loading}>
+        <button
+          type="submit"
+          className={`w-full py-2 px-4 text-white font-semibold rounded-md ${
+            loading ? "bg-gray-500" : "bg-blue-600 hover:bg-blue-700"
+          }`}
+          disabled={loading}
+        >
           {loading ? "Searching..." : "Search"}
         </button>
-        {error && <p>Error: {error.message}</p>}
+        {error && <p className="text-red-500 mt-4">Error: {error.message}</p>}
       </form>
     </div>
   );
 }
-
-// import { useQuery, useMutation } from '@apollo/client';
-// import { GET_FLIGHTS, DELETE_FLIGHT } from '@/graphql/query';
-
-// export default function FlightList({ onEdit }) {
-//   const { data, loading, error } = useQuery(GET_FLIGHTS);
-//   const [deleteFlight] = useMutation(DELETE_FLIGHT, {
-//     refetchQueries: [{ query: GET_FLIGHTS }],
-//   });
-
-//   if (loading) return <p>Loading...</p>;
-//   if (error) return <p>Error: {error.message}</p>;
-
-//   const handleDelete = async (id) => {
-//     await deleteFlight({ variables: { id } });
-//   };
-
-//   return (
-//     <div>
-//       <h2>Flights</h2>
-//       <ul>
-//         {data.flights.map((flight) => (
-//           <li key={flight.id}>
-//             <div>
-//               <p>Airline: {flight.airline}</p>
-//               <p>From: {flight.from}</p>
-//               <p>To: {flight.to}</p>
-//               <p>Departure Time: {new Date(flight.departureTime).toLocaleString()}</p>
-//               <p>Arrival Time: {new Date(flight.arrivalTime).toLocaleString()}</p>
-//               <p>Available Seats: {flight.availableSeats}</p>
-//               <button onClick={() => onEdit(flight)}>Edit</button>
-//               <button onClick={() => handleDelete(flight.id)}>Delete</button>
-//             </div>
-//           </li>
-//         ))}
-//       </ul>
-//     </div>
-//   );
-// }
