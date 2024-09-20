@@ -3,14 +3,19 @@
 import { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { REGISTER_USER } from "@/graphql/mutation";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { Input } from "@/components/ui/Input";
+import { Label } from "@/components/ui/Label";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function Register() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // const [register, { data, loading, error }] = useMutation(REGISTER_USER);
+  const [register, { data, loading, error }] = useMutation(REGISTER_USER);
   const router = useRouter();
 
   const handleSubmit = async (e) => {
@@ -24,37 +29,74 @@ export default function Register() {
   };
 
   return (
-    <div>
-      <h1>Register</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Username</label>
-          <input
+    <div className="h-screen grid md:grid-cols-2 grid-cols-1">
+      {/* Left Image Section */}
+      <div className="hidden md:block h-full">
+        <Image
+          src="https://images.unsplash.com/photo-1534775053122-dcd28a281520?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          alt="Register Background"
+          width={1280}
+          height={720}
+          className="h-full w-full object-cover"
+        />
+      </div>
+
+      {/* Registration Form Section */}
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col items-center justify-center gap-4 px-6 md:px-12 py-12 bg-gray-100"
+      >
+        <h1 className="text-3xl font-semibold text-blue-600">Register</h1>
+
+        <div className="w-full">
+          <Label htmlFor="username">Username</Label>
+          <Input
             type="text"
+            id="username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            className="w-full mt-1 p-3 border rounded-md"
           />
         </div>
-        <div>
-          <label>Email</label>
-          <input
+
+        <div className="w-full">
+          <Label htmlFor="email">Email</Label>
+          <Input
             type="email"
+            id="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            className="w-full mt-1 p-3 border rounded-md"
           />
         </div>
-        <div>
-          <label>Password</label>
-          <input
+
+        <div className="w-full">
+          <Label htmlFor="password">Password</Label>
+          <Input
             type="password"
+            id="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            className="w-full mt-1 p-3 border rounded-md"
           />
         </div>
-        <button type="submit" disabled={loading}>
+
+        <Button
+          type="submit"
+          disabled={loading}
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md"
+        >
           {loading ? "Registering..." : "Register"}
-        </button>
-        {error && <p>Error: {error.message}</p>}
+        </Button>
+
+        {error && <p className="text-red-500 mt-2">Error: {error.message}</p>}
+
+        <p>
+          Already have an account?{" "}
+          <Link href="/login" className="text-blue-600 hover:underline">
+            Login here
+          </Link>
+        </p>
       </form>
     </div>
   );

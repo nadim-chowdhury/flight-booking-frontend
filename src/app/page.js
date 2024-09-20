@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 export default function Home() {
   const [flights, setFlights] = useState([]);
   const router = useRouter();
-  const userId = "current-user-id"; // Replace with the actual logged-in user ID
+  const userId = "current-user-id";
 
   const handleFlightsFound = (foundFlights) => {
     setFlights(foundFlights);
