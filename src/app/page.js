@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import FlightSearch from "@/components/FlightSearch";
-import FlightList from "@/components/FlightList";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
+import { Button } from "../components/ui/button";
+import FlightSearch from "../components/FlightSearch";
+import FlightList from "../components/FlightList";
 
 export default function Home() {
   const [flights, setFlights] = useState([]);
@@ -18,12 +18,12 @@ export default function Home() {
   return (
     <div className="">
       {/* Hero Section */}
-      <section className="bg-[url('https://images.unsplash.com/photo-1521086248378-5fe2b23c8b23?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-cover bg-no-repeat min-h-[95vh] text-white py-20">
-        <div className="container mx-auto text-center">
-          <h1 className="text-5xl font-bold mb-4">Book Your Next Flight</h1>
+      <section className="bg-[url('https://images.unsplash.com/photo-1521086248378-5fe2b23c8b23?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-cover bg-no-repeat min-h-[95vh] text-white py-20 md:py-32">
+        <div className="container mx-auto text-center tracking-wide">
+          {/* <h1 className="text-5xl font-bold mb-4">Book Your Next Flight</h1>
           <p className="mb-8">
             Find the best deals on flights to your favorite destinations.
-          </p>
+          </p> */}
           <FlightSearch onFlightsFound={handleFlightsFound} />
         </div>
       </section>
@@ -56,12 +56,10 @@ export default function Home() {
       {/* Call to Action Section */}
       <section className="bg-[url('https://images.unsplash.com/photo-1488085061387-422e29b40080?q=80&w=1931&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-no-repeat bg-cover text-white">
         <div className="container mx-auto py-16 text-center bg-gradient-to-r from-transparent via-black/50 to-transparent">
-          <h2 className="text-3xl font-bold mb-4">
+          <h2 className="text-3xl font-bold mb-4 tracking-wider">
             Ready to Book Your Flight?
           </h2>
-          <p className="text-lg mb-8">
-            Sign up now and get access to exclusive deals!
-          </p>
+          <p className="mb-8">Sign up now and get access to exclusive deals!</p>
           <Button
             onClick={() => router.push("/register")}
             className="bg-blue-600"
@@ -95,7 +93,7 @@ export default function Home() {
       </section>
 
       {/* Flight List Section */}
-      {flights.length > 0 && (
+      {flights.length >= 0 && (
         <section className="py-16">
           <div className="container mx-auto">
             <div className="bg-gray-100 p-6 rounded-lg">

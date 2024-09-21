@@ -1,0 +1,32 @@
+export const flightsDemoData = [
+  {
+    id: "1",
+    airline: "Airline A",
+    from: "New York (JFK)",
+    to: "London (LHR)",
+    departureTime: "2024-09-21 08:00 AM",
+    arrivalTime: "2024-09-21 08:00 PM",
+    duration: "10h",
+    price: 500,
+  },
+  {
+    id: "2",
+    airline: "Airline B",
+    from: "San Francisco (SFO)",
+    to: "Tokyo (NRT)",
+    departureTime: "2024-09-22 09:00 AM",
+    arrivalTime: "2024-09-23 11:00 AM",
+    duration: "12h",
+    price: 750,
+  },
+  {
+    id: "3",
+    airline: "Airline C",
+    from: "Los Angeles (LAX)",
+    to: "Sydney (SYD)",
+    departureTime: "2024-09-23 10:00 PM",
+    arrivalTime: "2024-09-24 07:00 AM",
+    duration: "15h",
+    price: 900,
+  },
+];

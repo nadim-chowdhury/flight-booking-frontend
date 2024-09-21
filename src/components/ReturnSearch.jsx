@@ -41,7 +41,7 @@ export default function ReturnSearch() {
   };
 
   return (
-    <div className="rounded-lg p-6">
+    <div className="rounded-lg md:py-6">
       <form
         onSubmit={handleSearch}
         className="flex flex-col md:flex-row md:items-end gap-4"

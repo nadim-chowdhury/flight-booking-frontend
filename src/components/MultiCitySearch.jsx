@@ -55,11 +55,7 @@ export default function MultiCitySearch() {
   };
 
   return (
-    <div className="rounded-lg p-6">
-      <h2 className="text-xl font-semibold text-gray-800 mb-4">
-        Multi-City Flight Search
-      </h2>
-
+    <div className="rounded-lg md:py-6">
       <form onSubmit={handleSearch}>
         {flights.map((flight, index) => (
           <div

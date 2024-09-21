@@ -17,7 +17,7 @@ export default function Header() {
       <div className="container mx-auto py-4 flex items-center justify-between">
         {/* Logo */}
         <Link href="/">
-          <h1 className="text-3xl font-bold uppercase">
+          <h1 className="text-3xl font-bold tracking-tight uppercase">
             Travel<span className="text-blue-600">Buddy</span>
           </h1>
         </Link>
@@ -102,7 +102,7 @@ export default function Header() {
             </li>
             <li>
               <Link href="/login">
-                <span className="block px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-center">
+                <span className="block px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-sky-700 text-center">
                   Login
                 </span>
               </Link>

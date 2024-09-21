@@ -1,9 +1,9 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
-import ApolloProviderWrapper from "@/lib/ApolloProviderWrapper";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import ApolloProviderWrapper from "../lib/ApolloProviderWrapper";
 import StoreProviderWrapper from "../lib/StoreProviderWrapper";
+import Header from "../components/Header";
+// import Footer from "../components/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,7 +20,13 @@ export default function RootLayout({ children }) {
           <StoreProviderWrapper>
             <Header />
             {children}
-            <Footer />
+            {/* <Footer /> */}
+            <div className="bg-slate-900 text-white/80 py-4 text-center">
+              <p>
+                &copy; {new Date().getFullYear()} Travel Buddy. All rights
+                reserved.
+              </p>
+            </div>
           </StoreProviderWrapper>
         </ApolloProviderWrapper>
       </body>

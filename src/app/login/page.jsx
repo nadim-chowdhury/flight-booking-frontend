@@ -44,7 +44,7 @@ export default function Login() {
       {/* Login Form Section */}
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col items-center justify-center gap-4 px-6 md:px-12 py-12 bg-gray-100"
+        className="flex flex-col items-center justify-center gap-4 px-6 md:px-12 py-12"
       >
         <h1 className="text-3xl font-semibold text-blue-600">Login</h1>
 
@@ -55,7 +55,7 @@ export default function Login() {
             id="username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            className="w-full mt-1 p-3 border rounded-md"
+            className="w-full mt-1 p-3 border rounded-md bg-slate-100"
           />
         </div>
 
@@ -66,14 +66,14 @@ export default function Login() {
             id="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full mt-1 p-3 border rounded-md"
+            className="w-full mt-1 p-3 border rounded-md bg-slate-100"
           />
         </div>
 
         <Button
           type="submit"
           disabled={loading}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md"
+          className="w-full bg-blue-600 hover:bg-sky-700 text-white py-2 rounded-md"
         >
           {loading ? "Logging in..." : "Login"}
         </Button>

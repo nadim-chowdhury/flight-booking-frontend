@@ -1,21 +1,53 @@
 import Link from "next/link";
-import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
+import { FaFacebook, FaInstagram, FaLinkedin, FaTwitter } from "react-icons/fa";
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-900 text-gray-300 py-8">
+    <footer className="bg-gray-900 text-gray-300 py-12">
       <div className="container mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
           {/* Column 1: About */}
-          <div>
+          {/* <div>
             <h3 className="text-xl font-semibold text-white mb-4">
               Travel Buddy
             </h3>
-            <p className="text-gray-400">
+            <p className="w-36 mx-auto">
               Your trusted partner for seamless flight bookings and travel deals
               worldwide.
             </p>
-          </div>
+
+            <div className="mt-4">
+              <h3 className="text-xl font-semibold text-white mb-4">
+                Follow Us
+              </h3>
+              <div className="flex items-center justify-center gap-4">
+                <Link
+                  href="https://facebook.com"
+                  className="text-gray-400 hover:text-white"
+                >
+                  <FaFacebook size={20} />
+                </Link>
+                <Link
+                  href="https://instagram.com"
+                  className="text-gray-400 hover:text-white"
+                >
+                  <FaInstagram size={20} />
+                </Link>
+                <Link
+                  href="https://twitter.com"
+                  className="text-gray-400 hover:text-white"
+                >
+                  <FaTwitter size={20} />
+                </Link>
+                <Link
+                  href="https://twitter.com"
+                  className="text-gray-400 hover:text-white"
+                >
+                  <FaLinkedin size={20} />
+                </Link>
+              </div>
+            </div>
+          </div> */}
 
           {/* Column 2: Links */}
           <div>
@@ -71,31 +103,6 @@ export default function Footer() {
                 </Link>
               </li>
             </ul>
-          </div>
-
-          {/* Column 4: Social Media */}
-          <div>
-            <h3 className="text-xl font-semibold text-white mb-4">Follow Us</h3>
-            <div className="flex space-x-4">
-              <span
-                href="https://facebook.com"
-                className="text-gray-400 hover:text-white"
-              >
-                <FaFacebook size={24} />
-              </span>
-              <span
-                href="https://instagram.com"
-                className="text-gray-400 hover:text-white"
-              >
-                <FaInstagram size={24} />
-              </span>
-              <span
-                href="https://twitter.com"
-                className="text-gray-400 hover:text-white"
-              >
-                <FaTwitter size={24} />
-              </span>
-            </div>
           </div>
         </div>
 
