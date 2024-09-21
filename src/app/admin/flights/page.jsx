@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import FlightForm from "@/components/FlightForm";
-import FlightList from "@/components/FlightList";
-import { FlightListDemo } from "@/utils/demoData";
+import FlightForm from "../../../components/FlightForm";
+import FlightList from "../../../components/FlightList";
+import { FlightListDemo } from "../../../utils/demoData";
 
 export default function AdminFlightsPage() {
   const [selectedFlight, setSelectedFlight] = useState(null);

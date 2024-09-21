@@ -8,6 +8,7 @@ import FlightList from "../components/FlightList";
 
 export default function Home() {
   const [flights, setFlights] = useState([]);
+  
   const router = useRouter();
   const userId = "current-user-id";
 
@@ -93,7 +94,7 @@ export default function Home() {
       </section>
 
       {/* Flight List Section */}
-      {flights.length >= 0 && (
+      {/* {flights.length >= 0 && (
         <section className="py-16">
           <div className="container mx-auto">
             <div className="bg-gray-100 p-6 rounded-lg">
@@ -102,7 +103,7 @@ export default function Home() {
             </div>
           </div>
         </section>
-      )}
+      )} */}
     </div>
   );
 }

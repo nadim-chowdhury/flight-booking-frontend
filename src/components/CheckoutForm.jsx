@@ -1,9 +1,9 @@
 "use client";
 
-import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import { useState } from "react";
+import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import { useMutation } from "@apollo/client";
-import { CREATE_PAYMENT_INTENT, SAVE_PAYMENT } from "@/graphql/mutation";
+import { CREATE_PAYMENT_INTENT, SAVE_PAYMENT } from "../graphql/mutation";
 
 export default function CheckoutForm({ bookingId }) {
   const stripe = useStripe();

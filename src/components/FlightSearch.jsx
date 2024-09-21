@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useLazyQuery } from "@apollo/client";
 import { useForm } from "react-hook-form";
 import { format } from "date-fns";
-import { useLazyQuery } from "@apollo/client";
 import { SEARCH_FLIGHTS } from "../graphql/query";
 import OneWaySearch from "./OneWaySearch";
 import ReturnSearch from "./ReturnSearch";

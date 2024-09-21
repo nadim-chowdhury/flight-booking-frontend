@@ -1,9 +1,9 @@
 "use client";
 
 import { useQuery, useMutation } from "@apollo/client";
-import { GET_USERS } from "@/graphql/query";
 import { useForm } from "react-hook-form";
-import { UPDATE_USER_ROLE } from "@/graphql/mutation";
+import { GET_USERS } from "../graphql/query";
+import { UPDATE_USER_ROLE } from "../graphql/mutation";
 
 export default function UserList() {
   const { data, loading, error } = useQuery(GET_USERS);

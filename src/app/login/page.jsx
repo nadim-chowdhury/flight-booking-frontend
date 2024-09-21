@@ -1,14 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { useMutation } from "@apollo/client";
 import { useRouter } from "next/navigation";
-import { LOGIN_USER } from "@/graphql/mutation";
-import Image from "next/image";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import Image from "next/image";
+import { useMutation } from "@apollo/client";
+import { LOGIN_USER } from "../../graphql/mutation";
+import { Input } from "../../components/ui/input";
+import { Label } from "../../components/ui/label";
+import { Button } from "../../components/ui/button";
 
 export default function Login() {
   const [username, setUsername] = useState("");

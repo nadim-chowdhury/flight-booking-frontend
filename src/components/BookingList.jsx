@@ -2,9 +2,9 @@
 
 import { useQuery, useMutation } from "@apollo/client";
 import { useForm } from "react-hook-form";
-import { GET_BOOKINGS } from "@/graphql/query";
-import { mocksBookingList } from "@/utils/demoData";
-import { UPDATE_BOOKING_STATUS } from "@/graphql/mutation";
+import { GET_BOOKINGS } from "../graphql/query";
+import { mocksBookingList } from "../utils/demoData";
+import { UPDATE_BOOKING_STATUS } from "../graphql/mutation";
 
 export default function BookingList() {
   const { data, loading, error } = useQuery(GET_BOOKINGS);

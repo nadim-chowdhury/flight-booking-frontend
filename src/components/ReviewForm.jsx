@@ -1,23 +1,23 @@
 "use client";
 
-import { useForm } from "react-hook-form";
 import { useMutation } from "@apollo/client";
-import { CREATE_REVIEW } from "@/graphql/query";
+import { useForm } from "react-hook-form";
+// import { CREATE_REVIEW } from "../graphql/query";
 
 export default function ReviewForm({ flightId, onReviewSubmitted }) {
   const { register, handleSubmit } = useForm();
-  const [createReview, { loading, error }] = useMutation(CREATE_REVIEW);
+  // const [createReview, { loading, error }] = useMutation(CREATE_REVIEW);
 
   const onSubmit = async (formData) => {
     const { rating, comment } = formData;
-    try {
-      const response = await createReview({
-        variables: { flightId, rating: parseInt(rating), comment },
-      });
-      onReviewSubmitted(response.data.createReview);
-    } catch (error) {
-      console.error("Review submission error:", error);
-    }
+    // try {
+    //   const response = await createReview({
+    //     variables: { flightId, rating: parseInt(rating), comment },
+    //   });
+    //   onReviewSubmitted(response.data.createReview);
+    // } catch (error) {
+    //   console.error("Review submission error:", error);
+    // }
   };
 
   return (
@@ -38,10 +38,10 @@ export default function ReviewForm({ flightId, onReviewSubmitted }) {
           <label>Comment:</label>
           <textarea {...register("comment")} required />
         </div>
-        <button type="submit" disabled={loading}>
+        {/* <button type="submit" disabled={loading}>
           {loading ? "Submitting..." : "Submit"}
-        </button>
-        {error && <p>Error: {error.message}</p>}
+        </button> */}
+        {/* {error && <p>Error: {error.message}</p>} */}
       </form>
     </div>
   );

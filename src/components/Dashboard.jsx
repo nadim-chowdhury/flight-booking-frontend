@@ -1,8 +1,8 @@
 "use client";
 
 import { useQuery } from "@apollo/client";
-import { GET_DASHBOARD_OVERVIEW } from "@/graphql/query";
-import { mocksAdminDashboardData } from "@/utils/demoData";
+import { GET_DASHBOARD_OVERVIEW } from "../graphql/query";
+import { mocksAdminDashboardData } from "../utils/demoData";
 
 export default function Dashboard() {
   const { data, loading, error } = useQuery(GET_DASHBOARD_OVERVIEW);

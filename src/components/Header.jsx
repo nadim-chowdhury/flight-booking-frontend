@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
+import { Button } from "../components/ui/button";
 
 export default function Header() {
   const [navOpen, setNavOpen] = useState(false);

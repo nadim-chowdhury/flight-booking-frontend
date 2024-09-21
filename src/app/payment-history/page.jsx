@@ -1,8 +1,8 @@
 "use client";
 
 import { useQuery } from "@apollo/client";
-import { GET_PAYMENT_HISTORY } from "@/graphql/query";
 import { useRouter } from "next/navigation";
+import { GET_PAYMENT_HISTORY } from "../../graphql/query";
 
 export default function PaymentHistory({ userId }) {
   const { data, loading, error } = useQuery(GET_PAYMENT_HISTORY, {

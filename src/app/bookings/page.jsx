@@ -1,8 +1,8 @@
 "use client";
 
-import { useQuery } from "@apollo/client";
-import { GET_USER_BOOKINGS } from "@/graphql/query";
 import { useEffect, useState } from "react";
+import { useQuery } from "@apollo/client";
+import { GET_USER_BOOKINGS } from "../../graphql/query";
 
 const mocks = [
   {

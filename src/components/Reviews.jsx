@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@apollo/client";
-import { GET_REVIEWS } from "@/graphql/query";
+import { GET_REVIEWS } from "../graphql/query";
 
 export default function Reviews({ flightId }) {
   const { data, loading, error } = useQuery(GET_REVIEWS, {
