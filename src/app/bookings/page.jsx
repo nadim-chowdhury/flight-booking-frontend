@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useQuery } from "@apollo/client";
-import { GET_USER_BOOKINGS } from "../../graphql/query";
+// import { useEffect, useState } from "react";
+// import { useQuery } from "@apollo/client";
+// import { GET_USER_BOOKINGS } from "../../graphql/query";
 
 const mocks = [
   {
@@ -32,9 +32,9 @@ const mocks = [
 ];
 
 export default function Bookings({ userId }) {
-  const { data, loading, error } = useQuery(GET_USER_BOOKINGS, {
-    variables: { userId },
-  });
+  // const { data, loading, error } = useQuery(GET_USER_BOOKINGS, {
+  //   variables: { userId },
+  // });
 
   // if (loading) return <p>Loading...</p>;
   // if (error) return <p>Error: {error.message}</p>;
@@ -42,7 +42,7 @@ export default function Bookings({ userId }) {
   return (
     <div>
       <h2>Your Bookings</h2>
-      {mocks.map((booking) => (
+      {/* {mocks.map((booking) => (
         <div key={booking.id}>
           <p>Airline: {booking.flight.airline}</p>
           <p>From: {booking.flight.from}</p>
@@ -52,7 +52,7 @@ export default function Bookings({ userId }) {
           <p>Duration: {booking.flight.duration}</p>
           <p>Booking Time: {booking.bookingTime}</p>
         </div>
-      ))}
+      ))} */}
     </div>
   );
 }

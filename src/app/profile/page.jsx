@@ -1,36 +1,36 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/router";
-import { useQuery, useMutation } from "@apollo/client";
-import { GET_USER_PROFILE } from "../../graphql/query";
-import { UPDATE_USER_PROFILE } from "../../graphql/mutation";
+// import { useState } from "react";
+// import { useRouter } from "next/router";
+// import { useQuery, useMutation } from "@apollo/client";
+// import { GET_USER_PROFILE } from "../../graphql/query";
+// import { UPDATE_USER_PROFILE } from "../../graphql/mutation";
 
 export default function Profile() {
   // const { data, loading, error } = useQuery(GET_USER_PROFILE);
   // const [updateProfile] = useMutation(UPDATE_USER_PROFILE);
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
+  // const [username, setUsername] = useState("");
+  // const [email, setEmail] = useState("");
 
-  const router = useRouter();
+  // const router = useRouter();
 
   // if (loading) return <p>Loading...</p>;
   // if (error) return <p>Error: {error.message}</p>;
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      // await updateProfile({ variables: { username, email } });
-      router.push("/");
-    } catch (error) {
-      console.error("Update failed", error);
-    }
-  };
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     // await updateProfile({ variables: { username, email } });
+  //     router.push("/");
+  //   } catch (error) {
+  //     console.error("Update failed", error);
+  //   }
+  // };
 
   return (
     <div>
       <h1>Profile</h1>
-      <form onSubmit={handleSubmit}>
+      {/* <form onSubmit={handleSubmit}>
         <div>
           <label>Username</label>
           <input
@@ -48,7 +48,7 @@ export default function Profile() {
           />
         </div>
         <button type="submit">Update</button>
-      </form>
+      </form> */}
     </div>
   );
 }

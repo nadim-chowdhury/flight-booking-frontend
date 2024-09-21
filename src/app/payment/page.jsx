@@ -1,8 +1,8 @@
 "use client";
 
-import { loadStripe } from "@stripe/stripe-js";
-import { Elements } from "@stripe/react-stripe-js";
-import { useRouter } from "next/navigation";
+// import { loadStripe } from "@stripe/stripe-js";
+// import { Elements } from "@stripe/react-stripe-js";
+// import { useRouter } from "next/navigation";
 // import CheckoutForm from "../../components/CheckoutForm";
 
 const stripePromise = loadStripe(
@@ -16,9 +16,9 @@ export default function Payment() {
   return (
     <div>
       <h1>Complete Your Payment</h1>
-      <Elements stripe={stripePromise}>
-        {/* <CheckoutForm bookingId={bookingId} /> */}
-      </Elements>
+      {/* <Elements stripe={stripePromise}> */}
+      {/* <CheckoutForm bookingId={bookingId} /> */}
+      {/* </Elements> */}
     </div>
   );
 }
