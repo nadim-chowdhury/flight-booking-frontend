@@ -13,8 +13,8 @@ export default function Header() {
   };
 
   return (
-    <header className="bg-white border-b sticky top-0">
-      <div className="container mx-auto py-4 flex items-center justify-between">
+    <header className="bg-white border-b sticky top-0 z-50">
+      <div className="max-w-6xl px-4 mx-auto py-4 flex items-center justify-between">
         {/* Logo */}
         <Link href="/">
           <h1 className="text-3xl font-bold tracking-tight uppercase">

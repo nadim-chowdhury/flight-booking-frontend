@@ -21,7 +21,7 @@ export default function RootLayout({ children }) {
             <Header />
             {children}
             {/* <Footer /> */}
-            <div className="bg-slate-900 text-white/80 py-4 text-center">
+            <div className="bg-slate-900 text-white py-4 text-center">
               <p>
                 &copy; {new Date().getFullYear()} Travel Buddy. All rights
                 reserved.
