@@ -85,7 +85,7 @@ export default function AllFlights() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 flex flex-col gap-2">
+    <div className="max-w-6xl mx-auto px-4 flex flex-col gap-2 mb-16">
       <div className="py-12">
         {/* <h2 className="text-center tracking-wide text-3xl md:text-5xl font-bold mb-8">
           Book Your Next Flight
@@ -93,7 +93,9 @@ export default function AllFlights() {
         {/* <p className="mb-8">
             Find the best deals on flights to your favorite destinations.
           </p> */}
-        <FlightSearch onFlightsFound={handleFlightsFound} />
+        <div className="bg-slate-50 rounded-lg border">
+          <FlightSearch onFlightsFound={handleFlightsFound} />
+        </div>
       </div>
 
       {[1, 2, 3, 4, 5, 6, 7, 8].map((item, idx) => (

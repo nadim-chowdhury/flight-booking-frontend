@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon, Plus, Minus, Check } from "lucide-react";
 import { Calendar } from "../components/ui/calendar";
@@ -29,7 +29,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../components/ui/select";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function ReturnSearch() {
   const [departureCity, setDepartureCity] = useState("");
@@ -44,6 +44,28 @@ export default function ReturnSearch() {
   const [openDestination, setOpenDestination] = useState(false);
 
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const type = searchParams.get("type");
+
+  useEffect(() => {
+    const departureCityParam = searchParams.get("departureCity");
+    const destinationCityParam = searchParams.get("destinationCity");
+    const departureDateParam = searchParams.get("departureDate");
+    const returnDateParam = searchParams.get("returnDate");
+    const adultsParam = searchParams.get("adults");
+    const childrenParam = searchParams.get("children");
+    const infantsParam = searchParams.get("infants");
+    const seatTypeParam = searchParams.get("seatType");
+
+    if (departureCityParam) setDepartureCity(departureCityParam);
+    if (destinationCityParam) setDestinationCity(destinationCityParam);
+    if (departureDateParam) setDepartureDate(departureDateParam);
+    if (returnDateParam) setReturnDate(returnDateParam);
+    if (adultsParam) setAdults(Number(adultsParam));
+    if (childrenParam) setChildren(Number(childrenParam));
+    if (infantsParam) setInfants(Number(infantsParam));
+    if (seatTypeParam) setSeatType(seatTypeParam);
+  }, [searchParams]);
 
   const handleReturnTripSearch = (e) => {
     e.preventDefault();
@@ -77,7 +99,7 @@ export default function ReturnSearch() {
   return (
     <div className="rounded-lg md:pt-6">
       <form onSubmit={handleReturnTripSearch}>
-        <div className="flex flex-col md:flex-row md:items-end gap-4">
+        <div className="flex flex-col md:grid md:grid-cols-5 md:items-end gap-4">
           {/* Departure City */}
           <div className="w-full">
             <Label
@@ -94,11 +116,13 @@ export default function ReturnSearch() {
                   aria-expanded={openDeparture}
                   className="w-full text-black/60 justify-start"
                 >
-                  {departureCity
-                    ? allAirportsData.find(
-                        (airport) => airport.iata_code === departureCity
-                      )?.name
-                    : "Select City"}
+                  <span className="truncate">
+                    {departureCity
+                      ? allAirportsData.find(
+                          (airport) => airport.iata_code === departureCity
+                        )?.name
+                      : "Select City"}
+                  </span>
                 </Button>
               </PopoverTrigger>
               <PopoverContent align="start" className="w-full p-0">
@@ -151,11 +175,13 @@ export default function ReturnSearch() {
                   aria-expanded={openDestination}
                   className="w-full text-black/60 justify-start"
                 >
-                  {destinationCity
-                    ? allAirportsData.find(
-                        (airport) => airport.iata_code === destinationCity
-                      )?.name
-                    : "Select City"}
+                  <span className="truncate">
+                    {destinationCity
+                      ? allAirportsData.find(
+                          (airport) => airport.iata_code === destinationCity
+                        )?.name
+                      : "Select City"}
+                  </span>
                 </Button>
               </PopoverTrigger>
               <PopoverContent align="start" className="w-full p-0">
@@ -208,11 +234,13 @@ export default function ReturnSearch() {
                     !departureDate && "text-black/60"
                   }`}
                 >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
                   {departureDate ? (
                     format(departureDate, "PPP")
                   ) : (
-                    <span>Select Date</span>
+                    <>
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      <span>Select Date</span>
+                    </>
                   )}
                 </Button>
               </PopoverTrigger>
@@ -245,11 +273,13 @@ export default function ReturnSearch() {
                     !returnDate && "text-black/60"
                   }`}
                 >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
                   {returnDate ? (
                     format(returnDate, "PPP")
                   ) : (
-                    <span>Select Date</span>
+                    <>
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      <span>Select Date</span>
+                    </>
                   )}
                 </Button>
               </PopoverTrigger>
@@ -391,7 +421,16 @@ export default function ReturnSearch() {
 
                 {/* Seat Type */}
                 <div className="mt-2">
-                  <Select onValueChange={(value) => setSeatType(value)}>
+                  <Label
+                    htmlFor="infants"
+                    className="block text-sm text-start font-medium text-gray-700 my-1"
+                  >
+                    Select Seat Type
+                  </Label>
+                  <Select
+                    value={seatType}
+                    onValueChange={(value) => setSeatType(value)}
+                  >
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select Seat Type" />
                     </SelectTrigger>

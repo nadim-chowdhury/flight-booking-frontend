@@ -5,9 +5,10 @@ import Image from "next/image";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import FareSummary from "./FareSummary";
 import SearchFlightDetails from "./SearchFlightDetails";
+import { ChevronDown, ChevronUp } from "lucide-react";
 
 export default function FlightDetails({ flightData }) {
-  const [detailsOpen, setDetailsOpen] = useState(false);
+  const [detailsOpen, setDetailsOpen] = useState([]);
 
   const { flightCombination, fareSummary } = flightData;
 
@@ -22,13 +23,21 @@ export default function FlightDetails({ flightData }) {
     };
   });
 
+  const toggleDetails = (index) => {
+    setDetailsOpen((prevState) => {
+      const updatedState = [...prevState];
+      updatedState[index] = !updatedState[index];
+      return updatedState;
+    });
+  };
+
   const formattedPrice = `BDT ${fareSummary?.totalFareAmount || 0}`;
 
   return (
     <div className="flight-details bg-slate-50 rounded-lg border mb-4 pt-4">
       {flightDetailsData.map(({ flight, marketingCarrierLogo }, index) => (
         <div key={index} className="px-3 pb-4">
-          <div className="flight-content flex gap-4 justify-between flex-wrap border-b">
+          <div className="flight-content flex gap-4 justify-between flex-wrap">
             <div className="air-logo mb-4">
               <Image
                 src={marketingCarrierLogo}
@@ -59,12 +68,6 @@ export default function FlightDetails({ flightData }) {
               <p className="text-sm text-blue-500">
                 {flight?.productDateTime?.segmentTime}
               </p>
-              {/* <Image
-                src="/assets/img/non-stop-shape.png"
-                alt="Non-stop icon"
-                width={30}
-                height={30}
-              /> */}
               <p className="text-sm text-gray-800">Non Stop</p>
             </div>
 
@@ -81,38 +84,54 @@ export default function FlightDetails({ flightData }) {
               </p>
             </div>
 
-            {index === 0 && (
+            {index === 0 ? (
               <div className="price">
                 <p className="text-sm text-blue-500">Price</p>
                 <p className="text-xl font-bold text-gray-800">
                   {formattedPrice}
                 </p>
               </div>
+            ) : (
+              <div className="price hidden md:block">
+                <p className="text-sm text-slate-50">Price</p>
+                <p className="text-xl font-bold text-slate-50">
+                  {formattedPrice}
+                </p>
+              </div>
             )}
 
-            <div className="view-details mb-4">
-              <button className="book-now-btn bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition">
-                Book Now
-              </button>
-            </div>
+            {index === 0 ? (
+              <div className="view-details mb-4">
+                <button className="book-now-btn bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition">
+                  Book Now
+                </button>
+              </div>
+            ) : (
+              <div className="view-details mb-4 hidden md:block">
+                <button className="book-now-btn bg-slate-50 text-slate-50 font-bold py-2 px-4 rounded transition">
+                  Book Now
+                </button>
+              </div>
+            )}
           </div>
 
           <div className="accordion mt-4">
-            <div className="flex justify-between">
+            <div className="flex justify-between bg-white border rounded-md py-1 px-4">
               <p className="font-bold text-sm text-green-600">
                 {fareSummary?.refundable
                   ? "Refundable"
                   : "Partially Refundable"}
               </p>
               <button
-                className="font-bold text-red-600"
-                onClick={() => setDetailsOpen(!detailsOpen)}
+                className="font-bold text-red-600 flex items-center gap-1"
+                onClick={() => toggleDetails(index)}
               >
-                Flight Details
+                <span>Flight Details</span>
+                {detailsOpen[index] ? <ChevronUp /> : <ChevronDown />}
               </button>
             </div>
 
-            {detailsOpen && (
+            {detailsOpen[index] && (
               <Tabs defaultValue="flight-details" className="mt-4">
                 <TabsList className="grid w-full grid-cols-2 bg-slate-200 border">
                   <TabsTrigger value="flight-details">

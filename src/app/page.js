@@ -21,11 +21,15 @@ export default function Home() {
       {/* Hero Section */}
       <section className="bg-[url('https://images.unsplash.com/photo-1521086248378-5fe2b23c8b23?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-cover bg-no-repeat min-h-[95vh] text-white py-8 md:py-16">
         <div className="max-w-6xl px-4 mx-auto text-center tracking-wide">
-          <h2 className="text-3xl md:text-5xl font-bold mb-8">Book Your Next Flight</h2>
+          <h2 className="text-3xl md:text-5xl font-bold mb-8">
+            Book Your Next Flight
+          </h2>
           {/* <p className="mb-8">
             Find the best deals on flights to your favorite destinations.
           </p> */}
-          <FlightSearch onFlightsFound={handleFlightsFound} />
+          <div className="bg-white rounded-lg border">
+            <FlightSearch onFlightsFound={handleFlightsFound} />
+          </div>
         </div>
       </section>
 

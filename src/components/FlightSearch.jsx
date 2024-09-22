@@ -14,11 +14,21 @@ import {
   TabsList,
   TabsTrigger,
 } from "../components/ui/tabs";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function FlightSearch({ onFlightsFound }) {
+  const searchParams = useSearchParams();
+  const type = searchParams.get("type");
+
   const { register, handleSubmit } = useForm();
   const [searchFlights, { data, loading, error }] =
     useLazyQuery(SEARCH_FLIGHTS);
+
+  useEffect(() => {
+    if (data) {
+      onFlightsFound(data.searchFlights);
+    }
+  }, [data, onFlightsFound]);
 
   const onSubmit = async (formData) => {
     const { from, to, departureDate } = formData;
@@ -31,30 +41,24 @@ export default function FlightSearch({ onFlightsFound }) {
     });
   };
 
-  useEffect(() => {
-    if (data) {
-      onFlightsFound(data.searchFlights);
-    }
-  }, [data, onFlightsFound]);
-
   return (
-    <div className="bg-white p-6 rounded-lg border">
-      <Tabs defaultValue="oneway">
+    <div className="p-6">
+      <Tabs defaultValue={type || "one-way"}>
         <div className="flex items-start md:justify-start justify-center w-full">
           <TabsList className="bg-red-600 text-white p-2 h-11">
-            <TabsTrigger value="oneway">One Way</TabsTrigger>
-            <TabsTrigger value="return">Round Trip</TabsTrigger>
-            <TabsTrigger value="multicity">Multi City</TabsTrigger>
+            <TabsTrigger value="one-way">One Way</TabsTrigger>
+            <TabsTrigger value="return-trip">Return Trip</TabsTrigger>
+            <TabsTrigger value="multi-city">Multi City</TabsTrigger>
           </TabsList>
         </div>
 
-        <TabsContent value="oneway">
+        <TabsContent value="one-way">
           <OneWaySearch />
         </TabsContent>
-        <TabsContent value="return">
+        <TabsContent value="return-trip">
           <ReturnSearch />
         </TabsContent>
-        <TabsContent value="multicity">
+        <TabsContent value="multi-city">
           <MultiCitySearch />
         </TabsContent>
       </Tabs>
