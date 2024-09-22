@@ -54,19 +54,24 @@ export default function MultiCitySearch() {
 
   useEffect(() => {
     const flightSegments = [];
+    let i = 1;
 
-    for (let i = 1; i <= 4; i++) {
+    while (
+      searchParams.get(`flight${i}DepartureCity`) &&
+      searchParams.get(`flight${i}DestinationCity`) &&
+      searchParams.get(`flight${i}DepartureDate`)
+    ) {
       const departureCity = searchParams.get(`flight${i}DepartureCity`);
       const destinationCity = searchParams.get(`flight${i}DestinationCity`);
       const departureDate = searchParams.get(`flight${i}DepartureDate`);
 
-      if (departureCity && destinationCity && departureDate) {
-        flightSegments.push({
-          departureCity,
-          destinationCity,
-          departureDate: parseISO(departureDate),
-        });
-      }
+      flightSegments.push({
+        departureCity,
+        destinationCity,
+        departureDate: parseISO(departureDate),
+      });
+
+      i++;
     }
 
     if (flightSegments.length > 0) {
@@ -281,11 +286,13 @@ export default function MultiCitySearch() {
                           !flight.departureDate && "text-black/60"
                         )}
                       >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
                         {flight.departureDate ? (
                           format(flight.departureDate, "PPP")
                         ) : (
-                          <span className="font-medium">Select Date</span>
+                          <>
+                            <CalendarIcon className="mr-2 h-4 w-4" />
+                            <span className="font-medium">Select Date</span>
+                          </>
                         )}
                       </Button>
                     </PopoverTrigger>

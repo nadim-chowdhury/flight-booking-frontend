@@ -57,22 +57,26 @@ export default function SearchFlightDetails({ searchFlightDetailsData }) {
               <div className="flex justify-between mb-2">
                 <div>
                   <p className="text-xs font-bold">Departure:</p>
-                  <p>
+                  <p className="text-sm font-medium">
                     {departureLocation?.airportName} (
                     {departureLocation?.cityCode})
                   </p>
-                  <p>{departureLocation?.countryName}</p>
-                  <p>
+                  <p className="text-sm font-medium">
+                    {departureLocation?.countryName}
+                  </p>
+                  <p className="text-sm font-medium">
                     {timeOfDeparture} - {dateOfDepartureString}
                   </p>
                 </div>
                 <div>
                   <p className="text-xs font-bold">Arrival:</p>
-                  <p>
+                  <p className="text-sm font-medium">
                     {arrivalLocation?.airportName} ({arrivalLocation?.cityCode})
                   </p>
-                  <p>{arrivalLocation?.countryName}</p>
-                  <p>
+                  <p className="text-sm font-medium">
+                    {arrivalLocation?.countryName}
+                  </p>
+                  <p className="text-sm font-medium">
                     {timeOfArrival} - {dateOfArrivalString}
                   </p>
                 </div>

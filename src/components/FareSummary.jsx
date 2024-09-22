@@ -64,17 +64,17 @@ export default function FareSummary({ fareSummary }) {
               breakdownData.map((fare, index) => (
                 <tr className="text-sm" key={index}>
                   <td className="border px-2 py-2">{fare.type}</td>
-                  <td className="border px-2 py-2 text-blue-500">
+                  <td className="border px-2 py-2 text-blue-600">
                     BDT {fare.baseFare.toLocaleString()}
                   </td>
-                  <td className="border px-2 py-2 text-blue-500">
+                  <td className="border px-2 py-2 text-blue-600">
                     BDT {fare.taxesAndFees.toLocaleString()}
                   </td>
-                  <td className="border px-2 py-2 text-blue-500">
+                  <td className="border px-2 py-2 text-blue-600">
                     BDT ({fare.totalPerPassenger.toLocaleString()} x{" "}
                     {fare.count})
                   </td>
-                  <td className="border px-2 py-2 font-bold text-blue-500">
+                  <td className="border px-2 py-2 font-bold text-blue-600">
                     BDT {fare.total.toLocaleString()}
                   </td>
                 </tr>
@@ -92,14 +92,14 @@ export default function FareSummary({ fareSummary }) {
 
             {/* Total Row */}
             <tr className="text-sm">
-              <td className="border px-2 py-2 font-bold text-blue-500">
+              <td className="border px-2 py-2 font-bold text-blue-600">
                 Total ({totalTravelers} Traveler
                 {totalTravelers > 1 ? "s" : ""})
               </td>
               <td className="border px-2 py-2"></td>
               <td className="border px-2 py-2"></td>
               <td className="border px-2 py-2"></td>
-              <td className="border px-2 py-2 font-bold text-blue-500">
+              <td className="border px-2 py-2 font-bold text-blue-600">
                 BDT {totalFareAmount.toLocaleString()}
               </td>
             </tr>

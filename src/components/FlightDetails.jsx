@@ -43,50 +43,50 @@ export default function FlightDetails({ flightData }) {
                 src={marketingCarrierLogo}
                 alt="air-logo"
                 className="rounded"
-                width={60}
-                height={60}
+                width={48}
+                height={48}
               />
-              <p className="mt-2 text-sm font-medium text-blue-500">
+              <p className="mt-2 text-sm font-medium text-blue-600">
                 {flight?.companyId?.marketingCarrier}
               </p>
             </div>
 
             <div className="depart">
-              <p className="text-sm text-blue-500">Depart</p>
+              <p className="text-sm text-blue-600">Depart</p>
               <p className="text-xl font-bold text-gray-800">
                 {flight?.productDateTime?.timeOfDeparture}
               </p>
               <p className="text-sm font-semibold text-gray-800">
                 {flight?.productDateTime?.dateOfDepartureString}
               </p>
-              <p className="text-lg text-gray-800">
+              <p className="text-sm font-medium text-gray-800">
                 {flight?.location[0]?.city} ({flight?.location[0]?.cityCode})
               </p>
             </div>
 
             <div className="non-stop text-center">
-              <p className="text-sm text-blue-500">
+              <p className="text-sm text-blue-600">
                 {flight?.productDateTime?.segmentTime}
               </p>
               <p className="text-sm text-gray-800">Non Stop</p>
             </div>
 
             <div className="arrive">
-              <p className="text-sm text-blue-500">Arrive</p>
+              <p className="text-sm text-blue-600">Arrive</p>
               <p className="text-xl font-bold text-gray-800">
                 {flight?.productDateTime?.timeOfArrival}
               </p>
               <p className="text-sm font-semibold text-gray-800">
                 {flight?.productDateTime?.dateOfArrivalString}
               </p>
-              <p className="text-lg text-gray-800">
+              <p className="text-sm font-medium text-gray-800">
                 {flight?.location[1]?.city} ({flight?.location[1]?.cityCode})
               </p>
             </div>
 
             {index === 0 ? (
               <div className="price">
-                <p className="text-sm text-blue-500">Price</p>
+                <p className="text-sm text-blue-600">Price</p>
                 <p className="text-xl font-bold text-gray-800">
                   {formattedPrice}
                 </p>
