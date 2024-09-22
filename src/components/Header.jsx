@@ -60,9 +60,9 @@ export default function Header() {
         <div className="md:hidden">
           <Button onClick={toggleNav}>
             {navOpen ? (
-              <AiOutlineClose size={24} className="" />
+              <AiOutlineClose size={20} className="" />
             ) : (
-              <AiOutlineMenu size={24} className="" />
+              <AiOutlineMenu size={20} className="" />
             )}
           </Button>
         </div>
@@ -102,7 +102,7 @@ export default function Header() {
             </li>
             <li>
               <Link href="/login">
-                <span className="block px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-sky-700 text-center">
+                <span className="block px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-center">
                   Login
                 </span>
               </Link>

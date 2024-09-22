@@ -40,7 +40,7 @@ export default function FlightSearch({ onFlightsFound }) {
   return (
     <div className="bg-white p-6 rounded-lg border">
       <Tabs defaultValue="oneway">
-        <div className="flex items-start">
+        <div className="flex items-start md:justify-start justify-center w-full">
           <TabsList className="bg-red-600 text-white p-2 h-11">
             <TabsTrigger value="oneway">One Way</TabsTrigger>
             <TabsTrigger value="return">Round Trip</TabsTrigger>

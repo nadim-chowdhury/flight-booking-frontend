@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "../components/ui/button";
 import FlightSearch from "../components/FlightSearch";
-import FlightList from "../components/FlightList";
+// import FlightList from "../components/FlightList";
 
 export default function Home() {
   const [flights, setFlights] = useState([]);
