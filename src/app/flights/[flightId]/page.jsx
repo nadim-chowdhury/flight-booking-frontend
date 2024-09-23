@@ -176,7 +176,7 @@ export default function SelectedFlightDetails() {
 
         {/* Right Side - Fare Summary */}
         <div>
-          <div className="bg-slate-50 border rounded-lg p-6 mt-6 md:md-0">
+          <div className="bg-slate-50 border rounded-lg p-6 mt-6 md:mt-0">
             <h4 className="text-xl font-semibold">Fare Summary</h4>
             <div className="mt-4">
               <p>Base Fare</p>

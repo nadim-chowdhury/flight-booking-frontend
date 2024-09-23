@@ -1,8 +1,15 @@
 "use client";
 
-// import { useEffect, useState } from "react";
-// import { useQuery } from "@apollo/client";
-// import { GET_USER_BOOKINGS } from "../../graphql/query";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 const mocks = [
   {
@@ -31,28 +38,53 @@ const mocks = [
   },
 ];
 
-export default function Bookings({ userId }) {
-  // const { data, loading, error } = useQuery(GET_USER_BOOKINGS, {
-  //   variables: { userId },
-  // });
-
-  // if (loading) return <p>Loading...</p>;
-  // if (error) return <p>Error: {error.message}</p>;
-
+export default function Bookings() {
   return (
-    <div>
-      <h2>Your Bookings</h2>
-      {/* {mocks.map((booking) => (
-        <div key={booking.id}>
-          <p>Airline: {booking.flight.airline}</p>
-          <p>From: {booking.flight.from}</p>
-          <p>To: {booking.flight.to}</p>
-          <p>Departure: {booking.flight.departureTime}</p>
-          <p>Arrival: {booking.flight.arrivalTime}</p>
-          <p>Duration: {booking.flight.duration}</p>
-          <p>Booking Time: {booking.bookingTime}</p>
-        </div>
-      ))} */}
+    <div className="max-w-6xl mx-auto px-4 my-16 min-h-[90vh]">
+      <h2 className="text-xl font-semibold mb-4">Your Bookings</h2>
+
+      <div className="p-4 bg-slate-50 rounded-lg border">
+        <Table className="border">
+          <TableCaption>A list of your recent flight bookings.</TableCaption>
+          <TableHeader>
+            <TableRow className="bg-white border rounded-t-md text-slate-800">
+              <TableHead className="w-[100px]">Airline</TableHead>
+              <TableHead>From</TableHead>
+              <TableHead>To</TableHead>
+              <TableHead>Departure</TableHead>
+              <TableHead>Arrival</TableHead>
+              <TableHead>Duration</TableHead>
+              <TableHead className="text-right">Booking Time</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {mocks.map((booking) => (
+              <TableRow key={booking.id}>
+                <TableCell className="font-medium">
+                  {booking.flight.airline}
+                </TableCell>
+                <TableCell>{booking.flight.from}</TableCell>
+                <TableCell>{booking.flight.to}</TableCell>
+                <TableCell>
+                  {new Date(booking.flight.departureTime).toLocaleString()}
+                </TableCell>
+                <TableCell>
+                  {new Date(booking.flight.arrivalTime).toLocaleString()}
+                </TableCell>
+                <TableCell>{booking.flight.duration}</TableCell>
+                <TableCell className="text-right">
+                  {new Date(booking.bookingTime).toLocaleString()}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+          {/* <TableFooter>
+          <TableRow>
+            <TableCell colSpan={7}>End of Booking List</TableCell>
+          </TableRow>
+        </TableFooter> */}
+        </Table>
+      </div>
     </div>
   );
 }

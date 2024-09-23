@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import FareSummary from "./FareSummary";
 import SearchFlightDetails from "./SearchFlightDetails";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import { Button } from "./ui/button";
 
 export default function FlightDetails({ flightData }) {
   const [detailsOpen, setDetailsOpen] = useState([]);
@@ -108,9 +109,12 @@ export default function FlightDetails({ flightData }) {
                 <Link
                   href={`/flights/${flight?.location[0]?.city}-${flight?.location[0]?.cityCode}`}
                 >
-                  <button className="book-now-btn bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition">
+                  <Button
+                    size="sm"
+                    className="book-now-btn bg-blue-600 hover:bg-blue-700 text-white transition"
+                  >
                     Book Now
-                  </button>
+                  </Button>
                 </Link>
               </div>
             ) : (
@@ -123,18 +127,22 @@ export default function FlightDetails({ flightData }) {
           </div>
 
           <div className="accordion mt-4">
-            <div className="flex justify-between bg-white border rounded-md py-1 px-4">
+            <div className="flex items-center justify-between bg-white border rounded-md py-1 px-4">
               <p className="font-bold text-sm text-green-600">
                 {fareSummary?.refundable
                   ? "Refundable"
                   : "Partially Refundable"}
               </p>
               <button
-                className="font-bold text-red-600 flex items-center gap-1"
+                className="font-bold text-red-600 flex items-center gap-1 text-sm"
                 onClick={() => toggleDetails(index)}
               >
                 <span>Flight Details</span>
-                {detailsOpen[index] ? <ChevronUp /> : <ChevronDown />}
+                {detailsOpen[index] ? (
+                  <ChevronUp size={20} />
+                ) : (
+                  <ChevronDown size={20} />
+                )}
               </button>
             </div>
 

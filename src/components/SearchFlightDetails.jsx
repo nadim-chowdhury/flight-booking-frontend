@@ -17,10 +17,10 @@ export default function SearchFlightDetails({ searchFlightDetailsData }) {
 
         return (
           <div key={index}>
-            <p className="border-b border-gray-300 px-3 py-2 font-bold">
+            <h3 className="border-b border-gray-300 px-3 py-2 font-bold">
               {`${departureLocation?.city} to ${arrivalLocation?.city}, ${dateOfDepartureString}`}
-            </p>
-            <div className="px-3 py-2 flex items-start border-b border-gray-300 space-x-3">
+            </h3>
+            <div className="px-3 py-2 flex items-start border-b border-gray-300 space-x-3 overflow-x-scroll whitespace-nowrap md:overflow-x-auto">
               <Image
                 src={marketingCarrierLogo}
                 alt="air-logo"
@@ -54,7 +54,7 @@ export default function SearchFlightDetails({ searchFlightDetailsData }) {
 
             {/* Departure and Arrival details */}
             <div className="px-3 py-2">
-              <div className="flex justify-between mb-2">
+              <div className="flex gap-4 justify-between mb-2 overflow-x-scroll whitespace-nowrap md:overflow-x-auto">
                 <div>
                   <p className="text-xs font-bold">Departure:</p>
                   <p className="text-sm font-medium">

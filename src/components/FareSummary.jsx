@@ -37,7 +37,7 @@ export default function FareSummary({ fareSummary }) {
         Fare Breakdown
       </p>
 
-      <div className="m-3 overflow-x-auto">
+      <div className="m-3 overflow-x-scroll whitespace-nowrap md:overflow-x-auto">
         <table className="table-auto w-full border-collapse">
           <thead>
             <tr className="text-left bg-gray-100">

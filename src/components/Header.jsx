@@ -22,43 +22,45 @@ export default function Header() {
           </h1>
         </Link>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex space-x-8 font-medium">
-          <Link href="/">
-            <span className="text-gray-700 hover:text-blue-600 hover:underline">
-              Flights
-            </span>
-          </Link>
-          <Link href="/">
+        <div className="flex items-center gap-8">
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex space-x-8 font-medium">
+            <Link href="/bookings">
+              <span className="text-gray-700 hover:text-blue-600 hover:underline">
+                Bookings
+              </span>
+            </Link>
+            {/* <Link href="/">
             <span className="text-gray-700 hover:text-blue-600 hover:underline">
               Deals
             </span>
-          </Link>
-          <Link href="/">
-            <span className="text-gray-700 hover:text-blue-600 hover:underline">
-              About Us
-            </span>
-          </Link>
-          <Link href="/">
-            <span className="text-gray-700 hover:text-blue-600 hover:underline">
-              Contact
-            </span>
-          </Link>
-        </nav>
+          </Link> */}
+            <Link href="/about">
+              <span className="text-gray-700 hover:text-blue-600 hover:underline">
+                About
+              </span>
+            </Link>
+            <Link href="/contact">
+              <span className="text-gray-700 hover:text-blue-600 hover:underline">
+                Contact
+              </span>
+            </Link>
+          </nav>
 
-        {/* Call to Action Button */}
-        <div className="hidden md:flex gap-2">
-          <Link href="/login">
-            <Button className="bg-blue-600">Login</Button>
-          </Link>
-          {/* <Link href="/register">
+          {/* Call to Action Button */}
+          <div className="hidden md:flex gap-2">
+            <Link href="/login">
+              <Button className="bg-blue-600">Login</Button>
+            </Link>
+            {/* <Link href="/register">
             <Button className="bg-blue-600">Register</Button>
           </Link> */}
+          </div>
         </div>
 
         {/* Mobile Menu Button */}
         <div className="md:hidden">
-          <Button onClick={toggleNav}>
+          <Button onClick={toggleNav} size="sm">
             {navOpen ? (
               <AiOutlineClose size={20} className="" />
             ) : (
@@ -70,26 +72,26 @@ export default function Header() {
 
       {/* Mobile Navigation */}
       {navOpen && (
-        <nav className="md:hidden bg-gray-100 border-b">
+        <nav className="md:hidden bg-gray-50 border-t">
           <ul className="space-y-4 px-4 py-4 flex flex-col justify-center items-center">
             <li>
-              <Link href="/flights">
+              <Link href="/bookings">
                 <span className="block text-gray-700 hover:text-blue-600 hover:underline">
-                  Flights
+                  Bookings
                 </span>
               </Link>
             </li>
-            <li>
+            {/* <li>
               <Link href="/deals">
                 <span className="block text-gray-700 hover:text-blue-600 hover:underline">
                   Deals
                 </span>
               </Link>
-            </li>
+            </li> */}
             <li>
               <Link href="/about">
                 <span className="block text-gray-700 hover:text-blue-600 hover:underline">
-                  About Us
+                  About
                 </span>
               </Link>
             </li>
