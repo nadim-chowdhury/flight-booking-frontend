@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import FareSummary from "./FareSummary";
 import SearchFlightDetails from "./SearchFlightDetails";
@@ -32,6 +33,8 @@ export default function FlightDetails({ flightData }) {
   };
 
   const formattedPrice = `BDT ${fareSummary?.totalFareAmount || 0}`;
+
+  const handleBookFlight = () => {};
 
   return (
     <div className="flight-details bg-slate-50 rounded-lg border mb-4 pt-4">
@@ -101,10 +104,14 @@ export default function FlightDetails({ flightData }) {
             )}
 
             {index === 0 ? (
-              <div className="view-details mb-4">
-                <button className="book-now-btn bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition">
-                  Book Now
-                </button>
+              <div onClick={handleBookFlight} className="view-details mb-4">
+                <Link
+                  href={`/flights/${flight?.location[0]?.city}-${flight?.location[0]?.cityCode}`}
+                >
+                  <button className="book-now-btn bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition">
+                    Book Now
+                  </button>
+                </Link>
               </div>
             ) : (
               <div className="view-details mb-4 hidden md:block">
