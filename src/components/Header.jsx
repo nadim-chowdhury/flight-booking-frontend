@@ -12,6 +12,14 @@ export default function Header() {
     setNavOpen(!navOpen);
   };
 
+  // Define navigation links
+  const navLinks = [
+    { href: "/bookings", label: "Bookings" },
+    { href: "/admin", label: "Admin Panel" },
+    // { href: "/contact", label: "Contact" },
+    { href: "/login", label: "Login" },
+  ];
+
   return (
     <header className="bg-white border-b sticky top-0 z-50">
       <div className="max-w-6xl px-4 mx-auto py-4 flex items-center justify-between">
@@ -22,29 +30,16 @@ export default function Header() {
           </h1>
         </Link>
 
-        <div className="flex items-center gap-8">
+        <div className="flex items-center gap-6">
           {/* Desktop Navigation */}
           <nav className="hidden md:flex space-x-8 font-medium">
-            <Link href="/bookings">
-              <span className="text-gray-700 hover:text-blue-600 hover:underline">
-                Bookings
-              </span>
-            </Link>
-            {/* <Link href="/">
-            <span className="text-gray-700 hover:text-blue-600 hover:underline">
-              Deals
-            </span>
-          </Link> */}
-            <Link href="/about">
-              <span className="text-gray-700 hover:text-blue-600 hover:underline">
-                About
-              </span>
-            </Link>
-            <Link href="/contact">
-              <span className="text-gray-700 hover:text-blue-600 hover:underline">
-                Contact
-              </span>
-            </Link>
+            {navLinks.slice(0, -1).map((link) => (
+              <Link key={link.href} href={link.href}>
+                <span className="text-gray-700 hover:text-blue-600 hover:underline">
+                  {link.label}
+                </span>
+              </Link>
+            ))}
           </nav>
 
           {/* Call to Action Button */}
@@ -52,9 +47,6 @@ export default function Header() {
             <Link href="/login">
               <Button className="bg-blue-600">Login</Button>
             </Link>
-            {/* <Link href="/register">
-            <Button className="bg-blue-600">Register</Button>
-          </Link> */}
           </div>
         </div>
 
@@ -62,9 +54,9 @@ export default function Header() {
         <div className="md:hidden">
           <Button onClick={toggleNav} size="sm">
             {navOpen ? (
-              <AiOutlineClose size={20} className="" />
+              <AiOutlineClose size={20} />
             ) : (
-              <AiOutlineMenu size={20} className="" />
+              <AiOutlineMenu size={20} />
             )}
           </Button>
         </div>
@@ -74,41 +66,21 @@ export default function Header() {
       {navOpen && (
         <nav className="md:hidden bg-gray-50 border-t">
           <ul className="space-y-4 px-4 py-4 flex flex-col justify-center items-center">
-            <li>
-              <Link href="/bookings">
-                <span className="block text-gray-700 hover:text-blue-600 hover:underline">
-                  Bookings
-                </span>
-              </Link>
-            </li>
-            {/* <li>
-              <Link href="/deals">
-                <span className="block text-gray-700 hover:text-blue-600 hover:underline">
-                  Deals
-                </span>
-              </Link>
-            </li> */}
-            <li>
-              <Link href="/about">
-                <span className="block text-gray-700 hover:text-blue-600 hover:underline">
-                  About
-                </span>
-              </Link>
-            </li>
-            <li>
-              <Link href="/contact">
-                <span className="block text-gray-700 hover:text-blue-600 hover:underline">
-                  Contact
-                </span>
-              </Link>
-            </li>
-            <li>
-              <Link href="/login">
-                <span className="block px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-center">
-                  Login
-                </span>
-              </Link>
-            </li>
+            {navLinks.map((link) => (
+              <li key={link.href}>
+                <Link href={link.href}>
+                  <span
+                    className={`block text-gray-700 hover:text-blue-600 hover:underline ${
+                      link.href === "/login"
+                        ? "px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-center"
+                        : ""
+                    }`}
+                  >
+                    {link.label}
+                  </span>
+                </Link>
+              </li>
+            ))}
           </ul>
         </nav>
       )}
