@@ -94,6 +94,7 @@ export default function Routes() {
         <table className="min-w-full bg-white border border-gray-200 rounded-md">
           <thead>
             <tr className="bg-gray-100">
+              <th className="px-4 py-2 border text-left font-semibold">Id</th>
               <th className="px-4 py-2 border text-left font-semibold">
                 Flight Number
               </th>
@@ -122,8 +123,9 @@ export default function Routes() {
                 </td>
               </tr>
             ) : routesData.length > 0 ? (
-              routesData.map((route) => (
+              routesData?.map((route) => (
                 <tr key={route?.id} className="hover:bg-gray-50">
+                  <td className="px-4 py-2 border">{route?.id}</td>
                   <td className="px-4 py-2 border">{route?.flight_number}</td>
                   <td className="px-4 py-2 border">{route?.airline_code}</td>
                   <td className="px-4 py-2 border">

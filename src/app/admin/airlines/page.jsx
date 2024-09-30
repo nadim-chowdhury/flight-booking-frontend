@@ -99,6 +99,7 @@ export default function Airlines() {
         <table className="min-w-full bg-white border border-slate-200 rounded-md">
           <thead>
             <tr className="bg-slate-100">
+              <th className="px-4 py-2 border text-left font-semibold">Id</th>
               <th className="px-4 py-2 border text-left font-semibold">Name</th>
               <th className="px-4 py-2 border text-left font-semibold">
                 Country
@@ -121,6 +122,7 @@ export default function Airlines() {
             ) : airlinesData.length > 0 ? (
               airlinesData.map((airline) => (
                 <tr key={airline?.id} className="hover:bg-slate-50">
+                  <td className="px-4 py-2 border">{airline?.id}</td>
                   <td className="px-4 py-2 border">{airline?.name}</td>
                   <td className="px-4 py-2 border">{airline?.country}</td>
                   <td className="px-4 py-2 border">{airline?.callsign}</td>

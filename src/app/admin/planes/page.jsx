@@ -94,6 +94,7 @@ export default function Planes() {
         <table className="min-w-full bg-white border border-slate-200 rounded-md">
           <thead>
             <tr className="bg-slate-100">
+              <th className="px-4 py-2 border text-left font-semibold">Id</th>
               <th className="px-4 py-2 border text-left font-semibold">Name</th>
               <th className="px-4 py-2 border text-left font-semibold">Code</th>
               <th className="px-4 py-2 border text-left font-semibold">
@@ -111,6 +112,7 @@ export default function Planes() {
             ) : planesData.length > 0 ? (
               planesData.map((plane) => (
                 <tr key={plane?.id} className="hover:bg-slate-50">
+                  <td className="px-4 py-2 border">{plane?.id}</td>
                   <td className="px-4 py-2 border">{plane?.name}</td>
                   <td className="px-4 py-2 border">{plane?.code}</td>
                   <td className="px-4 py-2 border">{plane?.additional_code}</td>
