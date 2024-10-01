@@ -37,7 +37,9 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 export default function ReturnSearch() {
   const [departureCity, setDepartureCity] = useState("");
+  const [departureCityFullName, setDepartureCityFullName] = useState("");
   const [destinationCity, setDestinationCity] = useState("");
+  const [destinationCityFullName, setDestinationCityFullName] = useState("");
   const [departureDate, setDepartureDate] = useState("");
   const [returnDate, setReturnDate] = useState("");
   const [adults, setAdults] = useState(1);
@@ -114,9 +116,21 @@ export default function ReturnSearch() {
   }, [debouncedSearchDestination]);
 
   useEffect(() => {
-    const departureCityParam = searchParams.get("departureCity");
-    const destinationCityParam = searchParams.get("destinationCity");
-    const departureDateParam = searchParams.get("departureDate");
+    const departureCityParam =
+      searchParams.get("departureCity") ||
+      searchParams.get("flight1DepartureCity");
+    const departureCityFullNameParam =
+      searchParams.get("departureCityFullName") ||
+      searchParams.get("flight1DepartureCityFullName");
+    const destinationCityParam =
+      searchParams.get("destinationCity") ||
+      searchParams.get("flight1DestinationCity");
+    const destinationCityFullNameParam =
+      searchParams.get("destinationCityFullName") ||
+      searchParams.get("flight1DestinationCityFullName");
+    const departureDateParam =
+      searchParams.get("departureDate") ||
+      searchParams.get("flight1DepartureDate");
     const returnDateParam = searchParams.get("returnDate");
     const adultsParam = searchParams.get("adults");
     const childrenParam = searchParams.get("children");
@@ -124,7 +138,11 @@ export default function ReturnSearch() {
     const seatTypeParam = searchParams.get("seatType");
 
     if (departureCityParam) setDepartureCity(departureCityParam);
+    if (departureCityFullNameParam)
+      setDepartureCityFullName(departureCityFullNameParam);
     if (destinationCityParam) setDestinationCity(destinationCityParam);
+    if (destinationCityFullNameParam)
+      setDestinationCityFullName(destinationCityFullNameParam);
     if (departureDateParam) setDepartureDate(departureDateParam);
     if (returnDateParam) setReturnDate(returnDateParam);
     if (adultsParam) setAdults(Number(adultsParam));
@@ -149,7 +167,9 @@ export default function ReturnSearch() {
 
     const query = {
       departureCity,
+      departureCityFullName,
       destinationCity,
+      destinationCityFullName,
       departureDate,
       returnDate,
       adults,
@@ -183,6 +203,7 @@ export default function ReturnSearch() {
                   className="w-full text-black/60 justify-start"
                 >
                   <span className="truncate">
+                    {departureCityFullName && departureCityFullName}
                     {departureCity
                       ? departureAirportsData?.find(
                           (airport) => airport?.iata === departureCity
@@ -220,6 +241,7 @@ export default function ReturnSearch() {
                                 iata === departureCity ? "" : iata
                               );
                               setOpenDeparture(false);
+                              setDepartureCityFullName(airport.name);
                               setSearchDepartureAirport("");
                             }}
                             className=""
@@ -255,6 +277,7 @@ export default function ReturnSearch() {
                   className="w-full text-black/60 justify-start"
                 >
                   <span className="truncate">
+                    {destinationCityFullName && destinationCityFullName}
                     {destinationCity
                       ? destinationAirportsData?.find(
                           (airport) => airport?.iata === destinationCity
@@ -292,6 +315,7 @@ export default function ReturnSearch() {
                                 iata === destinationCity ? "" : iata
                               );
                               setOpenDestination(false);
+                              setDestinationCityFullName(airport.name);
                               setSearchDestinationAirport("");
                             }}
                             className=""
@@ -330,7 +354,6 @@ export default function ReturnSearch() {
                     format(departureDate, "PPP")
                   ) : (
                     <>
-                      {" "}
                       <CalendarIcon className="mr-2 h-4 w-4" />{" "}
                       <span>Select Date</span>{" "}
                     </>
@@ -371,7 +394,6 @@ export default function ReturnSearch() {
                     format(returnDate, "PPP")
                   ) : (
                     <>
-                      {" "}
                       <CalendarIcon className="mr-2 h-4 w-4" />{" "}
                       <span>Select Date</span>{" "}
                     </>

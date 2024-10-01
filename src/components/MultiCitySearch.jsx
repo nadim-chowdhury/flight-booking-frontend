@@ -42,7 +42,13 @@ import { Separator } from "@/components/ui/separator";
 
 export default function MultiCitySearch() {
   const [flights, setFlights] = useState([
-    { departureCity: "", destinationCity: "", departureDate: null },
+    {
+      departureCity: "",
+      departureCityFullName: "",
+      destinationCity: "",
+      destinationCityFullName: "",
+      departureDate: null,
+    },
   ]);
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
@@ -52,34 +58,9 @@ export default function MultiCitySearch() {
   const [searchInput, setSearchInput] = useState({});
   const [loadingAirports, setLoadingAirports] = useState({});
   const [airportData, setAirportData] = useState({});
-  // const [searchDepartureAirport, setSearchDepartureAirport] = useState("");
-  // const [searchDestinationAirport, setSearchDestinationAirport] = useState("");
-  // const [loadingDepartureAirports, setLoadingDepartureAirports] =
-  //   useState(false);
-  // const [loadingDestinationAirports, setLoadingDestinationAirports] =
-  //   useState(false);
-  // const [departureAirportsData, setDepartureAirportsData] = useState([]);
-  // const [destinationAirportsData, setDestinationAirportsData] = useState([]);
-  // const [debouncedSearchDeparture, setDebouncedSearchDeparture] = useState("");
-  // const [debouncedSearchDestination, setDebouncedSearchDestination] =
-  //   useState("");
 
   const router = useRouter();
   const searchParams = useSearchParams();
-
-  // useEffect(() => {
-  //   const handler = setTimeout(() => {
-  //     setDebouncedSearchDeparture(searchDepartureAirport);
-  //   }, 500);
-  //   return () => clearTimeout(handler);
-  // }, [searchDepartureAirport]);
-
-  // useEffect(() => {
-  //   const handler = setTimeout(() => {
-  //     setDebouncedSearchDestination(searchDestinationAirport);
-  //   }, 500);
-  //   return () => clearTimeout(handler);
-  // }, [searchDestinationAirport]);
 
   useEffect(() => {
     const debouncedSearch = (index, field) => {
@@ -121,64 +102,78 @@ export default function MultiCitySearch() {
     return () => clearTimeout(timeoutId);
   }, [searchInput]);
 
-  // useEffect(() => {
-  //   if (!debouncedSearchDeparture) return;
-  //   setLoadingDepartureAirports(true);
-  //   const fetchDepartureAirports = async () => {
-  //     try {
-  //       const res = await fetch(
-  //         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/airports?search=${debouncedSearchDeparture}`
-  //       );
-  //       const data = await res.json();
-  //       setDepartureAirportsData(data?.airports || []);
-  //     } catch (error) {
-  //       console.error("Error fetching departure airports:", error);
-  //     } finally {
-  //       setLoadingDepartureAirports(false);
-  //     }
-  //   };
-  //   fetchDepartureAirports();
-  // }, [debouncedSearchDeparture]);
-
-  // useEffect(() => {
-  //   if (!debouncedSearchDestination) return;
-  //   setLoadingDestinationAirports(true);
-  //   const fetchDestinationAirports = async () => {
-  //     try {
-  //       const res = await fetch(
-  //         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/airports?search=${debouncedSearchDestination}`
-  //       );
-  //       const data = await res.json();
-  //       setDestinationAirportsData(data?.airports || []);
-  //     } catch (error) {
-  //       console.error("Error fetching destination airports:", error);
-  //     } finally {
-  //       setLoadingDestinationAirports(false);
-  //     }
-  //   };
-  //   fetchDestinationAirports();
-  // }, [debouncedSearchDestination]);
-
   useEffect(() => {
     const flightSegments = [];
     let i = 1;
+
     while (
       searchParams.get(`flight${i}DepartureCity`) &&
+      searchParams.get(`flight${i}DepartureCityFullName`) &&
       searchParams.get(`flight${i}DestinationCity`) &&
+      searchParams.get(`flight${i}DestinationCityFullName`) &&
       searchParams.get(`flight${i}DepartureDate`)
     ) {
       const departureCity = searchParams.get(`flight${i}DepartureCity`);
+      const departureCityFullName = searchParams.get(
+        `flight${i}DepartureCityFullName`
+      );
       const destinationCity = searchParams.get(`flight${i}DestinationCity`);
+      const destinationCityFullName = searchParams.get(
+        `flight${i}DestinationCityFullName`
+      );
       const departureDate = searchParams.get(`flight${i}DepartureDate`);
 
       flightSegments.push({
         departureCity,
+        departureCityFullName,
         destinationCity,
+        destinationCityFullName,
         departureDate: parseISO(departureDate),
       });
       i++;
     }
-    if (flightSegments.length > 0) setFlights(flightSegments);
+
+    if (flightSegments.length > 0) {
+      setFlights(flightSegments);
+    }
+
+    const departureCityParam = searchParams.get("departureCity");
+    const departureCityFullNameParam = searchParams.get(
+      "departureCityFullName"
+    );
+    const destinationCityParam = searchParams.get("destinationCity");
+    const destinationCityFullNameParam = searchParams.get(
+      "destinationCityFullName"
+    );
+    const departureDateParam = searchParams.get("departureDate");
+
+    if (
+      departureCityParam ||
+      departureCityFullNameParam ||
+      destinationCityParam ||
+      destinationCityFullNameParam ||
+      departureDateParam
+    ) {
+      setFlights((prevFlights) => {
+        const updatedFlights = [...prevFlights];
+        updatedFlights[0] = {
+          ...updatedFlights[0],
+          departureCity: departureCityParam || updatedFlights[0].departureCity,
+          departureCityFullName:
+            departureCityFullNameParam ||
+            updatedFlights[0].departureCityFullName,
+          destinationCity:
+            destinationCityParam || updatedFlights[0].destinationCity,
+          destinationCityFullName:
+            destinationCityFullNameParam ||
+            updatedFlights[0].destinationCityFullName,
+          departureDate: departureDateParam
+            ? parseISO(departureDateParam)
+            : updatedFlights[0].departureDate,
+        };
+        return updatedFlights;
+      });
+    }
 
     const adultsParam = parseInt(searchParams.get("adults")) || 1;
     const childrenParam = parseInt(searchParams.get("children")) || 0;
@@ -191,69 +186,22 @@ export default function MultiCitySearch() {
     setSeatType(seatTypeParam);
   }, [searchParams]);
 
-  // const handleFlightChange = (index, field, value) => {
-  //   const newFlights = [...flights];
-  //   newFlights[index][field] = value;
-  //   setFlights(newFlights);
-  // };
-
   const handleSearchInputChange = (index, field, value) => {
     setSearchInput((prev) => ({ ...prev, [`${index}-${field}`]: value }));
   };
 
-  // const addFlightSegment = () => {
-  //   setFlights([
-  //     ...flights,
-  //     { departureCity: "", destinationCity: "", departureDate: null },
-  //   ]);
-  // };
-
-  // const removeFlightSegment = (index) => {
-  //   const newFlights = flights.filter((_, i) => i !== index);
-  //   setFlights(newFlights);
-  // };
-
-  // const togglePopover = (index, field, value) => {
-  //   setOpenPopovers((prev) => ({
-  //     ...prev,
-  //     [`${index}-${field}`]: value,
-  //   }));
-  // };
-
-  // const handleMultiCitySearch = (e) => {
-  //   e.preventDefault();
-
-  //   const incompleteSegment = flights.some(
-  //     (flight) =>
-  //       !flight.departureCity ||
-  //       !flight.destinationCity ||
-  //       !flight.departureDate
-  //   );
-  //   if (incompleteSegment || !adults) {
-  //     alert("Please fill in all fields");
-  //     return;
-  //   }
-
-  //   const query = {
-  //     adults,
-  //     children,
-  //     infants,
-  //     seatType,
-  //   };
-
-  //   flights.forEach((flight, index) => {
-  //     query[`flight${index + 1}DepartureCity`] = flight.departureCity;
-  //     query[`flight${index + 1}DestinationCity`] = flight.destinationCity;
-  //     query[`flight${index + 1}DepartureDate`] = flight.departureDate;
-  //   });
-
-  //   const queryString = new URLSearchParams(query).toString();
-  //   router.push(`/flights?type=multi-city&${queryString}`);
-  // };
-
-  const handleFlightChange = (index, field, value) => {
+  const handleFlightChange = (index, field, value, fullName = null) => {
     const newFlights = [...flights];
     newFlights[index][field] = value;
+
+    if (fullName) {
+      if (field === "departureCity") {
+        newFlights[index]["departureCityFullName"] = fullName;
+      } else if (field === "destinationCity") {
+        newFlights[index]["destinationCityFullName"] = fullName;
+      }
+    }
+
     setFlights(newFlights);
   };
 
@@ -299,7 +247,11 @@ export default function MultiCitySearch() {
 
     flights.forEach((flight, index) => {
       query[`flight${index + 1}DepartureCity`] = flight.departureCity;
+      query[`flight${index + 1}DepartureCityFullName`] =
+        flight.departureCityFullName;
       query[`flight${index + 1}DestinationCity`] = flight.destinationCity;
+      query[`flight${index + 1}DestinationCityFullName`] =
+        flight.destinationCityFullName;
       query[`flight${index + 1}DepartureDate`] = flight.departureDate;
     });
 
@@ -335,11 +287,8 @@ export default function MultiCitySearch() {
                         className="w-full text-black/60 justify-start"
                       >
                         <span className="truncate">
-                          {flight?.departureCity
-                            ? airportData[`${index}-departureCity`]?.find(
-                                (airport) =>
-                                  airport.iata === flight?.departureCity
-                              )?.name
+                          {flight?.departureCityFullName
+                            ? flight.departureCityFullName
                             : "Select City"}
                         </span>
                       </Button>
@@ -378,7 +327,8 @@ export default function MultiCitySearch() {
                                       handleFlightChange(
                                         index,
                                         "departureCity",
-                                        iata
+                                        iata,
+                                        airport.name
                                       );
                                       handleSearchInputChange(
                                         index,
@@ -428,11 +378,8 @@ export default function MultiCitySearch() {
                         className="w-full text-black/60 justify-start"
                       >
                         <span className="truncate">
-                          {flight?.destinationCity
-                            ? airportData[`${index}-destinationCity`]?.find(
-                                (airport) =>
-                                  airport.iata === flight?.destinationCity
-                              )?.name
+                          {flight?.destinationCityFullName
+                            ? flight.destinationCityFullName
                             : "Select City"}
                         </span>
                       </Button>
@@ -473,7 +420,8 @@ export default function MultiCitySearch() {
                                       handleFlightChange(
                                         index,
                                         "destinationCity",
-                                        iata
+                                        iata,
+                                        airport.name
                                       );
                                       handleSearchInputChange(
                                         index,
@@ -516,11 +464,18 @@ export default function MultiCitySearch() {
                         variant={"outline"}
                         className={cn(
                           "w-full justify-start text-left font-normal text-black/60",
-                          !flight.departureDate && "text-black/60"
+                          !flights[index]?.departureDate && "text-black/60"
                         )}
                       >
-                        {flight.departureDate ? (
-                          format(flight.departureDate, "PPP")
+                        {flights[index]?.departureDate ? (
+                          typeof flights[index].departureDate === "string" ? (
+                            format(
+                              parseISO(flights[index].departureDate),
+                              "PPP"
+                            )
+                          ) : (
+                            format(flights[index].departureDate, "PPP")
+                          )
                         ) : (
                           <>
                             <CalendarIcon className="mr-2 h-4 w-4" />
@@ -533,7 +488,14 @@ export default function MultiCitySearch() {
                     <PopoverContent className="w-auto p-0">
                       <Calendar
                         mode="single"
-                        selected={flight.departureDate}
+                        selected={
+                          // Handle if departureDate is a string or Date object
+                          flights[index]?.departureDate
+                            ? typeof flights[index].departureDate === "string"
+                              ? parseISO(flights[index].departureDate)
+                              : flights[index].departureDate
+                            : undefined
+                        }
                         onSelect={(date) =>
                           handleFlightChange(
                             index,

@@ -32,7 +32,9 @@ import {
 
 export default function OneWaySearch() {
   const [departureCity, setDepartureCity] = useState("");
+  const [departureCityFullName, setDepartureCityFullName] = useState("");
   const [destinationCity, setDestinationCity] = useState("");
+  const [destinationCityFullName, setDestinationCityFullName] = useState("");
   const [departureDate, setDepartureDate] = useState("");
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
@@ -56,6 +58,40 @@ export default function OneWaySearch() {
   const searchParams = useSearchParams();
 
   useEffect(() => {
+    const departureCityParam =
+      searchParams.get("departureCity") ||
+      searchParams.get("flight1DepartureCity");
+    const departureCityFullNameParam =
+      searchParams.get("departureCityFullName") ||
+      searchParams.get("flight1DepartureCityFullName");
+    const destinationCityParam =
+      searchParams.get("destinationCity") ||
+      searchParams.get("flight1DestinationCity");
+    const destinationCityFullNameParam =
+      searchParams.get("destinationCityFullName") ||
+      searchParams.get("flight1DestinationCityFullName");
+    const departureDateParam =
+      searchParams.get("departureDate") ||
+      searchParams.get("flight1DepartureDate");
+    const adultsParam = searchParams.get("adults");
+    const childrenParam = searchParams.get("children");
+    const infantsParam = searchParams.get("infants");
+    const seatTypeParam = searchParams.get("seatType");
+
+    if (departureCityParam) setDepartureCity(departureCityParam);
+    if (departureCityFullNameParam)
+      setDepartureCityFullName(departureCityFullNameParam);
+    if (destinationCityParam) setDestinationCity(destinationCityParam);
+    if (destinationCityFullNameParam)
+      setDestinationCityFullName(destinationCityFullNameParam);
+    if (departureDateParam) setDepartureDate(departureDateParam);
+    if (adultsParam) setAdults(Number(adultsParam));
+    if (childrenParam) setChildren(Number(childrenParam));
+    if (infantsParam) setInfants(Number(infantsParam));
+    if (seatTypeParam) setSeatType(seatTypeParam);
+  }, [searchParams]);
+
+  useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearchDeparture(searchDepartureAirport);
     }, 500);
@@ -77,6 +113,7 @@ export default function OneWaySearch() {
 
   useEffect(() => {
     if (!debouncedSearchDeparture) return;
+
     const fetchDepartureAirports = async () => {
       setLoadingDepartureAirports(true);
       try {
@@ -97,6 +134,7 @@ export default function OneWaySearch() {
 
   useEffect(() => {
     if (!debouncedSearchDestination) return;
+
     const fetchDestinationAirports = async () => {
       setLoadingDestinationAirports(true);
       try {
@@ -125,7 +163,9 @@ export default function OneWaySearch() {
 
     const query = {
       departureCity,
+      departureCityFullName,
       destinationCity,
+      destinationCityFullName,
       departureDate,
       adults,
       children,
@@ -158,6 +198,7 @@ export default function OneWaySearch() {
                   className="w-full text-black/60 justify-start"
                 >
                   <span className="truncate">
+                    {departureCityFullName && departureCityFullName}
                     {departureCity
                       ? departureAirportsData?.find(
                           (airport) => airport?.iata === departureCity
@@ -195,6 +236,7 @@ export default function OneWaySearch() {
                                 iata === departureCity ? "" : iata
                               );
                               setOpenDeparture(false);
+                              setDepartureCityFullName(airport.name);
                               setSearchDepartureAirport("");
                             }}
                             className=""
@@ -230,6 +272,7 @@ export default function OneWaySearch() {
                   className="w-full text-black/60 justify-start"
                 >
                   <span className="truncate">
+                    {destinationCityFullName && destinationCityFullName}
                     {destinationCity
                       ? destinationAirportsData?.find(
                           (airport) => airport?.iata === destinationCity
@@ -267,6 +310,7 @@ export default function OneWaySearch() {
                                 iata === destinationCity ? "" : iata
                               );
                               setOpenDestination(false);
+                              setDestinationCityFullName(airport.name);
                               setSearchDestinationAirport("");
                             }}
                             className=""
