@@ -8,7 +8,9 @@ import {
   Minus,
   Check,
   Trash,
+  Search,
 } from "lucide-react";
+import { cn } from "../lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -35,7 +37,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { cn } from "@/lib/utils";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Separator } from "@/components/ui/separator";
 
@@ -47,15 +48,76 @@ export default function MultiCitySearch() {
   const [children, setChildren] = useState(0);
   const [infants, setInfants] = useState(0);
   const [seatType, setSeatType] = useState("economy");
+  const [searchDepartureAirport, setSearchDepartureAirport] = useState("");
+  const [searchDestinationAirport, setSearchDestinationAirport] = useState("");
+  const [loadingDepartureAirports, setLoadingDepartureAirports] =
+    useState(false);
+  const [loadingDestinationAirports, setLoadingDestinationAirports] =
+    useState(false);
+  const [departureAirportsData, setDepartureAirportsData] = useState([]);
+  const [destinationAirportsData, setDestinationAirportsData] = useState([]);
+  const [debouncedSearchDeparture, setDebouncedSearchDeparture] = useState("");
+  const [debouncedSearchDestination, setDebouncedSearchDestination] =
+    useState("");
 
   const router = useRouter();
   const searchParams = useSearchParams();
-  const type = searchParams.get("type");
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchDeparture(searchDepartureAirport);
+    }, 500);
+    return () => clearTimeout(handler);
+  }, [searchDepartureAirport]);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchDestination(searchDestinationAirport);
+    }, 500);
+    return () => clearTimeout(handler);
+  }, [searchDestinationAirport]);
+
+  useEffect(() => {
+    if (!debouncedSearchDeparture) return;
+    setLoadingDepartureAirports(true);
+    const fetchDepartureAirports = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/airports?search=${debouncedSearchDeparture}`
+        );
+        const data = await res.json();
+        setDepartureAirportsData(data?.airports || []);
+      } catch (error) {
+        console.error("Error fetching departure airports:", error);
+      } finally {
+        setLoadingDepartureAirports(false);
+      }
+    };
+    fetchDepartureAirports();
+  }, [debouncedSearchDeparture]);
+
+  useEffect(() => {
+    if (!debouncedSearchDestination) return;
+    setLoadingDestinationAirports(true);
+    const fetchDestinationAirports = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/airports?search=${debouncedSearchDestination}`
+        );
+        const data = await res.json();
+        setDestinationAirportsData(data?.airports || []);
+      } catch (error) {
+        console.error("Error fetching destination airports:", error);
+      } finally {
+        setLoadingDestinationAirports(false);
+      }
+    };
+    fetchDestinationAirports();
+  }, [debouncedSearchDestination]);
 
   useEffect(() => {
     const flightSegments = [];
     let i = 1;
-
     while (
       searchParams.get(`flight${i}DepartureCity`) &&
       searchParams.get(`flight${i}DestinationCity`) &&
@@ -70,13 +132,9 @@ export default function MultiCitySearch() {
         destinationCity,
         departureDate: parseISO(departureDate),
       });
-
       i++;
     }
-
-    if (flightSegments.length > 0) {
-      setFlights(flightSegments);
-    }
+    if (flightSegments.length > 0) setFlights(flightSegments);
 
     const adultsParam = parseInt(searchParams.get("adults")) || 1;
     const childrenParam = parseInt(searchParams.get("children")) || 0;
@@ -149,7 +207,7 @@ export default function MultiCitySearch() {
                 <div className="w-full">
                   <Label
                     htmlFor="departureCity"
-                    className="block text-sm text-start font-medium text-gray-700 mb-2"
+                    className="block text-sm text-start font-medium mb-2 text-slate-700"
                   >
                     Departure City
                   </Label>
@@ -170,37 +228,46 @@ export default function MultiCitySearch() {
                         </span>
                       </Button>
                     </PopoverTrigger>
-                    <PopoverContent align="start" className="w-full p-0">
+
+                    <PopoverContent className="w-full p-0">
                       <Command>
-                        <CommandInput placeholder="Search Airport" />
+                        <div className="flex items-center border-b">
+                          <Search className="h-4 w-4 mx-3" />
+                          <Input
+                            placeholder="Search Airport"
+                            value={searchDepartureAirport}
+                            onChange={(e) =>
+                              setSearchDepartureAirport(e.target.value)
+                            }
+                            className="w-full border-l rounded-none border-r-0 border-t-0 border-b-0 focus:ring-0 focus:outline-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+                          />
+                        </div>
+
                         <CommandList>
-                          <CommandEmpty>No airport found.</CommandEmpty>
-                          <CommandGroup>
-                            {allAirportsData.map((airport) => (
-                              <CommandItem
-                                key={airport.id}
-                                value={airport.iata_code}
-                                onSelect={(iata) => {
-                                  handleFlightChange(
-                                    index,
-                                    "departureCity",
-                                    iata
-                                  );
-                                }}
-                              >
-                                <Check
-                                  className={cn(
-                                    "mr-2 h-4 w-4",
-                                    flight.departureCity === airport.iata_code
-                                      ? "opacity-100"
-                                      : "opacity-0"
-                                  )}
-                                />
-                                {airport.name} ({airport.iata_code}) -{" "}
-                                {airport.city}
-                              </CommandItem>
-                            ))}
-                          </CommandGroup>
+                          {loadingDepartureAirports ? (
+                            <CommandEmpty>Loading...</CommandEmpty>
+                          ) : departureAirportsData.length > 0 ? (
+                            <CommandGroup>
+                              {departureAirportsData.map((airport) => (
+                                <CommandItem
+                                  key={airport.id}
+                                  value={airport.iata}
+                                  onSelect={(iata) =>
+                                    handleFlightChange(
+                                      index,
+                                      "departureCity",
+                                      iata
+                                    )
+                                  }
+                                >
+                                  {airport.name} ({airport.iata}) -{" "}
+                                  {airport.city}
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          ) : (
+                            <CommandEmpty>No airports found.</CommandEmpty>
+                          )}
                         </CommandList>
                       </Command>
                     </PopoverContent>
@@ -211,7 +278,7 @@ export default function MultiCitySearch() {
                 <div className="w-full">
                   <Label
                     htmlFor="destinationCity"
-                    className="block text-sm text-start font-medium text-gray-700 mb-2"
+                    className="block text-sm text-start font-medium mb-2 text-slate-700"
                   >
                     Destination City
                   </Label>
@@ -232,37 +299,46 @@ export default function MultiCitySearch() {
                         </span>
                       </Button>
                     </PopoverTrigger>
-                    <PopoverContent align="start" className="w-full p-0">
+
+                    <PopoverContent className="w-full p-0">
                       <Command>
-                        <CommandInput placeholder="Search Airport" />
+                        <div className="flex items-center border-b">
+                          <Search className="h-4 w-4 mx-3" />
+                          <Input
+                            placeholder="Search Airport"
+                            value={searchDestinationAirport}
+                            onChange={(e) =>
+                              setSearchDestinationAirport(e.target.value)
+                            }
+                            className="w-full border-l rounded-none border-r-0 border-t-0 border-b-0 focus:ring-0 focus:outline-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+                          />
+                        </div>
+
                         <CommandList>
-                          <CommandEmpty>No airport found.</CommandEmpty>
-                          <CommandGroup>
-                            {allAirportsData.map((airport) => (
-                              <CommandItem
-                                key={airport.id}
-                                value={airport.iata_code}
-                                onSelect={(iata) => {
-                                  handleFlightChange(
-                                    index,
-                                    "destinationCity",
-                                    iata
-                                  );
-                                }}
-                              >
-                                <Check
-                                  className={cn(
-                                    "mr-2 h-4 w-4",
-                                    flight.destinationCity === airport.iata_code
-                                      ? "opacity-100"
-                                      : "opacity-0"
-                                  )}
-                                />
-                                {airport.name} ({airport.iata_code}) -{" "}
-                                {airport.city}
-                              </CommandItem>
-                            ))}
-                          </CommandGroup>
+                          {loadingDestinationAirports ? (
+                            <CommandEmpty>Loading...</CommandEmpty>
+                          ) : destinationAirportsData.length > 0 ? (
+                            <CommandGroup>
+                              {destinationAirportsData.map((airport) => (
+                                <CommandItem
+                                  key={airport.id}
+                                  value={airport.iata}
+                                  onSelect={(iata) =>
+                                    handleFlightChange(
+                                      index,
+                                      "destinationCity",
+                                      iata
+                                    )
+                                  }
+                                >
+                                  {airport.name} ({airport.iata}) -{" "}
+                                  {airport.city}
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          ) : (
+                            <CommandEmpty>No airports found.</CommandEmpty>
+                          )}
                         </CommandList>
                       </Command>
                     </PopoverContent>
@@ -273,7 +349,7 @@ export default function MultiCitySearch() {
                 <div className="w-full">
                   <Label
                     htmlFor="departureDate"
-                    className="block text-sm text-start font-medium text-gray-700 mb-2"
+                    className="block text-sm text-start font-medium mb-2 text-slate-700"
                   >
                     Departure Date
                   </Label>
@@ -296,6 +372,7 @@ export default function MultiCitySearch() {
                         )}
                       </Button>
                     </PopoverTrigger>
+
                     <PopoverContent className="w-auto p-0">
                       <Calendar
                         mode="single"
@@ -318,7 +395,7 @@ export default function MultiCitySearch() {
                   <div className="w-full">
                     <Label
                       htmlFor="travellers"
-                      className="block text-sm text-start font-medium text-gray-700 mb-2"
+                      className="block text-sm text-start font-medium mb-2 text-slate-700"
                     >
                       Travellers & Seat
                     </Label>
@@ -343,11 +420,10 @@ export default function MultiCitySearch() {
                       </PopoverTrigger>
 
                       <PopoverContent className="w-60">
-                        {/* Passengers: Adults */}
                         <div className="w-full">
                           <Label
                             htmlFor="adults"
-                            className="block text-sm text-start font-medium text-gray-700"
+                            className="block text-sm text-start font-medium text-slate-700"
                           >
                             Adults
                           </Label>
@@ -379,7 +455,7 @@ export default function MultiCitySearch() {
                         <div className="w-full">
                           <Label
                             htmlFor="children"
-                            className="block text-sm text-start font-medium text-gray-700 mt-1"
+                            className="block text-sm text-start font-medium mt-1 text-slate-700"
                           >
                             Children
                           </Label>
@@ -412,7 +488,7 @@ export default function MultiCitySearch() {
                         <div className="w-full">
                           <Label
                             htmlFor="infants"
-                            className="block text-sm text-start font-medium text-gray-700 mt-1"
+                            className="block text-sm text-start font-medium mt-1 text-slate-700"
                           >
                             Infants
                           </Label>
@@ -445,7 +521,7 @@ export default function MultiCitySearch() {
                         <div className="mt-2">
                           <Label
                             htmlFor="infants"
-                            className="block text-sm text-start font-medium text-gray-700 my-1"
+                            className="block text-sm text-start font-medium my-1 text-slate-700"
                           >
                             Select Seat Type
                           </Label>
@@ -480,7 +556,7 @@ export default function MultiCitySearch() {
 
               {/* Separator */}
               {index === 0 && flights.length > 1 && (
-                <Separator className="mt-1 bg-blue-400 h-1 rounded-full md:hidden" />
+                <Separator className="mt-1 bg-sky-400 h-1 rounded-full md:hidden" />
               )}
 
               {/* Remove Segment Button */}
@@ -488,7 +564,7 @@ export default function MultiCitySearch() {
                 <Button
                   type="button"
                   onClick={() => removeFlightSegment(index)}
-                  className="bg-red-600 hover:bg-red-700 text-white"
+                  className="bg-rose-600/90 hover:bg-rose-600 text-white"
                 >
                   <Trash className="w-4 h-4" />
                 </Button>
@@ -520,7 +596,7 @@ export default function MultiCitySearch() {
               {index === flights.length - 1 && (
                 <Button
                   type="submit"
-                  className="bg-blue-600 hover:bg-blue-700 text-white rounded-md md:hidden"
+                  className="bg-sky-600 hover:bg-sky-700 text-white rounded-md md:hidden"
                 >
                   Search flights
                 </Button>
@@ -533,7 +609,7 @@ export default function MultiCitySearch() {
         <div className="md:flex md:items-center md:justify-end mt-6 hidden">
           <Button
             type="submit"
-            className="bg-blue-600 hover:bg-blue-700 text-white rounded-md"
+            className="bg-sky-600 hover:bg-sky-700 text-white rounded-md"
           >
             Search flights
           </Button>

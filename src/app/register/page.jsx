@@ -29,7 +29,7 @@ export default function Register() {
   };
 
   return (
-    <div className="h-screen grid md:grid-cols-2 grid-cols-1">
+    <div className="min-h-[90vh] grid md:grid-cols-2 grid-cols-1">
       {/* Left Image Section */}
       <div className="hidden md:block h-full">
         <Image
@@ -46,7 +46,7 @@ export default function Register() {
         onSubmit={handleSubmit}
         className="flex flex-col items-center justify-center gap-4 px-6 md:px-12 py-12"
       >
-        <h1 className="text-3xl font-semibold text-blue-600">Register</h1>
+        <h1 className="text-3xl font-semibold text-sky-600">Register</h1>
 
         <div className="w-full">
           <Label htmlFor="username">Username</Label>
@@ -84,16 +84,16 @@ export default function Register() {
         <Button
           type="submit"
           disabled={loading}
-          className="w-full bg-blue-600 hover:bg-sky-700 text-white py-2 rounded-md"
+          className="w-full bg-sky-600 hover:bg-sky-700 text-white py-2 rounded-md"
         >
           {loading ? "Registering..." : "Register"}
         </Button>
 
-        {error && <p className="text-red-500 mt-2">Error: {error.message}</p>}
+        {error && <p className="text-rose-500 mt-2">Error: {error.message}</p>}
 
         <p>
           Already have an account?{" "}
-          <Link href="/login" className="text-blue-600 hover:underline">
+          <Link href="/login" className="text-sky-600 hover:underline">
             Login here
           </Link>
         </p>

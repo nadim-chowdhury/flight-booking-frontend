@@ -61,7 +61,7 @@ export default function Planes() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 my-16">
+    <div className="max-w-6xl mx-auto px-4 my-16 min-h-[90vh]">
       <h1 className="text-2xl font-bold mb-4">Planes</h1>
 
       <div className="flex items-center gap-4 mb-4">
@@ -91,7 +91,7 @@ export default function Planes() {
 
       {/* Planes Table */}
       <div className="overflow-x-auto">
-        <table className="min-w-full bg-white border border-slate-200 rounded-md">
+        <table className="min-w-full border rounded-md">
           <thead>
             <tr className="bg-slate-100">
               <th className="px-4 py-2 border text-left font-semibold">Id</th>
@@ -102,6 +102,7 @@ export default function Planes() {
               </th>
             </tr>
           </thead>
+
           <tbody>
             {loading ? (
               <tr>
@@ -131,7 +132,7 @@ export default function Planes() {
 
       {/* Pagination controls */}
       <div className="mt-4 flex justify-between items-center">
-        <span className="text-slate-700">
+        <span className="">
           Page {Math.floor(offset / limit) + 1} of {Math.ceil(total / limit)}
         </span>
         <div className="space-x-2">
@@ -141,7 +142,7 @@ export default function Planes() {
             className={`px-4 py-2 border rounded-md ${
               offset <= 0
                 ? "bg-slate-300 cursor-not-allowed"
-                : "bg-blue-500 text-white hover:bg-blue-700"
+                : "bg-sky-500 text-white hover:bg-sky-700"
             }`}
           >
             Previous
@@ -152,7 +153,7 @@ export default function Planes() {
             className={`px-4 py-2 border rounded-md ${
               offset + limit >= total
                 ? "bg-slate-300 cursor-not-allowed"
-                : "bg-blue-500 text-white hover:bg-blue-700"
+                : "bg-sky-500 text-white hover:bg-sky-700"
             }`}
           >
             Next

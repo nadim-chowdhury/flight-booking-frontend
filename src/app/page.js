@@ -38,17 +38,17 @@ export default function Home() {
         <div className="max-w-6xl px-4 mx-auto text-center">
           <h2 className="text-3xl font-bold mb-12">Why Choose Us?</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-gray-100 p-6 rounded-lg">
+            <div className="bg-sky-50 border p-6 rounded-lg">
               <h3 className="text-xl font-semibold mb-4">Best Prices</h3>
               <p>We offer competitive prices for all destinations worldwide.</p>
             </div>
-            <div className="bg-gray-100 p-6 rounded-lg">
+            <div className="bg-sky-50 border p-6 rounded-lg">
               <h3 className="text-xl font-semibold mb-4">24/7 Support</h3>
               <p>
                 Our team is here to help you with any questions at any time.
               </p>
             </div>
-            <div className="bg-gray-100 p-6 rounded-lg">
+            <div className="bg-sky-50 border p-6 rounded-lg">
               <h3 className="text-xl font-semibold mb-4">Easy Booking</h3>
               <p>
                 Book flights quickly and easily with our user-friendly platform.
@@ -67,7 +67,7 @@ export default function Home() {
           <p className="mb-8">Sign up now and get access to exclusive deals!</p>
           <Button
             onClick={() => router.push("/register")}
-            className="bg-blue-600"
+            className="bg-sky-600 hover:bg-sky-700"
           >
             Get Started
           </Button>
@@ -79,14 +79,14 @@ export default function Home() {
         <div className="max-w-6xl px-4 mx-auto text-center">
           <h2 className="text-3xl font-bold mb-12">What Our Customers Say</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="bg-gray-100 p-6 rounded-lg">
+            <div className="bg-sky-50 border p-6 rounded-lg">
               <p className="mb-4">
                 &quot;This platform made booking my flight so easy and
                 stress-free!&quot;
               </p>
               <p className="font-semibold">- John Doe</p>
             </div>
-            <div className="bg-gray-100 p-6 rounded-lg">
+            <div className="bg-sky-50 border p-6 rounded-lg">
               <p className="mb-4">
                 &quot;I found the best deal on my flight thanks to this
                 site!&quot;
@@ -101,7 +101,7 @@ export default function Home() {
       {/* {flights.length >= 0 && (
         <section className="py-16">
           <div className="max-w-6xl px-4 mx-auto">
-            <div className="bg-gray-100 p-6 rounded-lg">
+            <div className="bg-sky-100 p-6 rounded-lg">
               <h2 className="text-3xl font-bold mb-8">Available Flights</h2>
               <FlightList flights={flights} userId={userId} />
             </div>

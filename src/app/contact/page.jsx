@@ -4,44 +4,44 @@ export default function Contact() {
   return (
     <div className="max-w-6xl mx-auto px-4 my-16 min-h-[90vh]">
       <div className="">
-        <h1 className="text-3xl font-bold text-gray-800 mb-4">Contact Us</h1>
-        <p className="text-lg text-gray-700 mb-6">
+        <h1 className="text-3xl font-bold text-slate-800 mb-4">Contact Us</h1>
+        <p className="text-lg mb-6">
           We&apos;re here to help! If you have any questions, feedback, or need
           assistance, feel free to reach out to us using the contact information
           below or fill out our contact form.
         </p>
 
-        <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+        <h2 className="text-2xl font-semibold text-slate-800 mb-4">
           Customer Support
         </h2>
-        <p className="text-gray-700 mb-6">
+        <p className="mb-6">
           For any issues related to bookings, payments, or general inquiries,
           our support team is available 24/7.
         </p>
-        <p className="text-gray-700 mb-4">
+        <p className="mb-4">
           Email:{" "}
-          <a href="mailto:support@flightx.com" className="text-blue-600">
+          <a href="mailto:support@flightx.com" className="text-sky-600">
             support@flightx.com
           </a>
         </p>
-        <p className="text-gray-700 mb-4">
+        <p className="mb-4">
           Phone:{" "}
-          <a href="tel:+1234567890" className="text-blue-600">
+          <a href="tel:+1234567890" className="text-sky-600">
             +1 (234) 567-890
           </a>
         </p>
 
-        <h2 className="text-2xl font-semibold text-gray-800 mb-4">Visit Us</h2>
-        <p className="text-gray-700 mb-4">
+        <h2 className="text-2xl font-semibold text-slate-800 mb-4">Visit Us</h2>
+        <p className="mb-4">
           Headquarters: 123 FlightX Street, Suite 500, City, Country
         </p>
 
-        <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+        <h2 className="text-2xl font-semibold text-slate-800 mb-4">
           Contact Form
         </h2>
         <form className="bg-slate-50 border p-6 rounded-lg">
           <div className="mb-4">
-            <label className="block text-gray-700 mb-2" htmlFor="name">
+            <label className="block mb-2" htmlFor="name">
               Name
             </label>
             <input
@@ -54,7 +54,7 @@ export default function Contact() {
           </div>
 
           <div className="mb-4">
-            <label className="block text-gray-700 mb-2" htmlFor="email">
+            <label className="block mb-2" htmlFor="email">
               Email
             </label>
             <input
@@ -67,7 +67,7 @@ export default function Contact() {
           </div>
 
           <div className="mb-4">
-            <label className="block text-gray-700 mb-2" htmlFor="message">
+            <label className="block mb-2" htmlFor="message">
               Message
             </label>
             <textarea
@@ -81,7 +81,7 @@ export default function Contact() {
 
           <button
             type="submit"
-            className="bg-blue-600 text-white py-2 px-4 rounded-lg"
+            className="bg-sky-600 text-white py-2 px-4 rounded-lg"
           >
             Submit
           </button>

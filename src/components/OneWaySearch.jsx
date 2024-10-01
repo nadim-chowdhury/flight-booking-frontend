@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
-import { Calendar as CalendarIcon, Plus, Minus, Check } from "lucide-react";
+import { Calendar as CalendarIcon, Plus, Minus, Search } from "lucide-react";
 import { Calendar } from "../components/ui/calendar";
 import { cn } from "../lib/utils";
 import { Input } from "../components/ui/input";
@@ -14,6 +14,14 @@ import {
   PopoverTrigger,
 } from "../components/ui/popover";
 import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandItem,
+  CommandList,
+} from "../components/ui/command";
+import { useRouter, useSearchParams } from "next/navigation";
+import {
   Select,
   SelectContent,
   SelectGroup,
@@ -21,16 +29,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../components/ui/select";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "../components/ui/command";
-import { allAirportsData } from "../utils/all-airports-data";
-import { useRouter, useSearchParams } from "next/navigation";
 
 export default function OneWaySearch() {
   const [departureCity, setDepartureCity] = useState("");
@@ -42,28 +40,80 @@ export default function OneWaySearch() {
   const [seatType, setSeatType] = useState("economy");
   const [openDeparture, setOpenDeparture] = useState(false);
   const [openDestination, setOpenDestination] = useState(false);
+  const [departureAirportsData, setDepartureAirportsData] = useState([]);
+  const [destinationAirportsData, setDestinationAirportsData] = useState([]);
+  const [loadingDepartureAirports, setLoadingDepartureAirports] =
+    useState(false);
+  const [loadingDestinationAirports, setLoadingDestinationAirports] =
+    useState(false);
+  const [searchDepartureAirport, setSearchDepartureAirport] = useState("");
+  const [searchDestinationAirport, setSearchDestinationAirport] = useState("");
+  const [debouncedSearchDeparture, setDebouncedSearchDeparture] = useState("");
+  const [debouncedSearchDestination, setDebouncedSearchDestination] =
+    useState("");
 
   const router = useRouter();
   const searchParams = useSearchParams();
-  const type = searchParams.get("type");
 
   useEffect(() => {
-    const departureCityParam = searchParams.get("departureCity");
-    const destinationCityParam = searchParams.get("destinationCity");
-    const departureDateParam = searchParams.get("departureDate");
-    const adultsParam = searchParams.get("adults");
-    const childrenParam = searchParams.get("children");
-    const infantsParam = searchParams.get("infants");
-    const seatTypeParam = searchParams.get("seatType");
+    const handler = setTimeout(() => {
+      setDebouncedSearchDeparture(searchDepartureAirport);
+    }, 500);
 
-    if (departureCityParam) setDepartureCity(departureCityParam);
-    if (destinationCityParam) setDestinationCity(destinationCityParam);
-    if (departureDateParam) setDepartureDate(departureDateParam);
-    if (adultsParam) setAdults(Number(adultsParam));
-    if (childrenParam) setChildren(Number(childrenParam));
-    if (infantsParam) setInfants(Number(infantsParam));
-    if (seatTypeParam) setSeatType(seatTypeParam);
-  }, [searchParams]);
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchDepartureAirport]);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchDestination(searchDestinationAirport);
+    }, 500);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchDestinationAirport]);
+
+  useEffect(() => {
+    if (!debouncedSearchDeparture) return;
+    const fetchDepartureAirports = async () => {
+      setLoadingDepartureAirports(true);
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/airports?offset=0&limit=10&order=ASC&search=${debouncedSearchDeparture}`
+        );
+        const data = await res.json();
+        setDepartureAirportsData(data?.airports || []);
+      } catch (error) {
+        console.error("Failed to fetch departure airports:", error);
+      } finally {
+        setLoadingDepartureAirports(false);
+      }
+    };
+
+    fetchDepartureAirports();
+  }, [debouncedSearchDeparture]);
+
+  useEffect(() => {
+    if (!debouncedSearchDestination) return;
+    const fetchDestinationAirports = async () => {
+      setLoadingDestinationAirports(true);
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/airports?offset=0&limit=10&order=ASC&search=${debouncedSearchDestination}`
+        );
+        const data = await res.json();
+        setDestinationAirportsData(data?.airports || []);
+      } catch (error) {
+        console.error("Failed to fetch destination airports:", error);
+      } finally {
+        setLoadingDestinationAirports(false);
+      }
+    };
+
+    fetchDestinationAirports();
+  }, [debouncedSearchDestination]);
 
   const handleOneWaySearch = (e) => {
     e.preventDefault();
@@ -95,7 +145,7 @@ export default function OneWaySearch() {
           <div className="w-full">
             <Label
               htmlFor="departureCity"
-              className="block text-sm text-start font-medium text-gray-700 mb-2"
+              className="block text-sm text-start font-medium mb-2 text-slate-700"
             >
               Departure City
             </Label>
@@ -109,42 +159,54 @@ export default function OneWaySearch() {
                 >
                   <span className="truncate">
                     {departureCity
-                      ? allAirportsData.find(
-                          (airport) => airport.iata_code === departureCity
+                      ? departureAirportsData?.find(
+                          (airport) => airport?.iata === departureCity
                         )?.name
                       : "Select City"}
                   </span>
                 </Button>
               </PopoverTrigger>
-              <PopoverContent align="start" className="w-full p-0">
+
+              <PopoverContent className="w-[290px] p-0">
                 <Command>
-                  <CommandInput placeholder="Search Airport" />
+                  <div className="flex items-center border-b">
+                    <Search className="h-4 w-4 mx-3" />
+                    <Input
+                      placeholder="Search Airport"
+                      value={searchDepartureAirport}
+                      onChange={(e) =>
+                        setSearchDepartureAirport(e.target.value)
+                      }
+                      className="w-full border-l rounded-none border-r-0 border-t-0 border-b-0 focus:ring-0 focus:outline-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+                    />
+                  </div>
+
                   <CommandList>
-                    <CommandEmpty>No airport found.</CommandEmpty>
-                    <CommandGroup>
-                      {allAirportsData.map((airport) => (
-                        <CommandItem
-                          key={airport.id}
-                          value={airport.iata_code}
-                          onSelect={(iata) => {
-                            setDepartureCity(
-                              iata === departureCity ? "" : iata
-                            );
-                            setOpenDeparture(false);
-                          }}
-                        >
-                          <Check
-                            className={cn(
-                              "mr-2 h-4 w-4",
-                              departureCity === airport.iata_code
-                                ? "opacity-100"
-                                : "opacity-0"
-                            )}
-                          />
-                          {airport.name} ({airport.iata_code}) - {airport.city}
-                        </CommandItem>
-                      ))}
-                    </CommandGroup>
+                    {loadingDepartureAirports ? (
+                      <CommandEmpty>Loading...</CommandEmpty>
+                    ) : departureAirportsData?.length > 0 ? (
+                      <CommandGroup>
+                        {departureAirportsData?.map((airport) => (
+                          <CommandItem
+                            key={airport?.id}
+                            value={airport?.iata}
+                            onSelect={(iata) => {
+                              setDepartureCity(
+                                iata === departureCity ? "" : iata
+                              );
+                              setOpenDeparture(false);
+                              setSearchDepartureAirport("");
+                            }}
+                            className=""
+                          >
+                            {airport?.name} ({airport?.iata && airport?.iata}) -{" "}
+                            {airport?.city}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    ) : (
+                      <CommandEmpty>No airports found.</CommandEmpty>
+                    )}
                   </CommandList>
                 </Command>
               </PopoverContent>
@@ -155,7 +217,7 @@ export default function OneWaySearch() {
           <div className="w-full">
             <Label
               htmlFor="destinationCity"
-              className="block text-sm text-start font-medium text-gray-700 mb-2"
+              className="block text-sm text-start font-medium mb-2 text-slate-700"
             >
               Destination City
             </Label>
@@ -169,42 +231,54 @@ export default function OneWaySearch() {
                 >
                   <span className="truncate">
                     {destinationCity
-                      ? allAirportsData.find(
-                          (airport) => airport.iata_code === destinationCity
+                      ? destinationAirportsData?.find(
+                          (airport) => airport?.iata === destinationCity
                         )?.name
                       : "Select City"}
                   </span>
                 </Button>
               </PopoverTrigger>
-              <PopoverContent align="start" className="w-full p-0">
+
+              <PopoverContent className="w-[290px] p-0">
                 <Command>
-                  <CommandInput placeholder="Search Airport" />
+                  <div className="flex items-center border-b">
+                    <Search className="h-4 w-4 mx-3" />
+                    <Input
+                      placeholder="Search Airport"
+                      value={searchDestinationAirport}
+                      onChange={(e) =>
+                        setSearchDestinationAirport(e.target.value)
+                      }
+                      className="w-full border-l rounded-none border-r-0 border-t-0 border-b-0 focus:ring-0 focus:outline-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+                    />
+                  </div>
+
                   <CommandList>
-                    <CommandEmpty>No airport found.</CommandEmpty>
-                    <CommandGroup>
-                      {allAirportsData.map((airport) => (
-                        <CommandItem
-                          key={airport.id}
-                          value={airport.iata_code}
-                          onSelect={(iata) => {
-                            setDestinationCity(
-                              iata === destinationCity ? "" : iata
-                            );
-                            setOpenDestination(false);
-                          }}
-                        >
-                          <Check
-                            className={cn(
-                              "mr-2 h-4 w-4",
-                              destinationCity === airport.iata_code
-                                ? "opacity-100"
-                                : "opacity-0"
-                            )}
-                          />
-                          {airport.name} ({airport.iata_code}) - {airport.city}
-                        </CommandItem>
-                      ))}
-                    </CommandGroup>
+                    {loadingDestinationAirports ? (
+                      <CommandEmpty>Loading...</CommandEmpty>
+                    ) : destinationAirportsData?.length > 0 ? (
+                      <CommandGroup>
+                        {destinationAirportsData?.map((airport) => (
+                          <CommandItem
+                            key={airport?.id}
+                            value={airport?.iata}
+                            onSelect={(iata) => {
+                              setDestinationCity(
+                                iata === destinationCity ? "" : iata
+                              );
+                              setOpenDestination(false);
+                              setSearchDestinationAirport("");
+                            }}
+                            className=""
+                          >
+                            {airport?.name} ({airport?.iata && airport?.iata}) -{" "}
+                            {airport?.city}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    ) : (
+                      <CommandEmpty>No airports found.</CommandEmpty>
+                    )}
                   </CommandList>
                 </Command>
               </PopoverContent>
@@ -214,8 +288,8 @@ export default function OneWaySearch() {
           {/* Departure Date */}
           <div className="w-full">
             <Label
-              htmlFor="departureCity"
-              className="block text-sm text-start font-medium text-gray-700 mb-2"
+              htmlFor="departureDate"
+              className="block text-sm text-start font-medium mb-2 text-slate-700"
             >
               Departure Date
             </Label>
@@ -238,6 +312,7 @@ export default function OneWaySearch() {
                   )}
                 </Button>
               </PopoverTrigger>
+
               <PopoverContent className="w-auto p-0">
                 <Calendar
                   mode="single"
@@ -254,8 +329,8 @@ export default function OneWaySearch() {
           {/* Travellers & Seat Type */}
           <div className="w-full">
             <Label
-              htmlFor="departureCity"
-              className="block text-sm text-start font-medium text-gray-700 mb-2"
+              htmlFor="travellers"
+              className="block text-sm text-start font-medium mb-2 text-slate-700"
             >
               Travellers & Seat
             </Label>
@@ -284,7 +359,7 @@ export default function OneWaySearch() {
                 <div className="w-full">
                   <Label
                     htmlFor="adults"
-                    className="block text-sm text-start font-medium text-gray-700"
+                    className="block text-sm text-start font-medium text-slate-700"
                   >
                     Adults
                   </Label>
@@ -316,7 +391,7 @@ export default function OneWaySearch() {
                 <div className="w-full">
                   <Label
                     htmlFor="children"
-                    className="block text-sm text-start font-medium text-gray-700 mt-1"
+                    className="block text-sm text-start font-medium mt-1 text-slate-700"
                   >
                     Children
                   </Label>
@@ -347,7 +422,7 @@ export default function OneWaySearch() {
                 <div className="w-full">
                   <Label
                     htmlFor="infants"
-                    className="block text-sm text-start font-medium text-gray-700 mt-1"
+                    className="block text-sm text-start font-medium mt-1 text-slate-700"
                   >
                     Infants
                   </Label>
@@ -377,8 +452,8 @@ export default function OneWaySearch() {
                 {/* Seat Type */}
                 <div className="mt-2">
                   <Label
-                    htmlFor="infants"
-                    className="block text-sm text-start font-medium text-gray-700 my-1"
+                    htmlFor="seatType"
+                    className="block text-sm text-start font-medium my-1 text-slate-700"
                   >
                     Select Seat Type
                   </Label>
@@ -408,7 +483,7 @@ export default function OneWaySearch() {
           {/* Search Button */}
           <Button
             type="submit"
-            className="bg-blue-600 hover:bg-blue-700 text-white rounded-md md:hidden"
+            className="bg-sky-600 hover:bg-sky-700 text-white rounded-md md:hidden"
           >
             Search flights
           </Button>
@@ -418,7 +493,7 @@ export default function OneWaySearch() {
         <div className="md:flex md:items-center md:justify-end hidden">
           <Button
             type="submit"
-            className="bg-blue-600 hover:bg-blue-700 text-white rounded-md mt-6"
+            className="bg-sky-600 hover:bg-sky-700 text-white rounded-md mt-6"
           >
             Search flights
           </Button>

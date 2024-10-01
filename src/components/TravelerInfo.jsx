@@ -22,13 +22,13 @@ export default function TravelerInfo({ travelerType }) {
 
   return (
     <div className="mt-6 bg-slate-50 border rounded-lg p-4">
-      <h4 className="font-semibold text-lg text-gray-800 mb-4">
+      <h4 className="font-semibold text-lg text-slate-800 mb-4">
         {travelerType} Information
       </h4>
 
       {/* Title */}
       <div className="mb-4">
-        <label className="block text-gray-700 mb-2">Title</label>
+        <label className="block mb-2">Title</label>
         <select
           name="title"
           value={travelerDetails.title}
@@ -46,7 +46,7 @@ export default function TravelerInfo({ travelerType }) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* First Name */}
         <div className="mb-4">
-          <label className="block text-gray-700 mb-2">First Name</label>
+          <label className="block mb-2">First Name</label>
           <input
             type="text"
             name="firstName"
@@ -58,7 +58,7 @@ export default function TravelerInfo({ travelerType }) {
 
         {/* Last Name */}
         <div className="mb-4">
-          <label className="block text-gray-700 mb-2">Last Name</label>
+          <label className="block mb-2">Last Name</label>
           <input
             type="text"
             name="lastName"
@@ -71,7 +71,7 @@ export default function TravelerInfo({ travelerType }) {
 
       {/* Date of Birth */}
       <div className="mb-4">
-        <label className="block text-gray-700 mb-2">Date of Birth</label>
+        <label className="block mb-2">Date of Birth</label>
         <input
           type="date"
           name="dateOfBirth"
@@ -85,7 +85,7 @@ export default function TravelerInfo({ travelerType }) {
       {travelerType === "Adult" && (
         <>
           <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Passport Number</label>
+            <label className="block mb-2">Passport Number</label>
             <input
               type="text"
               name="passportNumber"
@@ -95,7 +95,7 @@ export default function TravelerInfo({ travelerType }) {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Passport Expiry</label>
+            <label className="block mb-2">Passport Expiry</label>
             <input
               type="date"
               name="passportExpiry"

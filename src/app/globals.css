@@ -68,9 +68,67 @@
   }
 }
 
+/* table {
+  overflow-x: scroll;
+} */
+
+table td {
+  @apply whitespace-nowrap;
+}
+
 .truncate {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 100%;
+}
+
+/* Minimalist Tailwind CSS for the calendar */
+
+.calendar-component {
+  @apply bg-white rounded-md p-4 !w-full border !border-slate-200;
+}
+
+/* Calendar tiles (individual days) */
+.calendar-component .react-calendar__tile {
+  @apply p-2 hover:!bg-sky-50 rounded-md transition-colors duration-200 ease-in-out;
+}
+
+/* Highlight for today's date */
+.calendar-component .react-calendar__tile--now {
+  @apply bg-sky-100 text-sky-700 rounded-md hover:!bg-sky-50;
+}
+
+/* Highlight for selected date */
+.calendar-component .react-calendar__tile--active {
+  @apply bg-white text-sky-700 rounded-md hover:!bg-white;
+}
+
+.calendar-component .react-calendar__tile--active:enabled,
+.react-calendar__tile--active:enabled:focus {
+  @apply !bg-white text-sky-700 rounded-md hover:!bg-white;
+}
+
+/* Navigation (month/year navigation) */
+.calendar-component .react-calendar__navigation__label {
+  @apply text-lg font-medium text-slate-800;
+}
+
+.calendar-component .react-calendar__navigation button {
+  @apply text-slate-600 hover:!bg-sky-50 !rounded-md p-2 transition-colors duration-150 ease-in-out;
+}
+
+/* Weekdays */
+.calendar-component .react-calendar__month-view__weekdays__weekday {
+  @apply uppercase font-bold tracking-wide !no-underline;
+}
+
+/* Days */
+/* .calendar-component .react-calendar__month-view__days {
+  @apply gap-1;
+} */
+
+/* Weekend days */
+.calendar-component .react-calendar__month-view__days__day--weekend {
+  @apply text-rose-500;
 }

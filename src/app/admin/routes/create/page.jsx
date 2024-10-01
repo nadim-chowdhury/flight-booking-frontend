@@ -253,7 +253,7 @@ export default function CreateRoute() {
         {/* Submit Button */}
         <button
           type="submit"
-          className={`bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 ${
+          className={`bg-sky-600 text-white px-4 py-2 rounded-md hover:bg-sky-700 ${
             submitting ? "opacity-50 cursor-not-allowed" : ""
           }`}
           disabled={submitting} // Disable button while submitting

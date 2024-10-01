@@ -69,7 +69,7 @@ export default function Airports() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 my-16">
+    <div className="max-w-6xl mx-auto px-4 my-16 min-h-[90vh]">
       <h1 className="text-2xl font-bold mb-4">Airports</h1>
 
       <div className="flex items-center gap-4 mb-4">
@@ -99,9 +99,9 @@ export default function Airports() {
 
       {/* Airports Table */}
       <div className="overflow-x-auto">
-        <table className="min-w-full bg-white border border-gray-200 rounded-md">
+        <table className="min-w-full border rounded-md">
           <thead>
-            <tr className="bg-gray-100">
+            <tr className="bg-slate-100">
               <th className="px-4 py-2 border text-left font-semibold">Id</th>
               <th className="px-4 py-2 border text-left font-semibold">Name</th>
               <th className="px-4 py-2 border text-left font-semibold">City</th>
@@ -115,6 +115,7 @@ export default function Airports() {
               </th>
             </tr>
           </thead>
+
           <tbody>
             {loading ? (
               <tr>
@@ -124,7 +125,7 @@ export default function Airports() {
               </tr>
             ) : airportsData.length > 0 ? (
               airportsData.map((airport) => (
-                <tr key={airport?.id} className="hover:bg-gray-50">
+                <tr key={airport?.id} className="hover:bg-slate-50">
                   <td className="px-4 py-2 border">{airport?.id}</td>
                   <td className="px-4 py-2 border">{airport?.name}</td>
                   <td className="px-4 py-2 border">{airport?.city}</td>
@@ -147,7 +148,7 @@ export default function Airports() {
 
       {/* Pagination controls */}
       <div className="mt-4 flex justify-between items-center">
-        <span className="text-gray-700">
+        <span className="">
           Page {Math.floor(offset / limit) + 1} of {Math.ceil(total / limit)}
         </span>
         <div className="space-x-2">
@@ -156,8 +157,8 @@ export default function Airports() {
             onClick={() => handlePageChange(offset - limit)}
             className={`px-4 py-2 border rounded-md ${
               offset <= 0
-                ? "bg-gray-300 cursor-not-allowed"
-                : "bg-blue-500 text-white hover:bg-blue-700"
+                ? "bg-slate-300 cursor-not-allowed"
+                : "bg-sky-500 text-white hover:bg-sky-700"
             }`}
           >
             Previous
@@ -167,8 +168,8 @@ export default function Airports() {
             onClick={() => handlePageChange(offset + limit)}
             className={`px-4 py-2 border rounded-md ${
               offset + limit >= total
-                ? "bg-gray-300 cursor-not-allowed"
-                : "bg-blue-500 text-white hover:bg-blue-700"
+                ? "bg-slate-300 cursor-not-allowed"
+                : "bg-sky-500 text-white hover:bg-sky-700"
             }`}
           >
             Next

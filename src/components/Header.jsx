@@ -25,8 +25,8 @@ export default function Header() {
       <div className="max-w-6xl px-4 mx-auto py-4 flex items-center justify-between">
         {/* Logo */}
         <Link href="/">
-          <h1 className="text-3xl font-bold tracking-tight uppercase">
-            Travel<span className="text-blue-600">Buddy</span>
+          <h1 className="text-3xl font-bold uppercase">
+            Travel<span className="text-sky-600">Buddy</span>
           </h1>
         </Link>
 
@@ -35,7 +35,7 @@ export default function Header() {
           <nav className="hidden md:flex space-x-8 font-medium">
             {navLinks.slice(0, -1).map((link) => (
               <Link key={link.href} href={link.href}>
-                <span className="text-gray-700 hover:text-blue-600 hover:underline">
+                <span className="hover:text-sky-600 hover:underline">
                   {link.label}
                 </span>
               </Link>
@@ -45,14 +45,20 @@ export default function Header() {
           {/* Call to Action Button */}
           <div className="hidden md:flex gap-2">
             <Link href="/login">
-              <Button className="bg-blue-600">Login</Button>
+              <Button className="bg-sky-600 hover:bg-sky-700 text-white">
+                Login
+              </Button>
             </Link>
           </div>
         </div>
 
         {/* Mobile Menu Button */}
-        <div className="md:hidden">
-          <Button onClick={toggleNav} size="sm">
+        <div className="md:hidden relative">
+          <Button
+            onClick={toggleNav}
+            size="sm"
+            className="bg-sky-600 hover:bg-sky-700 text-white"
+          >
             {navOpen ? (
               <AiOutlineClose size={20} />
             ) : (
@@ -60,30 +66,30 @@ export default function Header() {
             )}
           </Button>
         </div>
-      </div>
 
-      {/* Mobile Navigation */}
-      {navOpen && (
-        <nav className="md:hidden bg-gray-50 border-t">
-          <ul className="space-y-4 px-4 py-4 flex flex-col justify-center items-center">
-            {navLinks.map((link) => (
-              <li key={link.href}>
-                <Link href={link.href}>
-                  <span
-                    className={`block text-gray-700 hover:text-blue-600 hover:underline ${
-                      link.href === "/login"
-                        ? "px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-center"
-                        : ""
-                    }`}
-                  >
-                    {link.label}
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      )}
+        {/* Mobile Navigation */}
+        {navOpen && (
+          <nav className="md:hidden bg-sky-50 border-y absolute top-[68px] left-0 w-full">
+            <ul className="space-y-4 px-4 py-6 flex flex-col justify-center items-center">
+              {navLinks.map((link) => (
+                <li key={link.href}>
+                  <Link href={link.href}>
+                    <span
+                      className={`block hover:text-slate-500 ${
+                        link.href === "/login"
+                          ? "px-4 py-2 bg-sky-600 text-white rounded-md hover:bg-sky-700 text-center mt-2"
+                          : ""
+                      }`}
+                    >
+                      {link.label}
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        )}
+      </div>
     </header>
   );
 }

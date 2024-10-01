@@ -11,11 +11,11 @@ export default function SelectedFlightDetails() {
     <div className="max-w-6xl mx-auto px-4 my-8 md:my-16">
       {/* Header */}
       <div className="flex flex-col md:flex-row items-start justify-between gap-6">
-        <h4 className="text-2xl font-bold text-red-600">Review Your Booking</h4>
+        <h4 className="text-2xl font-bold text-rose-600">
+          Review Your Booking
+        </h4>
         <div className="flex items-center space-x-3">
-          <span className="text-base text-gray-700 cursor-pointer">
-            Flight Selection
-          </span>
+          <span className="text-base cursor-pointer">Flight Selection</span>
           <svg
             width="9"
             height="14"
@@ -30,7 +30,7 @@ export default function SelectedFlightDetails() {
               strokeLinejoin="round"
             />
           </svg>
-          <span className="text-base text-red-600">Booking</span>
+          <span className="text-base text-rose-600">Booking</span>
           <svg
             width="9"
             height="14"
@@ -45,7 +45,7 @@ export default function SelectedFlightDetails() {
               strokeLinejoin="round"
             />
           </svg>
-          <span className="text-base text-gray-700">Payment</span>
+          <span className="text-base ">Payment</span>
         </div>
       </div>
 
@@ -56,8 +56,8 @@ export default function SelectedFlightDetails() {
           {/* Flight 1 */}
           <div className="bg-slate-50 border rounded-lg">
             <div className="border-b p-4 flex justify-between items-center">
-              <h4 className="font-bold text-lg text-blue-600">DAC-DEL</h4>
-              <button className="bg-red-600 text-white px-3 py-1 rounded transition duration-200 hover:bg-red-700">
+              <h4 className="font-bold text-lg text-sky-600">DAC-DEL</h4>
+              <button className="bg-rose-600 text-white px-3 py-1 rounded transition duration-200 hover:bg-rose-700">
                 View Baggage
               </button>
             </div>
@@ -71,7 +71,7 @@ export default function SelectedFlightDetails() {
                     height={60}
                   />
                   <div className="ml-4">
-                    <p className="text-gray-600 text-sm">Air India</p>
+                    <p className="text-slate-600 text-sm">Air India</p>
                     <p className="text-lg font-semibold">AI | 228</p>
                     <div className="flex space-x-2">
                       <p className="text-sm font-bold">Aircraft: Airbus A320</p>
@@ -79,31 +79,31 @@ export default function SelectedFlightDetails() {
                     </div>
                   </div>
                 </div>
-                <p className="text-gray-800 mt-2 sm:mt-0">Economy Class</p>
+                <p className="text-slate-800 mt-2 sm:mt-0">Economy Class</p>
               </div>
 
               <div className="flex flex-col sm:flex-row justify-between items-center py-4">
                 <div className="text-center sm:text-left">
-                  <p className="text-blue-400 text-sm">Depart</p>
+                  <p className="text-sky-400 text-sm">Depart</p>
                   <p className="text-lg font-semibold">15:00</p>
-                  <p className="text-sm font-bold text-blue-400">
+                  <p className="text-sm font-bold text-sky-400">
                     Fri, 25 Oct 2024
                   </p>
                   <p className="text-lg font-bold">DAC</p>
-                  <p className="text-gray-800">Dhaka</p>
+                  <p className="text-slate-800">Dhaka</p>
                 </div>
                 <div className="text-center my-4 sm:my-0">
-                  <p className="text-blue-400 text-sm">2 hours 25 minutes</p>
-                  <p className="text-gray-800">Non Stop</p>
+                  <p className="text-sky-400 text-sm">2 hours 25 minutes</p>
+                  <p className="text-slate-800">Non Stop</p>
                 </div>
                 <div className="text-center sm:text-left">
-                  <p className="text-blue-400 text-sm">Arrive</p>
+                  <p className="text-sky-400 text-sm">Arrive</p>
                   <p className="text-lg font-semibold">16:55</p>
-                  <p className="text-sm font-bold text-blue-400">
+                  <p className="text-sm font-bold text-sky-400">
                     Fri, 25 Oct 2024
                   </p>
                   <p className="text-lg font-bold">DEL</p>
-                  <p className="text-gray-800">Delhi</p>
+                  <p className="text-slate-800">Delhi</p>
                 </div>
               </div>
             </div>
@@ -112,8 +112,8 @@ export default function SelectedFlightDetails() {
           {/* Flight 2 */}
           <div className="bg-slate-50 border rounded-lg mt-6">
             <div className="border-b p-4 flex justify-between items-center">
-              <h4 className="font-bold text-lg text-blue-600">DEL-DXB</h4>
-              <button className="bg-red-600 text-white px-3 py-1 rounded transition duration-200 hover:bg-red-700">
+              <h4 className="font-bold text-lg text-sky-600">DEL-DXB</h4>
+              <button className="bg-rose-600 text-white px-3 py-1 rounded transition duration-200 hover:bg-rose-700">
                 View Baggage
               </button>
             </div>
@@ -127,7 +127,7 @@ export default function SelectedFlightDetails() {
                     height={60}
                   />
                   <div className="ml-4">
-                    <p className="text-gray-600 text-sm">Air India</p>
+                    <p className="text-slate-600 text-sm">Air India</p>
                     <p className="text-lg font-semibold">AI | 929</p>
                     <div className="flex space-x-2">
                       <p className="text-sm font-bold">
@@ -137,31 +137,31 @@ export default function SelectedFlightDetails() {
                     </div>
                   </div>
                 </div>
-                <p className="text-gray-800 mt-2 sm:mt-0">Economy Class</p>
+                <p className="text-slate-800 mt-2 sm:mt-0">Economy Class</p>
               </div>
 
               <div className="flex flex-col sm:flex-row justify-between items-center py-4">
                 <div className="text-center sm:text-left">
-                  <p className="text-blue-400 text-sm">Depart</p>
+                  <p className="text-sky-400 text-sm">Depart</p>
                   <p className="text-lg font-semibold">06:05</p>
-                  <p className="text-sm font-bold text-blue-400">
+                  <p className="text-sm font-bold text-sky-400">
                     Mon, 28 Oct 2024
                   </p>
                   <p className="text-lg font-bold">DEL</p>
-                  <p className="text-gray-800">Delhi</p>
+                  <p className="text-slate-800">Delhi</p>
                 </div>
                 <div className="text-center my-4 sm:my-0">
-                  <p className="text-blue-400 text-sm">3 hours 55 minutes</p>
-                  <p className="text-gray-800">Non Stop</p>
+                  <p className="text-sky-400 text-sm">3 hours 55 minutes</p>
+                  <p className="text-slate-800">Non Stop</p>
                 </div>
                 <div className="text-center sm:text-left">
-                  <p className="text-blue-400 text-sm">Arrive</p>
+                  <p className="text-sky-400 text-sm">Arrive</p>
                   <p className="text-lg font-semibold">08:00</p>
-                  <p className="text-sm font-bold text-blue-400">
+                  <p className="text-sm font-bold text-sky-400">
                     Mon, 28 Oct 2024
                   </p>
                   <p className="text-lg font-bold">DXB</p>
-                  <p className="text-gray-800">Dubai</p>
+                  <p className="text-slate-800">Dubai</p>
                 </div>
               </div>
             </div>
@@ -180,22 +180,22 @@ export default function SelectedFlightDetails() {
             <h4 className="text-xl font-semibold">Fare Summary</h4>
             <div className="mt-4">
               <p>Base Fare</p>
-              <p className="text-gray-800">USD 200</p>
+              <p className="text-slate-800">USD 200</p>
             </div>
             <div className="mt-2">
               <p>Taxes</p>
-              <p className="text-gray-800">USD 50</p>
+              <p className="text-slate-800">USD 50</p>
             </div>
             <hr className="my-4" />
             <div className="font-bold text-lg">
               <p>Total Fare</p>
-              <p className="text-gray-800">USD 250</p>
+              <p className="text-slate-800">USD 250</p>
             </div>
           </div>
         </div>
       </div>
 
-      <button className="bg-red-600 text-white px-4 py-2 w-full mt-6 rounded transition duration-200 hover:bg-red-700">
+      <button className="bg-rose-600 text-white px-4 py-2 w-full mt-6 rounded transition duration-200 hover:bg-rose-700">
         Confirm
       </button>
     </div>

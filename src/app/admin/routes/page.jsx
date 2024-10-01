@@ -61,7 +61,7 @@ export default function Routes() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 my-16">
+    <div className="max-w-6xl mx-auto px-4 my-16 min-h-[90vh]">
       <h1 className="text-2xl font-bold mb-4">Routes</h1>
 
       <div className="flex items-center gap-4 mb-4">
@@ -91,9 +91,9 @@ export default function Routes() {
 
       {/* Routes Table */}
       <div className="overflow-x-auto">
-        <table className="min-w-full bg-white border border-gray-200 rounded-md">
+        <table className="min-w-full border rounded-md">
           <thead>
-            <tr className="bg-gray-100">
+            <tr className="bg-sky-100">
               <th className="px-4 py-2 border text-left font-semibold">Id</th>
               <th className="px-4 py-2 border text-left font-semibold">
                 Flight Number
@@ -115,6 +115,7 @@ export default function Routes() {
               </th>
             </tr>
           </thead>
+
           <tbody>
             {loading ? (
               <tr>
@@ -124,7 +125,7 @@ export default function Routes() {
               </tr>
             ) : routesData.length > 0 ? (
               routesData?.map((route) => (
-                <tr key={route?.id} className="hover:bg-gray-50">
+                <tr key={route?.id} className="hover:bg-sky-50">
                   <td className="px-4 py-2 border">{route?.id}</td>
                   <td className="px-4 py-2 border">{route?.flight_number}</td>
                   <td className="px-4 py-2 border">{route?.airline_code}</td>
@@ -149,7 +150,7 @@ export default function Routes() {
 
       {/* Pagination controls */}
       <div className="mt-4 flex justify-between items-center">
-        <span className="text-gray-700">
+        <span className="">
           Page {Math.floor(offset / limit) + 1} of {Math.ceil(total / limit)}
         </span>
         <div className="space-x-2">
@@ -158,8 +159,8 @@ export default function Routes() {
             onClick={() => handlePageChange(offset - limit)}
             className={`px-4 py-2 border rounded-md ${
               offset <= 0
-                ? "bg-gray-300 cursor-not-allowed"
-                : "bg-blue-500 text-white hover:bg-blue-700"
+                ? "bg-sky-300 cursor-not-allowed"
+                : "bg-sky-500 text-white hover:bg-sky-700"
             }`}
           >
             Previous
@@ -169,8 +170,8 @@ export default function Routes() {
             onClick={() => handlePageChange(offset + limit)}
             className={`px-4 py-2 border rounded-md ${
               offset + limit >= total
-                ? "bg-gray-300 cursor-not-allowed"
-                : "bg-blue-500 text-white hover:bg-blue-700"
+                ? "bg-sky-300 cursor-not-allowed"
+                : "bg-sky-500 text-white hover:bg-sky-700"
             }`}
           >
             Next

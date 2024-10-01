@@ -40,20 +40,20 @@ export default function FareSummary({ fareSummary }) {
       <div className="m-3 overflow-x-scroll whitespace-nowrap md:overflow-x-auto">
         <table className="table-auto w-full border-collapse">
           <thead>
-            <tr className="text-left bg-gray-100">
-              <th className="border px-2 py-2 text-sm font-semibold text-gray-700">
+            <tr className="text-left bg-sky-100">
+              <th className="border px-2 py-2 text-sm font-semibold">
                 Fare Summary
               </th>
-              <th className="border px-2 py-2 text-sm font-semibold text-gray-700">
+              <th className="border px-2 py-2 text-sm font-semibold">
                 Base Fare
               </th>
-              <th className="border px-2 py-2 text-sm font-semibold text-gray-700">
+              <th className="border px-2 py-2 text-sm font-semibold">
                 Taxes + Fees
               </th>
-              <th className="border px-2 py-2 text-sm font-semibold text-gray-700">
+              <th className="border px-2 py-2 text-sm font-semibold">
                 Per Passenger
               </th>
-              <th className="border px-2 py-2 text-sm font-semibold text-gray-700">
+              <th className="border px-2 py-2 text-sm font-semibold">
                 Total
               </th>
             </tr>
@@ -64,17 +64,17 @@ export default function FareSummary({ fareSummary }) {
               breakdownData.map((fare, index) => (
                 <tr className="text-sm" key={index}>
                   <td className="border px-2 py-2">{fare.type}</td>
-                  <td className="border px-2 py-2 text-blue-600">
+                  <td className="border px-2 py-2 text-sky-600">
                     BDT {fare.baseFare.toLocaleString()}
                   </td>
-                  <td className="border px-2 py-2 text-blue-600">
+                  <td className="border px-2 py-2 text-sky-600">
                     BDT {fare.taxesAndFees.toLocaleString()}
                   </td>
-                  <td className="border px-2 py-2 text-blue-600">
+                  <td className="border px-2 py-2 text-sky-600">
                     BDT ({fare.totalPerPassenger.toLocaleString()} x{" "}
                     {fare.count})
                   </td>
-                  <td className="border px-2 py-2 font-bold text-blue-600">
+                  <td className="border px-2 py-2 font-bold text-sky-600">
                     BDT {fare.total.toLocaleString()}
                   </td>
                 </tr>
@@ -83,7 +83,7 @@ export default function FareSummary({ fareSummary }) {
               <tr>
                 <td
                   colSpan="5"
-                  className="border px-2 py-2 text-center text-gray-500"
+                  className="border px-2 py-2 text-center text-slate-500"
                 >
                   No fare breakdown available.
                 </td>
@@ -92,14 +92,14 @@ export default function FareSummary({ fareSummary }) {
 
             {/* Total Row */}
             <tr className="text-sm">
-              <td className="border px-2 py-2 font-bold text-blue-600">
+              <td className="border px-2 py-2 font-bold text-sky-600">
                 Total ({totalTravelers} Traveler
                 {totalTravelers > 1 ? "s" : ""})
               </td>
               <td className="border px-2 py-2"></td>
               <td className="border px-2 py-2"></td>
               <td className="border px-2 py-2"></td>
-              <td className="border px-2 py-2 font-bold text-blue-600">
+              <td className="border px-2 py-2 font-bold text-sky-600">
                 BDT {totalFareAmount.toLocaleString()}
               </td>
             </tr>
@@ -109,14 +109,14 @@ export default function FareSummary({ fareSummary }) {
 
       {/* Additional Fare Information */}
       <div className="m-3">
-        {/* <p className="text-sm font-medium text-gray-600">
+        {/* <p className="text-sm font-medium text-slate-600">
           Last Ticket Date: {lastTicketDate || "N/A"}
         </p> */}
-        <p className="text-sm font-medium text-gray-600">
+        <p className="text-sm font-medium text-slate-600">
           Refundable: {refundable ? "Yes" : "No"}
         </p>
         {refundable && (
-          <p className="text-sm font-medium text-gray-600">
+          <p className="text-sm font-medium text-slate-600">
             Refund Penalty: {refundPenalty}%
           </p>
         )}

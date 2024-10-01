@@ -12,7 +12,7 @@ export default function ContactDetails() {
     <div className="bg-slate-50 border rounded-lg p-4 mt-6">
       {/* Contact Details Section */}
       <div className="personal-details">
-        <h3 className="font-bold text-2xl mb-0 text-gray-900 pr-3">
+        <h3 className="font-bold text-2xl mb-0 text-slate-900 pr-3">
           Contact Details
         </h3>
         <div className="passport flex items-center mt-3">
@@ -46,9 +46,7 @@ export default function ContactDetails() {
               strokeLinejoin="round"
             ></path>
           </svg>
-          <p className="text-sm text-gray-700 mb-0">
-            Receive booking confirmation & updates
-          </p>
+          <p className="text-sm mb-0">Receive booking confirmation & updates</p>
         </div>
       </div>
 
@@ -58,7 +56,7 @@ export default function ContactDetails() {
           {/* Email Field */}
           <div className="form-group mb-3">
             <label htmlFor="email" className="text-sm font-semibold mb-1 block">
-              Email <span className="text-red-500">*</span>
+              Email <span className="text-rose-500">*</span>
             </label>
             <input
               name="email"
@@ -74,7 +72,7 @@ export default function ContactDetails() {
           {/* Phone Field */}
           <div className="form-group mb-3">
             <label htmlFor="phone" className="text-sm font-semibold mb-1 block">
-              Contact Number <span className="text-red-500">*</span>
+              Contact Number <span className="text-rose-500">*</span>
             </label>
             <PhoneInput
               country={"bd"}

@@ -21,11 +21,11 @@ export default function AdminPage() {
 
       <Dashboard />
 
-      <ul className="grid grid-cols-4 gap-4">
+      <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {adminSections.map((section) => (
           <li key={section.href}>
             <Link href={section.href}>
-              <div className="text-blue-500 hover:underline bg-slate-50 border p-6 rounded-md">
+              <div className="text-sky-600 font-medium hover:underline bg-sky-50/50 border p-6 rounded-md">
                 {section.label}
               </div>
             </Link>
