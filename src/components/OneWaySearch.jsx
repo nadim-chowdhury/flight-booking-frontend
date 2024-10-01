@@ -167,7 +167,7 @@ export default function OneWaySearch() {
                 </Button>
               </PopoverTrigger>
 
-              <PopoverContent className="w-[290px] p-0">
+              <PopoverContent className="w-[310px] p-0">
                 <Command>
                   <div className="flex items-center border-b">
                     <Search className="h-4 w-4 mx-3" />
@@ -239,7 +239,7 @@ export default function OneWaySearch() {
                 </Button>
               </PopoverTrigger>
 
-              <PopoverContent className="w-[290px] p-0">
+              <PopoverContent className="w-[310px] p-0">
                 <Command>
                   <div className="flex items-center border-b">
                     <Search className="h-4 w-4 mx-3" />
