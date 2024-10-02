@@ -98,8 +98,8 @@ export default function AllFlights() {
         </div>
       </div>
 
-      {[1, 2, 3, 4, 5, 6, 7, 8].map((item, idx) => (
-        <>
+      {[1, 2, 3, 4, 5, 6].map((item, idx) => (
+        <div key={idx}>
           {type === "one-way" && (
             <FlightDetails
               key={idx}
@@ -118,7 +118,7 @@ export default function AllFlights() {
               flightData={type === "multi-city" && flightsDemoDataMultiCity}
             />
           )}
-        </>
+        </div>
       ))}
     </div>
   );

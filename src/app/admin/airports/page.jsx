@@ -158,7 +158,7 @@ export default function Airports() {
             className={`px-4 py-2 border rounded-md ${
               offset <= 0
                 ? "bg-slate-300 cursor-not-allowed"
-                : "bg-sky-500 text-white hover:bg-sky-700"
+                : "bg-sky-600 text-white hover:bg-sky-700"
             }`}
           >
             Previous
@@ -169,7 +169,7 @@ export default function Airports() {
             className={`px-4 py-2 border rounded-md ${
               offset + limit >= total
                 ? "bg-slate-300 cursor-not-allowed"
-                : "bg-sky-500 text-white hover:bg-sky-700"
+                : "bg-sky-600 text-white hover:bg-sky-700"
             }`}
           >
             Next

@@ -119,11 +119,11 @@ export default function Bookings() {
               return isFlightOnDate(date) ? (
                 <p className="text-green-600 font-bold">Flight</p>
               ) : (
-                <p className="text-slate-500">No events</p>
+                <p className="text-slate-500 hidden sm:block">No Flight</p>
               );
             }
           }}
-          className="calendar-component" // Add this class to the calendar for custom styling
+          className="calendar-component"
         />
       </div>
 

@@ -160,7 +160,7 @@ export default function Routes() {
             className={`px-4 py-2 border rounded-md ${
               offset <= 0
                 ? "bg-sky-300 cursor-not-allowed"
-                : "bg-sky-500 text-white hover:bg-sky-700"
+                : "bg-sky-600 text-white hover:bg-sky-700"
             }`}
           >
             Previous
@@ -171,7 +171,7 @@ export default function Routes() {
             className={`px-4 py-2 border rounded-md ${
               offset + limit >= total
                 ? "bg-sky-300 cursor-not-allowed"
-                : "bg-sky-500 text-white hover:bg-sky-700"
+                : "bg-sky-600 text-white hover:bg-sky-700"
             }`}
           >
             Next

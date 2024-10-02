@@ -151,6 +151,23 @@ export default function ReturnSearch() {
     if (seatTypeParam) setSeatType(seatTypeParam);
   }, [searchParams]);
 
+  useEffect(() => {
+    const fetchDepartureAirports = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/airports?offset=0&limit=10&order=ASC`
+        );
+        const data = await res.json();
+        setDepartureAirportsData(data?.airports || []);
+        setDestinationAirportsData(data?.airports || []);
+      } catch (error) {
+        console.error("Failed to fetch departure airports:", error);
+      }
+    };
+
+    fetchDepartureAirports();
+  }, []);
+
   const handleReturnTripSearch = (e) => {
     e.preventDefault();
 
