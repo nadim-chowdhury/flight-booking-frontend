@@ -93,7 +93,7 @@ export default function Routes() {
       <div className="overflow-x-auto">
         <table className="min-w-full border rounded-md">
           <thead>
-            <tr className="bg-sky-100">
+            <tr className="bg-slate-100">
               <th className="px-4 py-2 border text-left font-semibold">Id</th>
               <th className="px-4 py-2 border text-left font-semibold">
                 Flight Number
@@ -118,14 +118,20 @@ export default function Routes() {
 
           <tbody>
             {loading ? (
-              <tr>
-                <td colSpan={6} className="text-center py-4">
-                  Loading...
-                </td>
-              </tr>
+              [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item) => (
+                <tr key={item}>
+                  <td className="px-4 py-2 border text-white">00</td>
+                  <td className="px-4 py-2 border text-white">00</td>
+                  <td className="px-4 py-2 border text-white">00</td>
+                  <td className="px-4 py-2 border text-white">00</td>
+                  <td className="px-4 py-2 border text-white">00</td>
+                  <td className="px-4 py-2 border text-white">00</td>
+                  <td className="px-4 py-2 border text-white">00</td>
+                </tr>
+              ))
             ) : routesData.length > 0 ? (
               routesData?.map((route) => (
-                <tr key={route?.id} className="hover:bg-sky-50">
+                <tr key={route?.id} className="hover:bg-slate-50">
                   <td className="px-4 py-2 border">{route?.id}</td>
                   <td className="px-4 py-2 border">{route?.flight_number}</td>
                   <td className="px-4 py-2 border">{route?.airline_code}</td>
@@ -159,7 +165,7 @@ export default function Routes() {
             onClick={() => handlePageChange(offset - limit)}
             className={`px-4 py-2 border rounded-md ${
               offset <= 0
-                ? "bg-sky-300 cursor-not-allowed"
+                ? "bg-slate-300 cursor-not-allowed"
                 : "bg-sky-600 text-white hover:bg-sky-700"
             }`}
           >
@@ -170,7 +176,7 @@ export default function Routes() {
             onClick={() => handlePageChange(offset + limit)}
             className={`px-4 py-2 border rounded-md ${
               offset + limit >= total
-                ? "bg-sky-300 cursor-not-allowed"
+                ? "bg-slate-300 cursor-not-allowed"
                 : "bg-sky-600 text-white hover:bg-sky-700"
             }`}
           >

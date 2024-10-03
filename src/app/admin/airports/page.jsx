@@ -118,11 +118,17 @@ export default function Airports() {
 
           <tbody>
             {loading ? (
-              <tr>
-                <td colSpan={6} className="text-center py-4">
-                  Loading...
-                </td>
-              </tr>
+              [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item) => (
+                <tr key={item}>
+                  <td className="px-4 py-2 border text-white">00</td>
+                  <td className="px-4 py-2 border text-white">00</td>
+                  <td className="px-4 py-2 border text-white">00</td>
+                  <td className="px-4 py-2 border text-white">00</td>
+                  <td className="px-4 py-2 border text-white">00</td>
+                  <td className="px-4 py-2 border text-white">00</td>
+                  <td className="px-4 py-2 border text-white">00</td>
+                </tr>
+              ))
             ) : airportsData.length > 0 ? (
               airportsData.map((airport) => (
                 <tr key={airport?.id} className="hover:bg-slate-50">
