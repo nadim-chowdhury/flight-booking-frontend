@@ -62,7 +62,7 @@ export default function ContactDetails() {
               name="email"
               type="email"
               placeholder="Email"
-              className="form-control border border-gray-300 rounded px-4 py-2 w-full h-[45px]"
+              className="form-control border border-[#cacaca] rounded px-4 py-2 w-full h-[45px]"
               autoComplete="off"
               value={email}
               onChange={(e) => setEmail(e.target.value)}

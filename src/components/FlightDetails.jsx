@@ -10,7 +10,7 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "./ui/button";
 
 export default function FlightDetails({ flightData }) {
-  const [detailsOpen, setDetailsOpen] = useState([]);
+  const [detailsOpen, setDetailsOpen] = useState(false);
 
   const { flightCombination, fareSummary } = flightData;
 
@@ -25,12 +25,8 @@ export default function FlightDetails({ flightData }) {
     };
   });
 
-  const toggleDetails = (index) => {
-    setDetailsOpen((prevState) => {
-      const updatedState = [...prevState];
-      updatedState[index] = !updatedState[index];
-      return updatedState;
-    });
+  const toggleDetails = () => {
+    setDetailsOpen((prevState) => !prevState);
   };
 
   const formattedPrice = `BDT ${fareSummary?.totalFareAmount || 0}`;
@@ -41,10 +37,10 @@ export default function FlightDetails({ flightData }) {
     <div className="flight-details bg-slate-50 rounded-lg border mb-4 py-4">
       {flightDetailsData.map(({ flight, marketingCarrierLogo }, index) => (
         <div key={index} className="px-4">
-          <div className="flight-content flex gap-8 justify-between items-center">
+          <div className="flight-content flex gap-8 justify-between items-center relative">
             <div
-              className={`grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 items-center ${
-                index > 0 && "border-t pt-2 mt-2"
+              className={`grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-8 items-center ${
+                index > 0 && "border-t pt-4 md:pt-2 mt-4 md:mt-2"
               }`}
             >
               <div className="air-logo">
@@ -60,7 +56,7 @@ export default function FlightDetails({ flightData }) {
                 </p>
               </div>
 
-              <div className="depart">
+              <div className="depart border-t pt-3 md:border-t-0 md:pt-0">
                 <p className="text-sm text-sky-600">Depart</p>
                 <p className="text-xl font-bold text-slate-800">
                   {flight?.productDateTime?.timeOfDeparture}
@@ -101,7 +97,7 @@ export default function FlightDetails({ flightData }) {
               </div>
 
               {index === 0 ? (
-                <div className="price text-end">
+                <div className="price text-start md:text-end">
                   <p className="text-sm text-sky-600">Price</p>
                   <p className="text-xl font-bold text-slate-800">
                     {formattedPrice}
@@ -123,7 +119,10 @@ export default function FlightDetails({ flightData }) {
             </div>
 
             {index === 0 ? (
-              <div onClick={handleBookFlight} className="view-details mb-4">
+              <div
+                onClick={handleBookFlight}
+                className="view-details mb-4 absolute top-0 right-0 md:relative"
+              >
                 <Link
                   href={`/flights/${flight?.location[0]?.city}-${flight?.location[0]?.cityCode}`}
                 >
@@ -178,7 +177,7 @@ export default function FlightDetails({ flightData }) {
               </button>
             </div> */}
 
-            {detailsOpen[index] && (
+            {/* {detailsOpen[index] && (
               <Tabs defaultValue="flight-details" className="mt-4">
                 <TabsList className="grid w-full grid-cols-2 bg-slate-200 border">
                   <TabsTrigger value="flight-details">
@@ -194,10 +193,33 @@ export default function FlightDetails({ flightData }) {
                   <FareSummary fareSummary={fareSummary} />
                 </TabsContent>
               </Tabs>
-            )}
+            )} */}
           </div>
         </div>
       ))}
+
+      {/* Render Details only once after all flight segments */}
+      {detailsOpen && (
+        <div className="mt-4 px-4">
+          <Tabs defaultValue="flight-details" className="w-full">
+            <TabsList className="grid w-full grid-cols-2 bg-slate-200 border">
+              <TabsTrigger value="flight-details">Flight Details</TabsTrigger>
+              <TabsTrigger value="fare-summary">Fare Summary</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="flight-details">
+              <SearchFlightDetails
+                searchFlightDetailsData={flightDetailsData.map(
+                  (flightData) => flightData.flight
+                )}
+              />
+            </TabsContent>
+            <TabsContent value="fare-summary">
+              <FareSummary fareSummary={fareSummary} />
+            </TabsContent>
+          </Tabs>
+        </div>
+      )}
     </div>
   );
 }

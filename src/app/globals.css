@@ -96,17 +96,17 @@ table td {
 
 /* Highlight for today's date */
 .calendar-component .react-calendar__tile--now {
-  @apply bg-sky-100 !text-sky-700 !rounded-lg hover:!bg-sky-50;
+  @apply bg-sky-100 !text-sky-700 !rounded-full hover:!bg-sky-50;
 }
 
 /* Highlight for selected date */
 .calendar-component .react-calendar__tile--active {
-  @apply bg-sky-100 !text-sky-700 !rounded-lg hover:!bg-sky-50;
+  @apply bg-sky-100 !text-sky-700 !rounded-full hover:!bg-sky-50;
 }
 
 .calendar-component .react-calendar__tile--active:enabled,
 .react-calendar__tile--active:enabled:focus {
-  @apply !bg-sky-100 text-sky-700 rounded-lg hover:!bg-sky-50;
+  @apply !bg-sky-100 text-sky-700 rounded-full hover:!bg-sky-50;
 }
 
 /* Navigation (month/year navigation) */

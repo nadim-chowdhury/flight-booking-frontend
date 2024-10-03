@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function SearchFlightDetails({ searchFlightDetailsData }) {
   return (
-    <div className="my-3 mx-1 border border-gray-300 rounded-md">
+    <div className="mt-3 border rounded-md">
       {searchFlightDetailsData?.map((flight, index) => {
         const {
           timeOfDeparture,
@@ -54,8 +54,8 @@ export default function SearchFlightDetails({ searchFlightDetailsData }) {
 
             {/* Departure and Arrival details */}
             <div className="px-3 py-2">
-              <div className="grid grid-cols-2 gap-4 mb-2 overflow-x-scroll whitespace-nowrap md:overflow-x-auto">
-                <div className="text-start">
+              <div className="flex items-center pb-2 gap-6 mb-1 overflow-x-scroll whitespace-nowrap md:overflow-x-auto">
+                <div className="text-start text-wrap w-full">
                   <p className="text-xs font-bold text-sky-600">Departure:</p>
                   <p className="text-sm font-medium">
                     {departureLocation?.airportName} (
@@ -68,7 +68,10 @@ export default function SearchFlightDetails({ searchFlightDetailsData }) {
                     {timeOfDeparture} - {dateOfDepartureString}
                   </p>
                 </div>
-                <div className="text-end">
+
+                <div className="border-r border-l h-12"></div>
+
+                <div className="text-end text-wrap w-full">
                   <p className="text-xs font-bold text-sky-600">Arrival:</p>
                   <p className="text-sm font-medium">
                     {arrivalLocation?.airportName} ({arrivalLocation?.cityCode})
