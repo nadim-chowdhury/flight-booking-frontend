@@ -200,7 +200,7 @@ export default function ReturnSearch() {
   };
 
   return (
-    <div className="rounded-lg md:pt-6">
+    <div className="rounded-lg pt-2 md:pt-6">
       <form onSubmit={handleReturnTripSearch}>
         <div className="flex flex-col md:grid md:grid-cols-5 md:items-end gap-4">
           {/* Departure City */}

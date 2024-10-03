@@ -187,7 +187,7 @@ export default function MultiCitySearch() {
             destinationCityFullNameParam ||
             updatedFlights[0].destinationCityFullName,
           departureDate: departureDateParam
-            ? parseISO(departureDateParam)
+            ? departureDateParam
             : updatedFlights[0].departureDate,
         };
         return updatedFlights;
@@ -279,7 +279,7 @@ export default function MultiCitySearch() {
   };
 
   return (
-    <div className="rounded-lg md:pt-6">
+    <div className="rounded-lg pt-2 md:pt-6">
       <form onSubmit={handleMultiCitySearch}>
         {flights.map((flight, index) => (
           <div key={index} className={index > 0 ? "mt-4" : ""}>

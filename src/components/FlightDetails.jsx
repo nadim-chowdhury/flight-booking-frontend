@@ -38,71 +38,89 @@ export default function FlightDetails({ flightData }) {
   const handleBookFlight = () => {};
 
   return (
-    <div className="flight-details bg-slate-50 rounded-lg border mb-4 pt-4">
+    <div className="flight-details bg-slate-50 rounded-lg border mb-4 py-4">
       {flightDetailsData.map(({ flight, marketingCarrierLogo }, index) => (
-        <div key={index} className="px-3 pb-4">
-          <div className="flight-content flex gap-4 justify-between flex-wrap">
-            <div className="air-logo mb-4">
-              <Image
-                src={marketingCarrierLogo}
-                alt="air-logo"
-                className="rounded"
-                width={48}
-                height={48}
-              />
-              <p className="mt-2 text-sm font-medium text-sky-600">
-                {flight?.companyId?.marketingCarrier}
-              </p>
-            </div>
+        <div key={index} className="px-4">
+          <div className="flight-content flex gap-8 justify-between items-center">
+            <div
+              className={`grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 items-center ${
+                index > 0 && "border-t pt-2 mt-2"
+              }`}
+            >
+              <div className="air-logo">
+                <Image
+                  src={marketingCarrierLogo}
+                  alt="air-logo"
+                  className="rounded"
+                  width={48}
+                  height={48}
+                />
+                <p className="mt-2 text-sm font-medium text-sky-600">
+                  {flight?.companyId?.marketingCarrier}
+                </p>
+              </div>
 
-            <div className="depart">
-              <p className="text-sm text-sky-600">Depart</p>
-              <p className="text-xl font-bold text-slate-800">
-                {flight?.productDateTime?.timeOfDeparture}
-              </p>
-              <p className="text-sm font-semibold text-slate-800">
-                {flight?.productDateTime?.dateOfDepartureString}
-              </p>
-              <p className="text-sm font-medium text-slate-800">
-                {flight?.location[0]?.city} ({flight?.location[0]?.cityCode})
-              </p>
-            </div>
-
-            <div className="non-stop text-center">
-              <p className="text-sm text-sky-600">
-                {flight?.productDateTime?.segmentTime}
-              </p>
-              <p className="text-sm text-slate-800">Non Stop</p>
-            </div>
-
-            <div className="arrive">
-              <p className="text-sm text-sky-600">Arrive</p>
-              <p className="text-xl font-bold text-slate-800">
-                {flight?.productDateTime?.timeOfArrival}
-              </p>
-              <p className="text-sm font-semibold text-slate-800">
-                {flight?.productDateTime?.dateOfArrivalString}
-              </p>
-              <p className="text-sm font-medium text-slate-800">
-                {flight?.location[1]?.city} ({flight?.location[1]?.cityCode})
-              </p>
-            </div>
-
-            {index === 0 ? (
-              <div className="price">
-                <p className="text-sm text-sky-600">Price</p>
+              <div className="depart">
+                <p className="text-sm text-sky-600">Depart</p>
                 <p className="text-xl font-bold text-slate-800">
-                  {formattedPrice}
+                  {flight?.productDateTime?.timeOfDeparture}
+                </p>
+                <p className="text-sm font-semibold text-slate-800">
+                  {flight?.productDateTime?.dateOfDepartureString}
+                </p>
+                <p className="text-sm font-medium text-slate-800">
+                  {flight?.location[0]?.city} ({flight?.location[0]?.cityCode})
                 </p>
               </div>
-            ) : (
-              <div className="price hidden md:block">
-                <p className="text-sm text-slate-50">Price</p>
-                <p className="text-xl font-bold text-slate-50">
-                  {formattedPrice}
+
+              <div className="non-stop text-center">
+                <p className="text-sm text-sky-600">
+                  {flight?.productDateTime?.segmentTime}
+                </p>
+                <p className="text-sm text-slate-800">Non Stop</p>
+                <Image
+                  src="/plane.png"
+                  alt="plane-image"
+                  className="rounded"
+                  width={1280}
+                  height={720}
+                />
+              </div>
+
+              <div className="arrive text-end">
+                <p className="text-sm text-sky-600">Arrive</p>
+                <p className="text-xl font-bold text-slate-800">
+                  {flight?.productDateTime?.timeOfArrival}
+                </p>
+                <p className="text-sm font-semibold text-slate-800">
+                  {flight?.productDateTime?.dateOfArrivalString}
+                </p>
+                <p className="text-sm font-medium text-slate-800">
+                  {flight?.location[1]?.city} ({flight?.location[1]?.cityCode})
                 </p>
               </div>
-            )}
+
+              {index === 0 ? (
+                <div className="price text-end">
+                  <p className="text-sm text-sky-600">Price</p>
+                  <p className="text-xl font-bold text-slate-800">
+                    {formattedPrice}
+                  </p>
+                  <p className="font-medium text-xs text-green-600">
+                    {fareSummary?.refundable
+                      ? "Refundable"
+                      : "Partially Refundable"}
+                  </p>
+                </div>
+              ) : (
+                <div className="price text-end hidden md:block">
+                  <p className="text-sm text-slate-50">Price</p>
+                  <p className="text-xl font-bold text-slate-50">
+                    {formattedPrice}
+                  </p>
+                </div>
+              )}
+            </div>
 
             {index === 0 ? (
               <div onClick={handleBookFlight} className="view-details mb-4">
@@ -116,25 +134,39 @@ export default function FlightDetails({ flightData }) {
                     Book Now
                   </Button>
                 </Link>
+                <button
+                  className="font-medium text-white bg-orange-600 rounded-md pl-3 pr-2 flex items-center gap-1 text-xs mt-2 w-full justify-center"
+                  onClick={() => toggleDetails(index)}
+                >
+                  <span>Details</span>
+                  {detailsOpen[index] ? (
+                    <ChevronUp size={20} />
+                  ) : (
+                    <ChevronDown size={20} />
+                  )}
+                </button>
               </div>
             ) : (
               <div className="view-details mb-4 hidden md:block">
-                <button className="book-now-btn bg-slate-50 text-slate-50 font-bold py-2 px-4 rounded transition">
+                <Button
+                  size="sm"
+                  className="book-now-btn bg-slate-50 hover:bg-slate-50 text-white transition cursor-default"
+                >
                   Book Now
-                </button>
+                </Button>
               </div>
             )}
           </div>
 
-          <div className="accordion mt-4">
-            <div className="flex items-center justify-between bg-white border rounded-md py-1 px-4">
-              <p className="font-bold text-sm text-green-600">
+          <div className="accordion">
+            {/* <div className="flex items-center justify-between bg-white border rounded-full py-1 px-4">
+              <p className="font-medium text-xs text-green-600">
                 {fareSummary?.refundable
                   ? "Refundable"
                   : "Partially Refundable"}
               </p>
               <button
-                className="font-bold text-rose-600 flex items-center gap-1 text-sm"
+                className="font-medium text-rose-600 flex items-center gap-1 text-xs"
                 onClick={() => toggleDetails(index)}
               >
                 <span>Flight Details</span>
@@ -144,7 +176,7 @@ export default function FlightDetails({ flightData }) {
                   <ChevronDown size={20} />
                 )}
               </button>
-            </div>
+            </div> */}
 
             {detailsOpen[index] && (
               <Tabs defaultValue="flight-details" className="mt-4">

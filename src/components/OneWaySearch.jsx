@@ -195,7 +195,7 @@ export default function OneWaySearch() {
   };
 
   return (
-    <div className="rounded-lg md:pt-6">
+    <div className="rounded-lg pt-2 md:pt-6">
       <form onSubmit={handleOneWaySearch}>
         <div className="flex flex-col md:grid md:grid-cols-4 md:items-end gap-4">
           {/* Departure City */}

@@ -32,15 +32,15 @@ export default function FareSummary({ fareSummary }) {
   );
 
   return (
-    <div className="my-3 border border-gray-300 rounded-md">
-      <p className="border-b border-gray-300 px-3 py-2 font-bold">
+    <div className="my-3 border rounded-md">
+      <p className="border-b px-3 py-2 font-bold">
         Fare Breakdown
       </p>
 
       <div className="m-3 overflow-x-scroll whitespace-nowrap md:overflow-x-auto">
         <table className="table-auto w-full border-collapse">
           <thead>
-            <tr className="text-left bg-sky-100">
+            <tr className="text-left bg-slate-100">
               <th className="border px-2 py-2 text-sm font-semibold">
                 Fare Summary
               </th>
@@ -53,9 +53,7 @@ export default function FareSummary({ fareSummary }) {
               <th className="border px-2 py-2 text-sm font-semibold">
                 Per Passenger
               </th>
-              <th className="border px-2 py-2 text-sm font-semibold">
-                Total
-              </th>
+              <th className="border px-2 py-2 text-sm font-semibold">Total</th>
             </tr>
           </thead>
 
@@ -64,17 +62,17 @@ export default function FareSummary({ fareSummary }) {
               breakdownData.map((fare, index) => (
                 <tr className="text-sm" key={index}>
                   <td className="border px-2 py-2">{fare.type}</td>
-                  <td className="border px-2 py-2 text-sky-600">
+                  <td className="border px-2 py-2">
                     BDT {fare.baseFare.toLocaleString()}
                   </td>
-                  <td className="border px-2 py-2 text-sky-600">
+                  <td className="border px-2 py-2">
                     BDT {fare.taxesAndFees.toLocaleString()}
                   </td>
-                  <td className="border px-2 py-2 text-sky-600">
+                  <td className="border px-2 py-2">
                     BDT ({fare.totalPerPassenger.toLocaleString()} x{" "}
                     {fare.count})
                   </td>
-                  <td className="border px-2 py-2 font-bold text-sky-600">
+                  <td className="border px-2 py-2">
                     BDT {fare.total.toLocaleString()}
                   </td>
                 </tr>

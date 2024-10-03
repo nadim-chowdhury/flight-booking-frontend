@@ -17,10 +17,10 @@ export default function SearchFlightDetails({ searchFlightDetailsData }) {
 
         return (
           <div key={index}>
-            <h3 className="border-b border-gray-300 px-3 py-2 font-bold">
+            <h3 className="border-b px-3 py-2 font-bold">
               {`${departureLocation?.city} to ${arrivalLocation?.city}, ${dateOfDepartureString}`}
             </h3>
-            <div className="px-3 py-2 flex items-start border-b border-gray-300 space-x-3 overflow-x-scroll whitespace-nowrap md:overflow-x-auto">
+            <div className="px-3 py-2 flex items-start border-b space-x-3 overflow-x-scroll whitespace-nowrap md:overflow-x-auto">
               <Image
                 src={marketingCarrierLogo}
                 alt="air-logo"
@@ -54,9 +54,9 @@ export default function SearchFlightDetails({ searchFlightDetailsData }) {
 
             {/* Departure and Arrival details */}
             <div className="px-3 py-2">
-              <div className="flex gap-4 justify-between mb-2 overflow-x-scroll whitespace-nowrap md:overflow-x-auto">
-                <div>
-                  <p className="text-xs font-bold">Departure:</p>
+              <div className="grid grid-cols-2 gap-4 mb-2 overflow-x-scroll whitespace-nowrap md:overflow-x-auto">
+                <div className="text-start">
+                  <p className="text-xs font-bold text-sky-600">Departure:</p>
                   <p className="text-sm font-medium">
                     {departureLocation?.airportName} (
                     {departureLocation?.cityCode})
@@ -68,8 +68,8 @@ export default function SearchFlightDetails({ searchFlightDetailsData }) {
                     {timeOfDeparture} - {dateOfDepartureString}
                   </p>
                 </div>
-                <div>
-                  <p className="text-xs font-bold">Arrival:</p>
+                <div className="text-end">
+                  <p className="text-xs font-bold text-sky-600">Arrival:</p>
                   <p className="text-sm font-medium">
                     {arrivalLocation?.airportName} ({arrivalLocation?.cityCode})
                   </p>
@@ -81,7 +81,7 @@ export default function SearchFlightDetails({ searchFlightDetailsData }) {
                   </p>
                 </div>
               </div>
-              <p className="text-xs font-bold capitalize">
+              <p className="text-xs font-bold capitalize text-center">
                 Baggage Info: {flight?.baggage?.checkIn} checked-in,{" "}
                 {flight?.baggage?.cabin} cabin
               </p>
