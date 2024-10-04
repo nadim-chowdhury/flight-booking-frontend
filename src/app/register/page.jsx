@@ -3,28 +3,43 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useMutation } from "@apollo/client";
 import { useRouter } from "next/navigation";
-import { REGISTER_USER } from "../../graphql/mutation";
-import { Input } from "../../components/ui/input";
-import { Label } from "../../components/ui/label";
-import { Button } from "../../components/ui/button";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 
 export default function Register() {
-  const [username, setUsername] = useState("");
+  const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const [register, { data, loading, error }] = useMutation(REGISTER_USER);
   const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+
     try {
-      // await register({ variables: { username, email, password } });
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/register`,
+        {
+          fullName,
+          email,
+          password,
+        }
+      );
+      console.log("response:", response);
+      toast.success("Registration successful! Redirecting to login...");
       router.push("/login");
     } catch (error) {
-      console.error("Registration failed", error);
+      toast.error("Registration failed. Please try again.");
+      console.error("Registration error:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -46,15 +61,17 @@ export default function Register() {
         onSubmit={handleSubmit}
         className="flex flex-col items-center justify-center gap-4 px-6 md:px-12 py-12"
       >
-        <h1 className="text-3xl font-semibold text-sky-600">Register</h1>
+        <h1 className="text-3xl font-semibold text-sky-600 uppercase">
+          Register
+        </h1>
 
         <div className="w-full">
-          <Label htmlFor="username">Username</Label>
+          <Label htmlFor="fullName">Full Name</Label>
           <Input
             type="text"
-            id="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            id="fullName"
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
             className="w-full mt-1 p-3 border rounded-md bg-slate-100"
           />
         </div>
@@ -89,7 +106,7 @@ export default function Register() {
           {loading ? "Registering..." : "Register"}
         </Button>
 
-        {error && <p className="text-rose-500 mt-2">Error: {error.message}</p>}
+        {error && <p className="text-rose-500 mt-2">Error: {error}</p>}
 
         <p>
           Already have an account?{" "}

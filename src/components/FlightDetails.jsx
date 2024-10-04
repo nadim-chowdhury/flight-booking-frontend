@@ -138,7 +138,7 @@ export default function FlightDetails({ flightData }) {
                   onClick={() => toggleDetails(index)}
                 >
                   <span>Details</span>
-                  {detailsOpen[index] ? (
+                  {detailsOpen ? (
                     <ChevronUp size={20} />
                   ) : (
                     <ChevronDown size={20} />

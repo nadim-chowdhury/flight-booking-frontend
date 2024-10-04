@@ -4,27 +4,46 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { useMutation } from "@apollo/client";
-import { LOGIN_USER } from "../../graphql/mutation";
-import { Input } from "../../components/ui/input";
-import { Label } from "../../components/ui/label";
-import { Button } from "../../components/ui/button";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { useDispatch } from "react-redux";
+import { userLogin } from "@/redux/slices/userSlice";
 
 export default function Login() {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const [login, { data, loading, error }] = useMutation(LOGIN_USER);
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+
     try {
-      const { data } = await login({ variables: { username, password } });
-      localStorage.setItem("token", data.login.access_token);
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/login`,
+        {
+          email,
+          password,
+        }
+      );
+      console.log("response:", response);
+      const { access_token, user } = response.data;
+
+      dispatch(userLogin({ access_token, user }));
+      toast.success("Login successful! Redirecting to home...");
       router.push("/");
     } catch (error) {
-      console.error("Login failed", error);
+      toast.error("Login failed. Please try again.");
+      console.error("Login error:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -46,15 +65,15 @@ export default function Login() {
         onSubmit={handleSubmit}
         className="flex flex-col items-center justify-center gap-4 px-6 md:px-12 py-12"
       >
-        <h1 className="text-3xl font-semibold text-sky-600">Login</h1>
+        <h1 className="text-3xl font-semibold text-sky-600 uppercase">Login</h1>
 
         <div className="w-full">
-          <Label htmlFor="username">Username</Label>
+          <Label htmlFor="email">Email</Label>
           <Input
-            type="text"
-            id="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            type="email"
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className="w-full mt-1 p-3 border rounded-md bg-slate-100"
           />
         </div>
@@ -78,10 +97,10 @@ export default function Login() {
           {loading ? "Logging in..." : "Login"}
         </Button>
 
-        {error && <p className="text-rose-500 mt-2">Error: {error.message}</p>}
+        {error && <p className="text-rose-500 mt-2">Error: {error}</p>}
 
         <p>
-          Don&apos;t have any account?{" "}
+          Don&apos;t have an account?{" "}
           <Link href="/register" className="text-sky-600 hover:underline">
             Register here
           </Link>

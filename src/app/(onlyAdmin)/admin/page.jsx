@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Dashboard from "../../components/Dashboard";
+import Dashboard from "@/components/Dashboard";
 
 export default function AdminPage() {
   // Define the sections dynamically
@@ -12,7 +12,7 @@ export default function AdminPage() {
     { href: "/admin/planes", label: "Planes" },
     { href: "/admin/reports", label: "Reports" },
     { href: "/admin/routes", label: "Routes" },
-    { href: "/admin/users", label: "users" },
+    { href: "/admin/users", label: "Users" },
   ];
 
   return (

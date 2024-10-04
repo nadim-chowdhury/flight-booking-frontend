@@ -5,12 +5,16 @@
 // import { useQuery, useMutation } from "@apollo/client";
 // import { GET_USER_PROFILE } from "../../graphql/query";
 // import { UPDATE_USER_PROFILE } from "../../graphql/mutation";
+import { useSelector } from "react-redux";
 
 export default function Profile() {
   // const { data, loading, error } = useQuery(GET_USER_PROFILE);
   // const [updateProfile] = useMutation(UPDATE_USER_PROFILE);
   // const [username, setUsername] = useState("");
   // const [email, setEmail] = useState("");
+
+  const userInfo = useSelector((state) => state.user.userInfo);
+  const token = useSelector((state) => state.user.token);
 
   // const router = useRouter();
 

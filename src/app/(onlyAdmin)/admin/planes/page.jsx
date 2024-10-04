@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { Button } from "../../../components/ui/button";
+import { Button } from "@/components/ui/button";
 
-export default function Routes() {
-  const [routesData, setRoutesData] = useState([]);
+export default function Planes() {
+  const [planesData, setPlanesData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [total, setTotal] = useState(0);
   const [limit, setLimit] = useState(10);
@@ -25,21 +25,21 @@ export default function Routes() {
     };
   }, [searchTerm]);
 
-  // Fetch routes data based on search, sorting, and pagination
+  // Fetch planes data based on search, sorting, and pagination
   useEffect(() => {
-    const fetchRoutes = async () => {
+    const fetchPlanes = async () => {
       setLoading(true);
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/routes?offset=${offset}&limit=${limit}&order=${order}&search=${debouncedSearchTerm}`
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/planes?offset=${offset}&limit=${limit}&order=${order}&search=${debouncedSearchTerm}`
       );
       const data = await res.json();
 
-      setRoutesData(data.routes);
+      setPlanesData(data.planes);
       setTotal(data.total);
       setLoading(false);
     };
 
-    fetchRoutes();
+    fetchPlanes();
   }, [debouncedSearchTerm, order, offset, limit]);
 
   // Handle search input
@@ -62,7 +62,7 @@ export default function Routes() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 my-16 min-h-[90vh]">
-      <h1 className="text-2xl font-bold mb-4">Routes</h1>
+      <h1 className="text-2xl font-bold mb-4">Planes</h1>
 
       <div className="flex items-center gap-4 mb-4">
         {/* Search input */}
@@ -74,8 +74,8 @@ export default function Routes() {
           className="border p-2 w-full rounded-md bg-slate-100"
         />
 
-        <Link href="/admin/routes/create">
-          <Button>Create Route</Button>
+        <Link href="/admin/planes/create">
+          <Button>Create Plane</Button>
         </Link>
       </div>
 
@@ -85,33 +85,20 @@ export default function Routes() {
         onChange={handleSort}
         className="border p-2 mb-4 rounded-md"
       >
-        <option value="ASC">Sort by Flight Number (A-Z)</option>
-        <option value="DESC">Sort by Flight Number (Z-A)</option>
+        <option value="ASC">Sort by Name (A-Z)</option>
+        <option value="DESC">Sort by Name (Z-A)</option>
       </select>
 
-      {/* Routes Table */}
+      {/* Planes Table */}
       <div className="overflow-x-auto">
         <table className="min-w-full border rounded-md">
           <thead>
             <tr className="bg-slate-100">
               <th className="px-4 py-2 border text-left font-semibold">Id</th>
+              <th className="px-4 py-2 border text-left font-semibold">Name</th>
+              <th className="px-4 py-2 border text-left font-semibold">Code</th>
               <th className="px-4 py-2 border text-left font-semibold">
-                Flight Number
-              </th>
-              <th className="px-4 py-2 border text-left font-semibold">
-                Airline Code
-              </th>
-              <th className="px-4 py-2 border text-left font-semibold">
-                Departure Airport
-              </th>
-              <th className="px-4 py-2 border text-left font-semibold">
-                Arrival Airport
-              </th>
-              <th className="px-4 py-2 border text-left font-semibold">
-                Stops
-              </th>
-              <th className="px-4 py-2 border text-left font-semibold">
-                Equipment
+                Additional Code
               </th>
             </tr>
           </thead>
@@ -124,29 +111,21 @@ export default function Routes() {
                   <td className="px-4 py-2 border text-white">00</td>
                   <td className="px-4 py-2 border text-white">00</td>
                   <td className="px-4 py-2 border text-white">00</td>
-                  <td className="px-4 py-2 border text-white">00</td>
-                  <td className="px-4 py-2 border text-white">00</td>
-                  <td className="px-4 py-2 border text-white">00</td>
                 </tr>
               ))
-            ) : routesData.length > 0 ? (
-              routesData?.map((route) => (
-                <tr key={route?.id} className="hover:bg-slate-50">
-                  <td className="px-4 py-2 border">{route?.id}</td>
-                  <td className="px-4 py-2 border">{route?.flight_number}</td>
-                  <td className="px-4 py-2 border">{route?.airline_code}</td>
-                  <td className="px-4 py-2 border">
-                    {route?.departure_airport}
-                  </td>
-                  <td className="px-4 py-2 border">{route?.arrival_airport}</td>
-                  <td className="px-4 py-2 border">{route?.stops}</td>
-                  <td className="px-4 py-2 border">{route?.equipment}</td>
+            ) : planesData.length > 0 ? (
+              planesData.map((plane) => (
+                <tr key={plane?.id} className="hover:bg-slate-50">
+                  <td className="px-4 py-2 border">{plane?.id}</td>
+                  <td className="px-4 py-2 border">{plane?.name}</td>
+                  <td className="px-4 py-2 border">{plane?.code}</td>
+                  <td className="px-4 py-2 border">{plane?.additional_code}</td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan={6} className="text-center py-4">
-                  No routes found.
+                <td colSpan={3} className="text-center py-4">
+                  No planes found.
                 </td>
               </tr>
             )}

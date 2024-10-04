@@ -3,22 +3,32 @@
 import { useState } from "react";
 import Link from "next/link";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
-import { Button } from "../components/ui/button";
+import { Button } from "@/components/ui/button";
+import { useSelector, useDispatch } from "react-redux";
+import { Power } from "lucide-react";
+import { userLogout } from "@/redux/slices/userSlice"; // Import the logout action
+
+const navLinks = [
+  { href: "/bookings", label: "Bookings" },
+  { href: "/profile", label: "Profile" },
+  { href: "/admin", label: "Admin Panel" },
+  { href: "/login", label: "Login" },
+];
 
 export default function Header() {
   const [navOpen, setNavOpen] = useState(false);
+
+  const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
+  const userInfo = useSelector((state) => state.user.userInfo);
+  const dispatch = useDispatch();
 
   const toggleNav = () => {
     setNavOpen(!navOpen);
   };
 
-  // Define navigation links
-  const navLinks = [
-    { href: "/bookings", label: "Bookings" },
-    { href: "/admin", label: "Admin Panel" },
-    // { href: "/contact", label: "Contact" },
-    { href: "/login", label: "Login" },
-  ];
+  const handleLogout = () => {
+    dispatch(userLogout());
+  };
 
   return (
     <header className="bg-white border-b sticky top-0 z-50">
@@ -32,23 +42,43 @@ export default function Header() {
 
         <div className="flex items-center gap-6">
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex space-x-8 font-medium">
-            {navLinks.slice(0, -1).map((link) => (
-              <Link key={link.href} href={link.href}>
-                <span className="hover:text-sky-600 hover:underline">
-                  {link.label}
-                </span>
-              </Link>
-            ))}
-          </nav>
+          {isAuthenticated && (
+            <nav className="hidden md:flex space-x-8 font-medium">
+              {navLinks.slice(0, -1).map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  // Uncomment this code to conditionally render the Admin Panel link
+                  // className={
+                  //   link.href === "/admin" && userInfo.role !== "admin"
+                  //     ? "hidden"
+                  //     : "block"
+                  // }
+                >
+                  <span className="hover:text-sky-600 hover:underline">
+                    {link.label}
+                  </span>
+                </Link>
+              ))}
+            </nav>
+          )}
 
           {/* Call to Action Button */}
           <div className="hidden md:flex gap-2">
-            <Link href="/login">
-              <Button className="bg-sky-600 hover:bg-sky-700 text-white">
-                Login
+            {isAuthenticated ? (
+              <Button
+                className="bg-sky-600 hover:bg-sky-700 text-white"
+                onClick={handleLogout}
+              >
+                <Power className="w-5 h-5" />
               </Button>
-            </Link>
+            ) : (
+              <Link href="/login">
+                <Button className="bg-sky-600 hover:bg-sky-700 text-white">
+                  Login
+                </Button>
+              </Link>
+            )}
           </div>
         </div>
 
@@ -71,7 +101,7 @@ export default function Header() {
         {navOpen && (
           <nav className="md:hidden bg-sky-50 border-y absolute top-[68px] left-0 w-full">
             <ul className="space-y-4 px-4 py-6 flex flex-col justify-center items-center">
-              {navLinks.map((link) => (
+              {navLinks.slice(0, -1).map((link) => (
                 <li key={link.href}>
                   <Link href={link.href}>
                     <span
@@ -86,6 +116,18 @@ export default function Header() {
                   </Link>
                 </li>
               ))}
+
+              {isAuthenticated && (
+                <li>
+                  <Button
+                    className="bg-sky-600 hover:bg-sky-700 text-white"
+                    onClick={handleLogout}
+                  >
+                    <Power className="w-5 h-5 mr-2" />
+                    Log Out
+                  </Button>
+                </li>
+              )}
             </ul>
           </nav>
         )}

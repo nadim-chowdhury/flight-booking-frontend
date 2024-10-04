@@ -2,49 +2,44 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { Button } from "../../../components/ui/button";
+import { Button } from "@/components/ui/button";
 
-export default function Airlines() {
-  const [airlinesData, setAirlinesData] = useState([]);
-  const [loading, setLoading] = useState(false); // Loading state
+export default function Routes() {
+  const [routesData, setRoutesData] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [total, setTotal] = useState(0);
   const [limit, setLimit] = useState(10);
   const [offset, setOffset] = useState(0);
   const [order, setOrder] = useState("ASC");
   const [searchTerm, setSearchTerm] = useState("");
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm); // Debounced search term
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
 
   // Debounce search term
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearchTerm(searchTerm);
-    }, 500); // 500ms debounce delay
+    }, 500);
 
     return () => {
-      clearTimeout(handler); // Clear the timeout if the user keeps typing
+      clearTimeout(handler);
     };
   }, [searchTerm]);
 
-  // Fetch data whenever debouncedSearchTerm, sortOrder, offset, or limit changes
+  // Fetch routes data based on search, sorting, and pagination
   useEffect(() => {
-    const fetchAirlines = async () => {
-      setLoading(true); // Set loading to true while fetching
-      try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/airlines?offset=${offset}&limit=${limit}&order=${order}&search=${debouncedSearchTerm}`
-        );
-        const data = await res.json();
+    const fetchRoutes = async () => {
+      setLoading(true);
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/routes?offset=${offset}&limit=${limit}&order=${order}&search=${debouncedSearchTerm}`
+      );
+      const data = await res.json();
 
-        setAirlinesData(data.airlines);
-        setTotal(data.total);
-      } catch (error) {
-        console.error("Error fetching airlines:", error);
-        alert("Failed to fetch airlines data.");
-      }
-      setLoading(false); // Set loading to false once data is fetched
+      setRoutesData(data.routes);
+      setTotal(data.total);
+      setLoading(false);
     };
 
-    fetchAirlines();
+    fetchRoutes();
   }, [debouncedSearchTerm, order, offset, limit]);
 
   // Handle search input
@@ -67,7 +62,7 @@ export default function Airlines() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 my-16 min-h-[90vh]">
-      <h1 className="text-2xl font-bold mb-4">Airlines</h1>
+      <h1 className="text-2xl font-bold mb-4">Routes</h1>
 
       <div className="flex items-center gap-4 mb-4">
         {/* Search input */}
@@ -79,8 +74,8 @@ export default function Airlines() {
           className="border p-2 w-full rounded-md bg-slate-100"
         />
 
-        <Link href="/admin/airlines/create">
-          <Button>Create Airline</Button>
+        <Link href="/admin/routes/create">
+          <Button>Create Route</Button>
         </Link>
       </div>
 
@@ -90,25 +85,33 @@ export default function Airlines() {
         onChange={handleSort}
         className="border p-2 mb-4 rounded-md"
       >
-        <option value="ASC">Sort by Name (A-Z)</option>
-        <option value="DESC">Sort by Name (Z-A)</option>
+        <option value="ASC">Sort by Flight Number (A-Z)</option>
+        <option value="DESC">Sort by Flight Number (Z-A)</option>
       </select>
 
-      {/* Airlines Table */}
+      {/* Routes Table */}
       <div className="overflow-x-auto">
         <table className="min-w-full border rounded-md">
           <thead>
             <tr className="bg-slate-100">
               <th className="px-4 py-2 border text-left font-semibold">Id</th>
-              <th className="px-4 py-2 border text-left font-semibold">Name</th>
               <th className="px-4 py-2 border text-left font-semibold">
-                Country
+                Flight Number
               </th>
               <th className="px-4 py-2 border text-left font-semibold">
-                Callsign
+                Airline Code
               </th>
               <th className="px-4 py-2 border text-left font-semibold">
-                Status
+                Departure Airport
+              </th>
+              <th className="px-4 py-2 border text-left font-semibold">
+                Arrival Airport
+              </th>
+              <th className="px-4 py-2 border text-left font-semibold">
+                Stops
+              </th>
+              <th className="px-4 py-2 border text-left font-semibold">
+                Equipment
               </th>
             </tr>
           </thead>
@@ -122,28 +125,28 @@ export default function Airlines() {
                   <td className="px-4 py-2 border text-white">00</td>
                   <td className="px-4 py-2 border text-white">00</td>
                   <td className="px-4 py-2 border text-white">00</td>
+                  <td className="px-4 py-2 border text-white">00</td>
+                  <td className="px-4 py-2 border text-white">00</td>
                 </tr>
               ))
-            ) : airlinesData.length > 0 ? (
-              airlinesData.map((airline) => (
-                <tr key={airline?.id} className="hover:bg-slate-50">
-                  <td className="px-4 py-2 border">{airline?.id}</td>
-                  <td className="px-4 py-2 border">{airline?.name}</td>
-                  <td className="px-4 py-2 border">{airline?.country}</td>
-                  <td className="px-4 py-2 border">{airline?.callsign}</td>
+            ) : routesData.length > 0 ? (
+              routesData?.map((route) => (
+                <tr key={route?.id} className="hover:bg-slate-50">
+                  <td className="px-4 py-2 border">{route?.id}</td>
+                  <td className="px-4 py-2 border">{route?.flight_number}</td>
+                  <td className="px-4 py-2 border">{route?.airline_code}</td>
                   <td className="px-4 py-2 border">
-                    {airline?.active === "Y" ? (
-                      <span className="text-green-600">Active</span>
-                    ) : (
-                      <span className="text-rose-600">Inactive</span>
-                    )}
+                    {route?.departure_airport}
                   </td>
+                  <td className="px-4 py-2 border">{route?.arrival_airport}</td>
+                  <td className="px-4 py-2 border">{route?.stops}</td>
+                  <td className="px-4 py-2 border">{route?.equipment}</td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan={4} className="text-center py-4">
-                  No airlines found.
+                <td colSpan={6} className="text-center py-4">
+                  No routes found.
                 </td>
               </tr>
             )}

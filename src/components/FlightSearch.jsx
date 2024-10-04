@@ -20,26 +20,26 @@ export default function FlightSearch({ onFlightsFound }) {
   const searchParams = useSearchParams();
   const type = searchParams.get("type");
 
-  const { register, handleSubmit } = useForm();
-  const [searchFlights, { data, loading, error }] =
-    useLazyQuery(SEARCH_FLIGHTS);
+  // const { register, handleSubmit } = useForm();
+  // const [searchFlights, { data, loading, error }] =
+  //   useLazyQuery(SEARCH_FLIGHTS);
 
-  useEffect(() => {
-    if (data) {
-      onFlightsFound(data.searchFlights);
-    }
-  }, [data, onFlightsFound]);
+  // useEffect(() => {
+  //   if (data) {
+  //     onFlightsFound(data.searchFlights);
+  //   }
+  // }, [data, onFlightsFound]);
 
-  const onSubmit = async (formData) => {
-    const { from, to, departureDate } = formData;
-    await searchFlights({
-      variables: {
-        from,
-        to,
-        departureDate: format(new Date(departureDate), "yyyy-MM-dd"),
-      },
-    });
-  };
+  // const onSubmit = async (formData) => {
+  //   const { from, to, departureDate } = formData;
+  //   await searchFlights({
+  //     variables: {
+  //       from,
+  //       to,
+  //       departureDate: format(new Date(departureDate), "yyyy-MM-dd"),
+  //     },
+  //   });
+  // };
 
   return (
     <div className="p-6">
