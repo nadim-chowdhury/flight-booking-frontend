@@ -48,12 +48,11 @@ export default function Header() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  // Uncomment this code to conditionally render the Admin Panel link
-                  // className={
-                  //   link.href === "/admin" && userInfo.role !== "admin"
-                  //     ? "hidden"
-                  //     : "block"
-                  // }
+                  className={
+                    link.href === "/admin" && userInfo.role !== "admin"
+                      ? "hidden"
+                      : "block"
+                  }
                 >
                   <span className="hover:text-sky-600 hover:underline">
                     {link.label}
@@ -69,8 +68,10 @@ export default function Header() {
               <Button
                 className="bg-sky-600 hover:bg-sky-700 text-white"
                 onClick={handleLogout}
+                size="sm"
               >
-                <Power className="w-5 h-5" />
+                <Power className="w-5 h-5 mr-2" />
+                Log Out
               </Button>
             ) : (
               <Link href="/login">
@@ -101,21 +102,29 @@ export default function Header() {
         {navOpen && (
           <nav className="md:hidden bg-sky-50 border-y absolute top-[68px] left-0 w-full">
             <ul className="space-y-4 px-4 py-6 flex flex-col justify-center items-center">
-              {navLinks.slice(0, -1).map((link) => (
-                <li key={link.href}>
-                  <Link href={link.href}>
-                    <span
-                      className={`block hover:text-slate-500 ${
-                        link.href === "/login"
-                          ? "px-4 py-2 bg-sky-600 text-white rounded-md hover:bg-sky-700 text-center mt-2"
-                          : ""
-                      }`}
-                    >
-                      {link.label}
-                    </span>
-                  </Link>
-                </li>
-              ))}
+              {navLinks.map((link) => {
+                const showLink =
+                  (isAuthenticated && link.href !== "/login") ||
+                  (!isAuthenticated && link.href === "/login");
+
+                return (
+                  showLink && (
+                    <li key={link.href}>
+                      <Link href={link.href} onClick={() => setNavOpen(false)}>
+                        <span
+                          className={`block hover:text-slate-100 ${
+                            link.href === "/login"
+                              ? "px-4 py-2 bg-sky-600 text-white rounded-md hover:bg-sky-700 text-center"
+                              : ""
+                          }`}
+                        >
+                          {link.label}
+                        </span>
+                      </Link>
+                    </li>
+                  )
+                );
+              })}
 
               {isAuthenticated && (
                 <li>

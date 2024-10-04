@@ -44,7 +44,7 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-[90vh] grid md:grid-cols-2 grid-cols-1">
+    <div className="min-h-[80vh] md:min-h-[90vh] grid md:grid-cols-2 grid-cols-1">
       {/* Left Image Section */}
       <div className="hidden md:block h-full">
         <Image

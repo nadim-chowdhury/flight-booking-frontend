@@ -17,7 +17,11 @@ export default function SearchFlightDetails({ searchFlightDetailsData }) {
 
         return (
           <div key={index}>
-            <h3 className="border-b px-3 py-2 font-bold">
+            <h3
+              className={`border-b px-3 py-2 font-bold ${
+                index > 0 && "border-t"
+              }`}
+            >
               {`${departureLocation?.city} to ${arrivalLocation?.city}, ${dateOfDepartureString}`}
             </h3>
             <div className="px-3 py-2 flex items-start border-b space-x-3 overflow-x-scroll whitespace-nowrap md:overflow-x-auto">

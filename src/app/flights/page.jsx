@@ -21,6 +21,8 @@ import "swiper/css/scrollbar";
 export default function AllFlights() {
   const [searchPayload, setSearchPayload] = useState(null);
   const [flights, setFlights] = useState([]);
+  const [sortOption, setSortOption] = useState("price-asc");
+  const [filterOption, setFilterOption] = useState("all");
 
   const searchParams = useSearchParams();
   const type = searchParams.get("type");
@@ -92,6 +94,26 @@ export default function AllFlights() {
     setFlights(foundFlights);
   };
 
+  const sortFlights = (flights) => {
+    return flights.sort((a, b) => {
+      if (sortOption === "price-asc") {
+        return a.price - b.price;
+      } else if (sortOption === "price-desc") {
+        return b.price - a.price;
+      } else if (sortOption === "duration-asc") {
+        return a.duration - b.duration;
+      } else if (sortOption === "duration-desc") {
+        return b.duration - a.duration;
+      }
+      return 0;
+    });
+  };
+
+  const filterFlights = (flights) => {
+    if (filterOption === "all") return flights;
+    return flights.filter((flight) => flight.airline === filterOption);
+  };
+
   return (
     <div className="max-w-6xl mx-auto px-4 flex flex-col gap-2 mb-16">
       <div className="pt-12">
@@ -109,7 +131,7 @@ export default function AllFlights() {
       <h2 className="mt-10 text-4xl md:text-[2.5rem] font-bold mb-4">
         Search Results
       </h2>
-      <div className="w-full mb-4">
+      {/* <div className="w-full mb-4">
         <Swiper
           modules={[Navigation, Pagination, Scrollbar, A11y]}
           spaceBetween={8}
@@ -166,6 +188,45 @@ export default function AllFlights() {
             </SwiperSlide>
           ))}
         </Swiper>
+      </div> */}
+
+      {/* Sort and Filter Options */}
+      <div className="flex justify-between items-center mb-4">
+        <div className="flex space-x-4">
+          <div>
+            <label className="font-semibold text-slate-600">Sort by:</label>
+            <select
+              value={sortOption}
+              onChange={(e) => setSortOption(e.target.value)}
+              className="ml-2 p-2 border rounded-md"
+            >
+              <option value="price-asc">Price: Low to High</option>
+              <option value="price-desc">Price: High to Low</option>
+              <option value="duration-asc">Duration: Shortest</option>
+              <option value="duration-desc">Duration: Longest</option>
+            </select>
+          </div>
+          <div>
+            <label className="font-semibold text-slate-600">Filter by:</label>
+            <select
+              value={filterOption}
+              onChange={(e) => setFilterOption(e.target.value)}
+              className="ml-2 p-2 border rounded-md"
+            >
+              <option value="all">All Airlines</option>
+              <option value="Airline1">Airline 1</option>
+              <option value="Airline2">Airline 2</option>
+              <option value="Airline3">Airline 3</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      {/* Flight List */}
+      <div className="w-full">
+        {sortFlights(filterFlights(flights)).map((flight, idx) => (
+          <FlightDetails key={idx} flightData={flight} />
+        ))}
       </div>
 
       {[1, 2, 3, 4, 5, 6].map((item, idx) => (
