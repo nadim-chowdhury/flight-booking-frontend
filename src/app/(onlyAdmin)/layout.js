@@ -6,13 +6,11 @@ import { useSelector } from "react-redux";
 
 export default function AdminLayout({ children }) {
   const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
-  const userInfo = useSelector((state) => state.user.userInfo);
-  console.log("userInfo:", userInfo);
-  console.log("isAuthenticated:", isAuthenticated);
+  // const userInfo = useSelector((state) => state.user.userInfo);
 
   useEffect(() => {
     if (!isAuthenticated) {
-      return redirect("/register");
+      return redirect("/login");
     }
   }, [isAuthenticated]);
 

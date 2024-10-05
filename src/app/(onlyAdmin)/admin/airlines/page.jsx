@@ -3,32 +3,37 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { SquarePen, Trash } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useSelector } from "react-redux";
 
 export default function Airlines() {
   const [airlinesData, setAirlinesData] = useState([]);
-  const [loading, setLoading] = useState(false); // Loading state
+  const [loading, setLoading] = useState(false);
   const [total, setTotal] = useState(0);
   const [limit, setLimit] = useState(10);
   const [offset, setOffset] = useState(0);
   const [order, setOrder] = useState("ASC");
   const [searchTerm, setSearchTerm] = useState("");
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm); // Debounced search term
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
+  const [deleteId, setDeleteId] = useState(null);
 
-  // Debounce search term
+  const router = useRouter();
+  const token = useSelector((state) => state.user.token);
+
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearchTerm(searchTerm);
-    }, 500); // 500ms debounce delay
+    }, 500);
 
     return () => {
-      clearTimeout(handler); // Clear the timeout if the user keeps typing
+      clearTimeout(handler);
     };
   }, [searchTerm]);
 
-  // Fetch data whenever debouncedSearchTerm, sortOrder, offset, or limit changes
   useEffect(() => {
     const fetchAirlines = async () => {
-      setLoading(true); // Set loading to true while fetching
+      setLoading(true);
       try {
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/airlines?offset=${offset}&limit=${limit}&order=${order}&search=${debouncedSearchTerm}`
@@ -41,27 +46,57 @@ export default function Airlines() {
         console.error("Error fetching airlines:", error);
         alert("Failed to fetch airlines data.");
       }
-      setLoading(false); // Set loading to false once data is fetched
+      setLoading(false);
     };
 
     fetchAirlines();
-  }, [debouncedSearchTerm, order, offset, limit]);
+  }, [debouncedSearchTerm, order, offset, limit, deleteId]);
 
-  // Handle search input
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
-    setOffset(0); // Reset pagination when search changes
+    setOffset(0);
   };
 
-  // Handle sort selection
   const handleSort = (e) => {
     setOrder(e.target.value);
   };
 
-  // Handle page change
   const handlePageChange = (newOffset) => {
     if (newOffset >= 0 && newOffset < total) {
       setOffset(newOffset);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (window.confirm("Are you sure you want to delete this airline?")) {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/airlines/${id}`,
+          {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.ok) {
+          alert("Airline deleted successfully");
+          setDeleteId(id);
+          setSearchTerm("");
+        } else {
+          const errorData = await response.json();
+          alert(
+            `Failed to delete airline: ${
+              errorData.message || response.statusText
+            }`
+          );
+        }
+      } catch (error) {
+        console.error("Error deleting airline:", error);
+        alert("An error occurred while deleting the airline");
+      }
     }
   };
 
@@ -110,21 +145,25 @@ export default function Airlines() {
               <th className="px-4 py-2 border text-left font-semibold">
                 Status
               </th>
+              <th className="px-4 py-2 border text-left font-semibold">
+                Action
+              </th>
             </tr>
           </thead>
 
           <tbody>
             {loading ? (
-              [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item) => (
-                <tr key={item}>
-                  <td className="px-4 py-2 border text-white">00</td>
-                  <td className="px-4 py-2 border text-white">00</td>
-                  <td className="px-4 py-2 border text-white">00</td>
-                  <td className="px-4 py-2 border text-white">00</td>
-                  <td className="px-4 py-2 border text-white">00</td>
+              [1, 2, 3, 4, 5].map((item) => (
+                <tr key={item} className="animate-pulse">
+                  <td className="px-4 py-2 border">Loading...</td>
+                  <td className="px-4 py-2 border">Loading...</td>
+                  <td className="px-4 py-2 border">Loading...</td>
+                  <td className="px-4 py-2 border">Loading...</td>
+                  <td className="px-4 py-2 border">Loading...</td>
+                  <td className="px-4 py-2 border">Loading...</td>
                 </tr>
               ))
-            ) : airlinesData.length > 0 ? (
+            ) : airlinesData && airlinesData.length > 0 ? (
               airlinesData.map((airline) => (
                 <tr key={airline?.id} className="hover:bg-slate-50">
                   <td className="px-4 py-2 border">{airline?.id}</td>
@@ -138,11 +177,31 @@ export default function Airlines() {
                       <span className="text-rose-600">Inactive</span>
                     )}
                   </td>
+                  <td className="px-4 py-2 border flex items-center gap-2">
+                    {/* Edit Button */}
+                    <Button
+                      size="sm"
+                      onClick={() =>
+                        router.push(`/admin/airlines/${airline.id}`)
+                      }
+                      className="bg-green-600 rounded-md text-white hover:bg-green-700"
+                    >
+                      <SquarePen className="w-4 h-4" />
+                    </Button>
+                    {/* Delete Button */}
+                    <Button
+                      size="sm"
+                      onClick={() => handleDelete(airline.id)}
+                      className="bg-rose-600 rounded-md text-white hover:bg-rose-700"
+                    >
+                      <Trash className="w-4 h-4" />
+                    </Button>
+                  </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan={4} className="text-center py-4">
+                <td colSpan={6} className="text-center py-4">
                   No airlines found.
                 </td>
               </tr>

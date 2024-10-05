@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import React, { useState, useEffect } from "react";
+import { useRouter, useParams } from "next/navigation";
 import { useSelector } from "react-redux";
 
-export default function CreateAirline() {
+export default function UpdateAirline() {
   const [formData, setFormData] = useState({
     name: "",
     alias: "",
@@ -14,10 +14,40 @@ export default function CreateAirline() {
     country: "",
     active: "Y",
   });
+  const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
 
+  const { airlineId } = useParams();
   const router = useRouter();
   const token = useSelector((state) => state.user.token);
+
+  useEffect(() => {
+    const fetchAirline = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/airlines/${airlineId}`
+        );
+        const data = await response.json();
+
+        setFormData({
+          name: data.name,
+          alias: data.alias,
+          iata: data.iata,
+          icao: data.icao,
+          callsign: data.callsign,
+          country: data.country,
+          active: data.active,
+        });
+
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching airline data:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchAirline();
+  }, [airlineId]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -33,9 +63,9 @@ export default function CreateAirline() {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/airlines`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/airlines/${airlineId}`,
         {
-          method: "POST",
+          method: "PUT",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -48,22 +78,23 @@ export default function CreateAirline() {
         throw new Error(`Error: ${response.status}`);
       }
 
-      const data = await response.json();
-      console.log("Airline Created:", data);
-
-      alert("Airline created successfully!");
+      alert("Airline updated successfully!");
       router.push("/admin/airlines");
     } catch (error) {
-      console.error("Error creating airline:", error);
-      alert("Failed to create airline. Please try again.");
+      console.error("Error updating airline:", error);
+      alert("Failed to update airline. Please try again.");
     } finally {
       setSubmitting(false);
     }
   };
 
+  if (loading) {
+    return <div className="min-h-screen text-center mt-10">Loading...</div>;
+  }
+
   return (
     <div className="max-w-6xl mx-auto px-4 my-16">
-      <h1 className="text-3xl font-bold mb-8">Create Airline</h1>
+      <h1 className="text-3xl font-bold mb-8">Update Airline</h1>
       <form
         onSubmit={handleSubmit}
         className="space-y-6 bg-slate-50 border p-6 rounded-lg"
@@ -185,9 +216,9 @@ export default function CreateAirline() {
           className={`bg-sky-600 text-white px-4 py-2 rounded-md hover:bg-sky-700 ${
             submitting ? "opacity-50 cursor-not-allowed" : ""
           }`}
-          disabled={submitting} // Disable button while submitting
+          disabled={submitting}
         >
-          {submitting ? "Submitting..." : "Create Airline"}
+          {submitting ? "Submitting..." : "Update Airline"}
         </button>
       </form>
     </div>
