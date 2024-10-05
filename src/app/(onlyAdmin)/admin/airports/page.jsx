@@ -3,29 +3,34 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { SquarePen, Trash } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useSelector } from "react-redux";
 
 export default function Airports() {
   const [airportsData, setAirportsData] = useState([]);
-  const [loading, setLoading] = useState(false); // Loading state
-  const [total, setTotal] = useState(0); // Total number of records
-  const [limit, setLimit] = useState(10); // Number of records per page
-  const [offset, setOffset] = useState(0); // Current offset for pagination
-  const [order, setOrder] = useState("ASC"); // Sort order (ASC/DESC)
-  const [searchTerm, setSearchTerm] = useState(""); // Search term
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm); // Debounced search term
+  const [loading, setLoading] = useState(false);
+  const [total, setTotal] = useState(0);
+  const [limit, setLimit] = useState(10);
+  const [offset, setOffset] = useState(0);
+  const [order, setOrder] = useState("ASC");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
+  const [deleteId, setDeleteId] = useState(null);
 
-  // Debounce search term to limit API requests
+  const router = useRouter();
+  const token = useSelector((state) => state.user.token);
+
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearchTerm(searchTerm);
-    }, 500); // 500ms debounce delay
+    }, 500);
 
     return () => {
-      clearTimeout(handler); // Clear debounce timer on input change
+      clearTimeout(handler);
     };
   }, [searchTerm]);
 
-  // Fetch airports data based on search, sorting, pagination
   useEffect(() => {
     const fetchAirports = async () => {
       setLoading(true);
@@ -36,35 +41,62 @@ export default function Airports() {
         const data = await res.json();
 
         setAirportsData(data.airports);
-        setTotal(data.total); // Assuming the API returns the total number of records
+        setTotal(data.total);
       } catch (error) {
-        console.error("Error fetching airports data:", error);
-        setAirportsData([]); // Clear data on error
-        setTotal(0); // Reset total on error
-      } finally {
-        setLoading(false); // Stop loading after fetching
+        console.error("Error fetching airports:", error);
+        alert("Failed to fetch airports data.");
       }
+      setLoading(false);
     };
 
     fetchAirports();
-  }, [debouncedSearchTerm, order, offset, limit]);
+  }, [debouncedSearchTerm, order, offset, limit, deleteId]);
 
-  // Handle search input change
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
-    setOffset(0); // Reset pagination when search changes
+    setOffset(0);
   };
 
-  // Handle sort order change
   const handleSort = (e) => {
     setOrder(e.target.value);
-    setOffset(0); // Reset pagination when sorting changes
   };
 
-  // Handle page change for pagination
   const handlePageChange = (newOffset) => {
     if (newOffset >= 0 && newOffset < total) {
       setOffset(newOffset);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (window.confirm("Are you sure you want to delete this airport?")) {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/airports/${id}`,
+          {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.ok) {
+          alert("Airport deleted successfully");
+          setDeleteId(id);
+          setSearchTerm("");
+        } else {
+          const errorData = await response.json();
+          alert(
+            `Failed to delete airport: ${
+              errorData.message || response.statusText
+            }`
+          );
+        }
+      } catch (error) {
+        console.error("Error deleting airport:", error);
+        alert("An error occurred while deleting the airport");
+      }
     }
   };
 
@@ -78,7 +110,7 @@ export default function Airports() {
           type="text"
           value={searchTerm}
           onChange={handleSearch}
-          placeholder="Search airlines..."
+          placeholder="Search airports..."
           className="border p-2 w-full rounded-md bg-slate-100"
         />
 
@@ -109,27 +141,25 @@ export default function Airports() {
                 Country
               </th>
               <th className="px-4 py-2 border text-left font-semibold">IATA</th>
-              <th className="px-4 py-2 border text-left font-semibold">ICAO</th>
               <th className="px-4 py-2 border text-left font-semibold">
-                Timezone
+                Action
               </th>
             </tr>
           </thead>
 
           <tbody>
             {loading ? (
-              [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item) => (
-                <tr key={item}>
-                  <td className="px-4 py-2 border text-white">00</td>
-                  <td className="px-4 py-2 border text-white">00</td>
-                  <td className="px-4 py-2 border text-white">00</td>
-                  <td className="px-4 py-2 border text-white">00</td>
-                  <td className="px-4 py-2 border text-white">00</td>
-                  <td className="px-4 py-2 border text-white">00</td>
-                  <td className="px-4 py-2 border text-white">00</td>
+              [1, 2, 3, 4, 5].map((item) => (
+                <tr key={item} className="animate-pulse">
+                  <td className="px-4 py-2 border">Loading...</td>
+                  <td className="px-4 py-2 border">Loading...</td>
+                  <td className="px-4 py-2 border">Loading...</td>
+                  <td className="px-4 py-2 border">Loading...</td>
+                  <td className="px-4 py-2 border">Loading...</td>
+                  <td className="px-4 py-2 border">Loading...</td>
                 </tr>
               ))
-            ) : airportsData.length > 0 ? (
+            ) : airportsData && airportsData.length > 0 ? (
               airportsData.map((airport) => (
                 <tr key={airport?.id} className="hover:bg-slate-50">
                   <td className="px-4 py-2 border">{airport?.id}</td>
@@ -137,8 +167,26 @@ export default function Airports() {
                   <td className="px-4 py-2 border">{airport?.city}</td>
                   <td className="px-4 py-2 border">{airport?.country}</td>
                   <td className="px-4 py-2 border">{airport?.iata}</td>
-                  <td className="px-4 py-2 border">{airport?.icao}</td>
-                  <td className="px-4 py-2 border">{airport?.tz}</td>
+                  <td className="px-4 py-2 border flex items-center gap-2">
+                    {/* Edit Button */}
+                    <Button
+                      size="sm"
+                      onClick={() =>
+                        router.push(`/admin/airports/${airport.id}`)
+                      }
+                      className="bg-green-600 rounded-md text-white hover:bg-green-700"
+                    >
+                      <SquarePen className="w-4 h-4" />
+                    </Button>
+                    {/* Delete Button */}
+                    <Button
+                      size="sm"
+                      onClick={() => handleDelete(airport.id)}
+                      className="bg-rose-600 rounded-md text-white hover:bg-rose-700"
+                    >
+                      <Trash className="w-4 h-4" />
+                    </Button>
+                  </td>
                 </tr>
               ))
             ) : (
