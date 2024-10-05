@@ -1,33 +1,64 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
+import { useRouter, useParams } from "next/navigation";
 import { useSelector } from "react-redux";
+import { useForm } from "react-hook-form";
 
-export default function CreateRoute() {
+export default function UpdateRoute() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    setValue,
+    formState: { errors, isSubmitting },
   } = useForm();
 
-  const [submitting, setSubmitting] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const { routeId } = useParams();
   const router = useRouter();
   const token = useSelector((state) => state.user.token);
 
-  const onSubmit = async (data) => {
-    setSubmitting(true);
+  useEffect(() => {
+    const fetchRoute = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/routes/${routeId}`
+        );
+        const data = await response.json();
+
+        // Set form data using setValue for react-hook-form
+        setValue("airline_code", data.airline_code);
+        setValue("airline_id", data.airline_id);
+        setValue("departure_airport", data.departure_airport);
+        setValue("departure_airport_id", data.departure_airport_id);
+        setValue("arrival_airport", data.arrival_airport);
+        setValue("arrival_airport_id", data.arrival_airport_id);
+        setValue("codeshare", data.codeshare);
+        setValue("stops", data.stops);
+        setValue("equipment", data.equipment);
+        setValue("flight_number", data.flight_number);
+
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching route data:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchRoute();
+  }, [routeId, setValue]);
+
+  const onSubmit = async (formData) => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/routes`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/routes/${routeId}`,
         {
-          method: "POST",
+          method: "PUT",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify(data),
+          body: JSON.stringify(formData),
         }
       );
 
@@ -35,24 +66,23 @@ export default function CreateRoute() {
         throw new Error(`Error: ${response.status}`);
       }
 
-      const responseData = await response.json();
-      console.log("Route Created:", responseData);
-
-      alert("Route created successfully!");
+      alert("Route updated successfully!");
       router.push("/admin/routes");
     } catch (error) {
-      console.error("Error creating route:", error);
-      alert("Failed to create route. Please try again.");
-    } finally {
-      setSubmitting(false);
+      console.error("Error updating route:", error);
+      alert("Failed to update route. Please try again.");
     }
   };
 
+  if (loading) {
+    return <div className="min-h-screen text-center mt-10">Loading...</div>;
+  }
+
   return (
     <div className="max-w-6xl mx-auto px-4 my-16">
-      <h1 className="text-3xl font-bold mb-8">Create Route</h1>
+      <h1 className="text-3xl font-bold mb-8">Update Route</h1>
       <form
-        onSubmit={handleSubmit(onSubmit)} // Handle form submit using react-hook-form
+        onSubmit={handleSubmit(onSubmit)}
         className="space-y-6 bg-slate-50 border p-6 rounded-lg"
       >
         {/* Airline Code */}
@@ -64,17 +94,15 @@ export default function CreateRoute() {
             id="airline_code"
             {...register("airline_code", {
               required: "Airline code is required",
-              maxLength: {
-                value: 2,
-                message: "Airline code should be exactly 2 characters long",
-              },
             })}
             className="w-full p-2 border rounded-md"
             type="text"
             placeholder="Enter airline code"
           />
           {errors.airline_code && (
-            <span className="text-red-600">{errors.airline_code.message}</span>
+            <p className="text-red-500 text-sm">
+              {errors.airline_code.message}
+            </p>
           )}
         </div>
 
@@ -96,7 +124,7 @@ export default function CreateRoute() {
             placeholder="Enter airline ID"
           />
           {errors.airline_id && (
-            <span className="text-red-600">{errors.airline_id.message}</span>
+            <p className="text-red-500 text-sm">{errors.airline_id.message}</p>
           )}
         </div>
 
@@ -113,19 +141,15 @@ export default function CreateRoute() {
               id="departure_airport"
               {...register("departure_airport", {
                 required: "Departure airport is required",
-                maxLength: {
-                  value: 3,
-                  message: "Departure airport code must be 3 characters",
-                },
               })}
               className="w-full p-2 border rounded-md"
               type="text"
               placeholder="Enter departure airport"
             />
             {errors.departure_airport && (
-              <span className="text-red-600">
+              <p className="text-red-500 text-sm">
                 {errors.departure_airport.message}
-              </span>
+              </p>
             )}
           </div>
 
@@ -141,17 +165,15 @@ export default function CreateRoute() {
               {...register("departure_airport_id", {
                 required: "Departure airport ID is required",
                 valueAsNumber: true,
-                validate: (value) =>
-                  value > 0 || "Departure airport ID must be a positive number",
               })}
               className="w-full p-2 border rounded-md"
               type="number"
               placeholder="Enter departure airport ID"
             />
             {errors.departure_airport_id && (
-              <span className="text-red-600">
+              <p className="text-red-500 text-sm">
                 {errors.departure_airport_id.message}
-              </span>
+              </p>
             )}
           </div>
         </div>
@@ -169,19 +191,15 @@ export default function CreateRoute() {
               id="arrival_airport"
               {...register("arrival_airport", {
                 required: "Arrival airport is required",
-                maxLength: {
-                  value: 3,
-                  message: "Arrival airport code must be 3 characters",
-                },
               })}
               className="w-full p-2 border rounded-md"
               type="text"
               placeholder="Enter arrival airport"
             />
             {errors.arrival_airport && (
-              <span className="text-red-600">
+              <p className="text-red-500 text-sm">
                 {errors.arrival_airport.message}
-              </span>
+              </p>
             )}
           </div>
 
@@ -197,17 +215,15 @@ export default function CreateRoute() {
               {...register("arrival_airport_id", {
                 required: "Arrival airport ID is required",
                 valueAsNumber: true,
-                validate: (value) =>
-                  value > 0 || "Arrival airport ID must be a positive number",
               })}
               className="w-full p-2 border rounded-md"
               type="number"
               placeholder="Enter arrival airport ID"
             />
             {errors.arrival_airport_id && (
-              <span className="text-red-600">
+              <p className="text-red-500 text-sm">
                 {errors.arrival_airport_id.message}
-              </span>
+              </p>
             )}
           </div>
         </div>
@@ -242,7 +258,7 @@ export default function CreateRoute() {
             placeholder="Enter number of stops"
           />
           {errors.stops && (
-            <span className="text-red-600">{errors.stops.message}</span>
+            <p className="text-red-500 text-sm">{errors.stops.message}</p>
           )}
         </div>
 
@@ -253,16 +269,11 @@ export default function CreateRoute() {
           </label>
           <input
             id="equipment"
-            {...register("equipment", {
-              required: "Equipment is required",
-            })}
+            {...register("equipment")}
             className="w-full p-2 border rounded-md"
             type="text"
             placeholder="Enter equipment"
           />
-          {errors.equipment && (
-            <span className="text-red-600">{errors.equipment.message}</span>
-          )}
         </div>
 
         {/* Flight Number */}
@@ -280,7 +291,9 @@ export default function CreateRoute() {
             placeholder="Enter flight number"
           />
           {errors.flight_number && (
-            <span className="text-red-600">{errors.flight_number.message}</span>
+            <p className="text-red-500 text-sm">
+              {errors.flight_number.message}
+            </p>
           )}
         </div>
 
@@ -288,11 +301,11 @@ export default function CreateRoute() {
         <button
           type="submit"
           className={`bg-sky-600 text-white px-4 py-2 rounded-md hover:bg-sky-700 ${
-            submitting ? "opacity-50 cursor-not-allowed" : ""
+            isSubmitting ? "opacity-50 cursor-not-allowed" : ""
           }`}
-          disabled={submitting} // Disable button while submitting
+          disabled={isSubmitting}
         >
-          {submitting ? "Submitting..." : "Create Route"}
+          {isSubmitting ? "Submitting..." : "Update Route"}
         </button>
       </form>
     </div>

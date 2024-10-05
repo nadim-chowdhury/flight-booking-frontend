@@ -14,6 +14,7 @@ export default function UpdateAirline() {
   } = useForm();
 
   const [loading, setLoading] = useState(true);
+
   const { airlineId } = useParams();
   const router = useRouter();
   const token = useSelector((state) => state.user.token);

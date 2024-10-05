@@ -3,6 +3,9 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { useSelector } from "react-redux";
+import { SquarePen, Trash } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function Planes() {
   const [planesData, setPlanesData] = useState([]);
@@ -13,8 +16,12 @@ export default function Planes() {
   const [order, setOrder] = useState("ASC");
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
+  const [deleteId, setDeleteId] = useState(null);
 
-  // Debounce search term
+  const token = useSelector((state) => state.user.token);
+  const router = useRouter();
+
+  // Debounce search term to prevent excessive API calls
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearchTerm(searchTerm);
@@ -29,18 +36,23 @@ export default function Planes() {
   useEffect(() => {
     const fetchPlanes = async () => {
       setLoading(true);
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/planes?offset=${offset}&limit=${limit}&order=${order}&search=${debouncedSearchTerm}`
-      );
-      const data = await res.json();
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/planes?offset=${offset}&limit=${limit}&order=${order}&search=${debouncedSearchTerm}`
+        );
+        const data = await res.json();
 
-      setPlanesData(data.planes);
-      setTotal(data.total);
+        setPlanesData(data.planes);
+        setTotal(data.total);
+      } catch (error) {
+        console.error("Error fetching planes:", error);
+        alert("Failed to fetch planes data.");
+      }
       setLoading(false);
     };
 
     fetchPlanes();
-  }, [debouncedSearchTerm, order, offset, limit]);
+  }, [debouncedSearchTerm, order, offset, limit, deleteId]);
 
   // Handle search input
   const handleSearch = (e) => {
@@ -60,6 +72,40 @@ export default function Planes() {
     }
   };
 
+  // Handle delete functionality
+  const handleDelete = async (id) => {
+    if (window.confirm("Are you sure you want to delete this plane?")) {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/planes/${id}`,
+          {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.ok) {
+          alert("Plane deleted successfully");
+          setDeleteId(id);
+          setSearchTerm(""); // Trigger reload of data after deletion
+        } else {
+          const errorData = await response.json();
+          alert(
+            `Failed to delete plane: ${
+              errorData.message || response.statusText
+            }`
+          );
+        }
+      } catch (error) {
+        console.error("Error deleting plane:", error);
+        alert("An error occurred while deleting the plane");
+      }
+    }
+  };
+
   return (
     <div className="max-w-6xl mx-auto px-4 my-16 min-h-[90vh]">
       <h1 className="text-2xl font-bold mb-4">Planes</h1>
@@ -70,7 +116,7 @@ export default function Planes() {
           type="text"
           value={searchTerm}
           onChange={handleSearch}
-          placeholder="Search airlines..."
+          placeholder="Search planes..."
           className="border p-2 w-full rounded-md bg-slate-100"
         />
 
@@ -100,31 +146,53 @@ export default function Planes() {
               <th className="px-4 py-2 border text-left font-semibold">
                 Additional Code
               </th>
+              <th className="px-4 py-2 border text-left font-semibold">
+                Actions
+              </th>
             </tr>
           </thead>
 
           <tbody>
             {loading ? (
-              [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item) => (
-                <tr key={item}>
-                  <td className="px-4 py-2 border text-white">00</td>
-                  <td className="px-4 py-2 border text-white">00</td>
-                  <td className="px-4 py-2 border text-white">00</td>
-                  <td className="px-4 py-2 border text-white">00</td>
+              [1, 2, 3, 4, 5].map((item) => (
+                <tr key={item} className="animate-pulse">
+                  <td className="px-4 py-2 border">Loading...</td>
+                  <td className="px-4 py-2 border">Loading...</td>
+                  <td className="px-4 py-2 border">Loading...</td>
+                  <td className="px-4 py-2 border">Loading...</td>
+                  <td className="px-4 py-2 border">Loading...</td>
                 </tr>
               ))
-            ) : planesData.length > 0 ? (
+            ) : planesData && planesData.length > 0 ? (
               planesData.map((plane) => (
                 <tr key={plane?.id} className="hover:bg-slate-50">
                   <td className="px-4 py-2 border">{plane?.id}</td>
                   <td className="px-4 py-2 border">{plane?.name}</td>
                   <td className="px-4 py-2 border">{plane?.code}</td>
                   <td className="px-4 py-2 border">{plane?.additional_code}</td>
+                  <td className="px-4 py-2 border flex items-center gap-2">
+                    {/* Edit Button */}
+                    <Button
+                      size="sm"
+                      onClick={() => router.push(`/admin/planes/${plane.id}`)}
+                      className="bg-green-600 rounded-md text-white hover:bg-green-700"
+                    >
+                      <SquarePen className="w-4 h-4" />
+                    </Button>
+                    {/* Delete Button */}
+                    <Button
+                      size="sm"
+                      onClick={() => handleDelete(plane.id)}
+                      className="bg-rose-600 rounded-md text-white hover:bg-rose-700"
+                    >
+                      <Trash className="w-4 h-4" />
+                    </Button>
+                  </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan={3} className="text-center py-4">
+                <td colSpan={5} className="text-center py-4">
                   No planes found.
                 </td>
               </tr>
