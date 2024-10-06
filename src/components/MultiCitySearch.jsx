@@ -147,7 +147,7 @@ export default function MultiCitySearch() {
         departureCityFullName,
         destinationCity,
         destinationCityFullName,
-        departureDate: parseISO(departureDate),
+        departureDate: departureDate,
       });
       i++;
     }
@@ -257,12 +257,7 @@ export default function MultiCitySearch() {
       return;
     }
 
-    const query = {
-      adults,
-      children,
-      infants,
-      seatType,
-    };
+    const query = { adults, children, infants, seatType };
 
     flights.forEach((flight, index) => {
       query[`flight${index + 1}DepartureCity`] = flight.departureCity;

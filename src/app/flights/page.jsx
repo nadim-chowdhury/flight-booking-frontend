@@ -2,16 +2,15 @@
 
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import Image from "next/image";
-import FlightSearch from "../../components/FlightSearch";
-import FlightDetails from "../../components/FlightDetails";
+// import Image from "next/image";
+import FlightSearch from "@/components/FlightSearch";
+import FlightDetails from "@/components/FlightDetails";
 import {
   flightsDemoDataMultiCity,
   flightsDemoDataOneway,
   flightsDemoDataReturn,
-} from "../../utils/demoData";
-import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
-import { Swiper, SwiperSlide } from "swiper/react";
+} from "@/utils/demoData";
+import axios from "axios";
 
 import "swiper/css";
 import "swiper/css/navigation";
@@ -31,7 +30,6 @@ export default function AllFlights() {
     if (!searchParams) return;
 
     let payload = {};
-
     const searchType = searchParams.get("type");
 
     if (searchType === "multi-city") {
@@ -50,45 +48,74 @@ export default function AllFlights() {
       }
 
       payload = {
+        type: searchParams.get("type"),
         flights,
         passengers: {
-          adults: searchParams.get("adults"),
-          children: searchParams.get("children") || 0,
-          infants: searchParams.get("infants") || 0,
+          adults: searchParams.get("adults") || "0",
+          children: searchParams.get("children") || "0",
+          infants: searchParams.get("infants") || "0",
         },
         seatType: searchParams.get("seatType") || "economy",
       };
     } else if (searchType === "return-trip") {
       payload = {
+        type: searchParams.get("type"),
         departureCity: searchParams.get("departureCity"),
         destinationCity: searchParams.get("destinationCity"),
         departureDate: searchParams.get("departureDate"),
         returnDate: searchParams.get("returnDate"),
         passengers: {
-          adults: searchParams.get("adults"),
-          children: searchParams.get("children") || 0,
-          infants: searchParams.get("infants") || 0,
+          adults: searchParams.get("adults") || "0",
+          children: searchParams.get("children") || "0",
+          infants: searchParams.get("infants") || "0",
         },
         seatType: searchParams.get("seatType") || "economy",
       };
     } else if (searchType === "one-way") {
       payload = {
+        type: searchParams.get("type"),
         departureCity: searchParams.get("departureCity"),
         destinationCity: searchParams.get("destinationCity"),
         departureDate: searchParams.get("departureDate"),
         passengers: {
-          adults: searchParams.get("adults"),
-          children: searchParams.get("children") || 0,
-          infants: searchParams.get("infants") || 0,
+          adults: searchParams.get("adults") || "0",
+          children: searchParams.get("children") || "0",
+          infants: searchParams.get("infants") || "0",
         },
         seatType: searchParams.get("seatType") || "economy",
       };
     }
 
-    setSearchPayload(payload);
-
-    console.log("Payload for API call:", payload);
+    if (Object.keys(payload).length > 0) {
+      setSearchPayload(payload);
+      console.log("Payload for API call:", payload);
+    }
   }, [searchParams]);
+
+  useEffect(() => {
+    const fetchFlights = async (searchPayload) => {
+      try {
+        const response = await axios.post(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/flights/search`,
+          searchPayload,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        setFlightResults(response.data);
+        console.log("API Response:", response.data);
+      } catch (error) {
+        console.error("API call failed:", error);
+      }
+    };
+
+    if (searchPayload) {
+      fetchFlights(searchPayload);
+    }
+  }, [searchPayload]);
 
   const handleFlightsFound = (foundFlights) => {
     setFlights(foundFlights);
@@ -96,6 +123,8 @@ export default function AllFlights() {
 
   const sortFlights = (flights) => {
     return flights.sort((a, b) => {
+      console.log("fetchFlights ~ response:", response);
+      console.log("fetchFlights ~ response:", response);
       if (sortOption === "price-asc") {
         return a.price - b.price;
       } else if (sortOption === "price-desc") {
