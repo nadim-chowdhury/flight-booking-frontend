@@ -134,7 +134,7 @@ export default function Airlines() {
         <table className="min-w-full border rounded-md">
           <thead>
             <tr className="bg-slate-100">
-              <th className="px-4 py-2 border text-left font-semibold">Id</th>
+              <th className="px-4 py-2 border text-left font-semibold">Sl</th>
               <th className="px-4 py-2 border text-left font-semibold">Name</th>
               <th className="px-4 py-2 border text-left font-semibold">
                 Country
@@ -164,9 +164,9 @@ export default function Airlines() {
                 </tr>
               ))
             ) : airlinesData && airlinesData.length > 0 ? (
-              airlinesData.map((airline) => (
-                <tr key={airline?.id} className="hover:bg-slate-50">
-                  <td className="px-4 py-2 border">{airline?.id}</td>
+              airlinesData.map((airline, idx) => (
+                <tr key={airline?._id} className="hover:bg-slate-50">
+                  <td className="px-4 py-2 border">{idx + 1}</td>
                   <td className="px-4 py-2 border">{airline?.name}</td>
                   <td className="px-4 py-2 border">{airline?.country}</td>
                   <td className="px-4 py-2 border">{airline?.callsign}</td>
@@ -182,7 +182,7 @@ export default function Airlines() {
                     <Button
                       size="sm"
                       onClick={() =>
-                        router.push(`/admin/airlines/${airline.id}`)
+                        router.push(`/admin/airlines/${airline._id}`)
                       }
                       className="bg-green-600 rounded-md text-white hover:bg-green-700"
                     >
@@ -191,7 +191,7 @@ export default function Airlines() {
                     {/* Delete Button */}
                     <Button
                       size="sm"
-                      onClick={() => handleDelete(airline.id)}
+                      onClick={() => handleDelete(airline._id)}
                       className="bg-rose-600 rounded-md text-white hover:bg-rose-700"
                     >
                       <Trash className="w-4 h-4" />

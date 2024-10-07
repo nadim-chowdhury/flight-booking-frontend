@@ -142,9 +142,9 @@ export default function Routes() {
               <th className="px-4 py-2 border text-left font-semibold">
                 Stops
               </th>
-              <th className="px-4 py-2 border text-left font-semibold">
+              {/* <th className="px-4 py-2 border text-left font-semibold">
                 Equipment
-              </th>
+              </th> */}
               <th className="px-4 py-2 border text-left font-semibold">
                 Actions
               </th>
@@ -161,14 +161,14 @@ export default function Routes() {
                   <td className="px-4 py-2 border">Loading...</td>
                   <td className="px-4 py-2 border">Loading...</td>
                   <td className="px-4 py-2 border">Loading...</td>
-                  <td className="px-4 py-2 border">Loading...</td>
+                  {/* <td className="px-4 py-2 border">Loading...</td> */}
                   <td className="px-4 py-2 border">Loading...</td>
                 </tr>
               ))
             ) : routesData?.length > 0 ? (
-              routesData?.map((route) => (
-                <tr key={route?.id} className="hover:bg-slate-50">
-                  <td className="px-4 py-2 border">{route?.id}</td>
+              routesData?.map((route, idx) => (
+                <tr key={route?._id} className="hover:bg-slate-50">
+                  <td className="px-4 py-2 border">{idx + 1}</td>
                   <td className="px-4 py-2 border">{route?.flight_number}</td>
                   <td className="px-4 py-2 border">{route?.airline_code}</td>
                   <td className="px-4 py-2 border">
@@ -176,18 +176,18 @@ export default function Routes() {
                   </td>
                   <td className="px-4 py-2 border">{route?.arrival_airport}</td>
                   <td className="px-4 py-2 border">{route?.stops}</td>
-                  <td className="px-4 py-2 border">{route?.equipment}</td>
+                  {/* <td className="px-4 py-2 border">{route?.equipment}</td> */}
                   <td className="px-4 py-2 border flex gap-2">
                     <Button
                       size="sm"
-                      onClick={() => router.push(`/admin/routes/${route.id}`)}
+                      onClick={() => router.push(`/admin/routes/${route._id}`)}
                       className="bg-green-600 text-white"
                     >
                       <Edit className="w-4 h-4" />
                     </Button>
                     <Button
                       size="sm"
-                      onClick={() => handleDelete(route.id)}
+                      onClick={() => handleDelete(route._id)}
                       className="bg-rose-600 text-white"
                     >
                       <Trash className="w-4 h-4" />

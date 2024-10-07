@@ -164,9 +164,9 @@ export default function Planes() {
                 </tr>
               ))
             ) : planesData && planesData.length > 0 ? (
-              planesData.map((plane) => (
-                <tr key={plane?.id} className="hover:bg-slate-50">
-                  <td className="px-4 py-2 border">{plane?.id}</td>
+              planesData.map((plane, idx) => (
+                <tr key={plane?._id} className="hover:bg-slate-50">
+                  <td className="px-4 py-2 border">{idx + 1}</td>
                   <td className="px-4 py-2 border">{plane?.name}</td>
                   <td className="px-4 py-2 border">{plane?.code}</td>
                   <td className="px-4 py-2 border">{plane?.additional_code}</td>
@@ -174,7 +174,7 @@ export default function Planes() {
                     {/* Edit Button */}
                     <Button
                       size="sm"
-                      onClick={() => router.push(`/admin/planes/${plane.id}`)}
+                      onClick={() => router.push(`/admin/planes/${plane._id}`)}
                       className="bg-green-600 rounded-md text-white hover:bg-green-700"
                     >
                       <SquarePen className="w-4 h-4" />
@@ -182,7 +182,7 @@ export default function Planes() {
                     {/* Delete Button */}
                     <Button
                       size="sm"
-                      onClick={() => handleDelete(plane.id)}
+                      onClick={() => handleDelete(plane._id)}
                       className="bg-rose-600 rounded-md text-white hover:bg-rose-700"
                     >
                       <Trash className="w-4 h-4" />

@@ -134,7 +134,7 @@ export default function Airports() {
         <table className="min-w-full border rounded-md">
           <thead>
             <tr className="bg-slate-100">
-              <th className="px-4 py-2 border text-left font-semibold">Id</th>
+              <th className="px-4 py-2 border text-left font-semibold">Sl</th>
               <th className="px-4 py-2 border text-left font-semibold">Name</th>
               <th className="px-4 py-2 border text-left font-semibold">City</th>
               <th className="px-4 py-2 border text-left font-semibold">
@@ -160,9 +160,9 @@ export default function Airports() {
                 </tr>
               ))
             ) : airportsData && airportsData.length > 0 ? (
-              airportsData.map((airport) => (
-                <tr key={airport?.id} className="hover:bg-slate-50">
-                  <td className="px-4 py-2 border">{airport?.id}</td>
+              airportsData.map((airport, idx) => (
+                <tr key={airport?._id} className="hover:bg-slate-50">
+                  <td className="px-4 py-2 border">{idx + 1}</td>
                   <td className="px-4 py-2 border">{airport?.name}</td>
                   <td className="px-4 py-2 border">{airport?.city}</td>
                   <td className="px-4 py-2 border">{airport?.country}</td>
@@ -172,7 +172,7 @@ export default function Airports() {
                     <Button
                       size="sm"
                       onClick={() =>
-                        router.push(`/admin/airports/${airport.id}`)
+                        router.push(`/admin/airports/${airport._id}`)
                       }
                       className="bg-green-600 rounded-md text-white hover:bg-green-700"
                     >
@@ -181,7 +181,7 @@ export default function Airports() {
                     {/* Delete Button */}
                     <Button
                       size="sm"
-                      onClick={() => handleDelete(airport.id)}
+                      onClick={() => handleDelete(airport._id)}
                       className="bg-rose-600 rounded-md text-white hover:bg-rose-700"
                     >
                       <Trash className="w-4 h-4" />

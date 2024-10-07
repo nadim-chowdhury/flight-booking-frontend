@@ -86,7 +86,7 @@ export default function Countries() {
         <table className="min-w-full border rounded-md">
           <thead>
             <tr className="bg-slate-100">
-              <th className="px-4 py-2 border text-left font-semibold">Id</th>
+              <th className="px-4 py-2 border text-left font-semibold">Sl</th>
               <th className="px-4 py-2 border text-left font-semibold">Code</th>
               <th className="px-4 py-2 border text-left font-semibold">Name</th>
               <th className="px-4 py-2 border text-left font-semibold">
@@ -106,9 +106,9 @@ export default function Countries() {
                 </tr>
               ))
             ) : countriesData.length > 0 ? (
-              countriesData.map((country) => (
-                <tr key={country?.id} className="hover:bg-slate-50">
-                  <td className="px-4 py-2 border">{country?.id}</td>
+              countriesData.map((country, idx) => (
+                <tr key={country?._id} className="hover:bg-slate-50">
+                  <td className="px-4 py-2 border">{idx + 1}</td>
                   <td className="px-4 py-2 border">{country?.code}</td>
                   <td className="px-4 py-2 border">{country?.name}</td>
                   <td className="px-4 py-2 border">
