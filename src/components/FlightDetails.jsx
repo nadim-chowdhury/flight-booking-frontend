@@ -9,7 +9,7 @@ import SearchFlightDetails from "./SearchFlightDetails";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "./ui/button";
 
-export default function FlightDetails({ flightData }) {
+export default function FlightDetails({ flightData, searchPayload }) {
   const [detailsOpen, setDetailsOpen] = useState(false);
 
   const { flightCombination, fareSummary } = flightData;
@@ -123,9 +123,7 @@ export default function FlightDetails({ flightData }) {
                 onClick={handleBookFlight}
                 className="view-details mb-4 absolute top-0 right-0 md:relative"
               >
-                <Link
-                  href={`/flights/${flight?.location[0]?.city}-${flight?.location[0]?.cityCode}`}
-                >
+                <Link href={`/flights/${flightData?._id}`}>
                   <Button
                     size="sm"
                     className="book-now-btn bg-sky-600 hover:bg-sky-700 text-white transition"

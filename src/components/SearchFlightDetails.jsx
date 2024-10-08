@@ -1,6 +1,11 @@
 import Image from "next/image";
 
 export default function SearchFlightDetails({ searchFlightDetailsData }) {
+  console.log(
+    "SearchFlightDetails ~ searchFlightDetailsData:",
+    searchFlightDetailsData
+  );
+
   return (
     <div className="mt-3 border rounded-md">
       {searchFlightDetailsData?.map((flight, index) => {
@@ -34,24 +39,24 @@ export default function SearchFlightDetails({ searchFlightDetailsData }) {
               />
               <div>
                 <p className="mb-1 font-bold">
-                  {flight?.companyId?.marketingCarrier}{" "}
-                  <span className="font-normal ml-4">
+                  {flight?.companyId?.marketingCarrier}&nbsp;|&nbsp;
+                  <span className="">
                     {flight?.companyId?.marketingCarrierCode}
                     {flight?.productDetails?.flightNumber &&
                       ` | ${flight?.productDetails?.flightNumber}`}
                   </span>
                 </p>
                 <p className="text-sm font-bold">
-                  Aircraft: {flight?.productDetails?.aircraft}
+                  Aircraft: {flight?.productDetail?.equipmentType}
                 </p>
                 <p className="text-xs font-bold">
                   Operated by: {flight?.companyId?.operatingCarrier}
                 </p>
                 <p className="text-xs font-bold">
-                  Flight Class: {flight?.class}
+                  Flight Class: {flight?.addProductDetail?.cabinClass}
                 </p>
                 <p className="text-xs font-bold">
-                  Available Seats: {flight?.availableSeats}
+                  Available Seats: {flight?.addProductDetail?.availableSeats}
                 </p>
               </div>
             </div>

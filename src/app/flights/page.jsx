@@ -105,8 +105,8 @@ export default function AllFlights() {
           }
         );
 
-        setFlightResults(response.data);
-        console.log("API Response:", response.data);
+        setFlights(response.data);
+        console.log("API Response:", response);
       } catch (error) {
         console.error("API call failed:", error);
       }
@@ -121,27 +121,27 @@ export default function AllFlights() {
     setFlights(foundFlights);
   };
 
-  const sortFlights = (flights) => {
-    return flights.sort((a, b) => {
-      console.log("fetchFlights ~ response:", response);
-      console.log("fetchFlights ~ response:", response);
-      if (sortOption === "price-asc") {
-        return a.price - b.price;
-      } else if (sortOption === "price-desc") {
-        return b.price - a.price;
-      } else if (sortOption === "duration-asc") {
-        return a.duration - b.duration;
-      } else if (sortOption === "duration-desc") {
-        return b.duration - a.duration;
-      }
-      return 0;
-    });
-  };
+  // const sortFlights = (flights) => {
+  //   return flights.sort((a, b) => {
+  //     console.log("fetchFlights ~ response:", response);
+  //     console.log("fetchFlights ~ response:", response);
+  //     if (sortOption === "price-asc") {
+  //       return a.price - b.price;
+  //     } else if (sortOption === "price-desc") {
+  //       return b.price - a.price;
+  //     } else if (sortOption === "duration-asc") {
+  //       return a.duration - b.duration;
+  //     } else if (sortOption === "duration-desc") {
+  //       return b.duration - a.duration;
+  //     }
+  //     return 0;
+  //   });
+  // };
 
-  const filterFlights = (flights) => {
-    if (filterOption === "all") return flights;
-    return flights.filter((flight) => flight.airline === filterOption);
-  };
+  // const filterFlights = (flights) => {
+  //   if (filterOption === "all") return flights;
+  //   return flights.filter((flight) => flight.airline === filterOption);
+  // };
 
   return (
     <div className="max-w-6xl mx-auto px-4 flex flex-col gap-2 mb-16">
@@ -253,12 +253,16 @@ export default function AllFlights() {
 
       {/* Flight List */}
       <div className="w-full">
-        {sortFlights(filterFlights(flights)).map((flight, idx) => (
-          <FlightDetails key={idx} flightData={flight} />
+        {flights?.map((flight, idx) => (
+          <FlightDetails
+            key={idx}
+            flightData={flight}
+            searchPayload={searchPayload}
+          />
         ))}
       </div>
 
-      {[1, 2, 3, 4, 5, 6].map((item, idx) => (
+      {/* {[1, 2, 3, 4, 5, 6].map((item, idx) => (
         <div key={idx}>
           {type === "one-way" && (
             <FlightDetails
@@ -279,7 +283,7 @@ export default function AllFlights() {
             />
           )}
         </div>
-      ))}
+      ))} */}
     </div>
   );
 }

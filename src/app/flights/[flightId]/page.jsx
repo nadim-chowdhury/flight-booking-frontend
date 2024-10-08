@@ -1,63 +1,49 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
-import TravelerInfo from "../../../components/TravelerInfo";
-import ContactDetails from "../../../components/ContactDetails";
+import { useParams } from "next/navigation";
+import TravelerInfo from "@/components/TravelerInfo";
+import ContactDetails from "@/components/ContactDetails";
+import axios from "axios";
 
 export default function SelectedFlightDetails() {
-  const flightsData = [
-    {
-      departureCity: "Dhaka",
-      departureCityCode: "DAC",
-      departureTime: "15:00",
-      departureDate: "Fri, 25 Oct 2024",
-      arrivalCity: "Delhi",
-      arrivalCityCode: "DEL",
-      arrivalTime: "16:55",
-      arrivalDate: "Fri, 25 Oct 2024",
-      airlineLogo:
-        "https://fe-pub.s3.ap-southeast-1.amazonaws.com/airlineimages/128/AI.png",
-      airlineName: "Air India",
-      flightNumber: "AI 228",
-      class: "Economy Class",
-      aircraft: "Airbus A320",
-      operatedBy: "AI",
-      duration: "2 hours 25 minutes",
-      stops: "Non Stop",
-      baggage: "2 checked bags (23kg each) + 1 carry-on (7kg)",
-    },
-    {
-      departureCity: "Delhi",
-      departureCityCode: "DEL",
-      departureTime: "06:05",
-      departureDate: "Mon, 28 Oct 2024",
-      arrivalCity: "Dubai",
-      arrivalCityCode: "DXB",
-      arrivalTime: "08:00",
-      arrivalDate: "Mon, 28 Oct 2024",
-      airlineLogo:
-        "https://fe-pub.s3.ap-southeast-1.amazonaws.com/airlineimages/128/AI.png",
-      airlineName: "Air India",
-      flightNumber: "AI 929",
-      class: "Economy Class",
-      aircraft: "Boeing 787-8",
-      operatedBy: "AI",
-      duration: "3 hours 55 minutes",
-      stops: "Non Stop",
-      baggage: "2 checked bags (23kg each) + 1 carry-on (7kg)",
-    },
-  ];
+  const [flightData, setFlightData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const travelersData = [
-    { type: "Adult" },
-    { type: "Child" },
-    { type: "Infant" },
-  ];
+  const { flightId } = useParams(); // Get flightId from the URL
 
-  const [baggageOpen, setBaggageOpen] = useState(
-    Array(flightsData.length).fill(false)
-  );
+  const [baggageOpen, setBaggageOpen] = useState([]);
+
+  useEffect(() => {
+    const fetchFlightById = async () => {
+      try {
+        if (flightId) {
+          const response = await axios.get(
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/flights/${flightId}`,
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          setFlightData(response.data); // Set the flight data received from the API
+          setBaggageOpen(
+            Array(response.data?.flightCombination?.length || 0).fill(false)
+          ); // Initialize baggageOpen state with the correct length
+          setLoading(false); // Set loading to false once the data is fetched
+        }
+      } catch (error) {
+        setError("Failed to fetch flight data");
+        setLoading(false); // Set loading to false on error
+      }
+    };
+
+    if (flightId) {
+      fetchFlightById(); // Trigger the API call when we have the id
+    }
+  }, [flightId]);
 
   const toggleBaggageDetails = (index) => {
     setBaggageOpen((prev) => {
@@ -67,11 +53,19 @@ export default function SelectedFlightDetails() {
     });
   };
 
-  const travelers = travelersData || [
-    { type: "Adult" },
-    { type: "Child" },
-    { type: "Infant" },
-  ];
+  const travelers = [{ type: "Adult" }, { type: "Child" }, { type: "Infant" }];
+
+  if (loading) {
+    return <div className="min-h-screen">Loading...</div>; // Display a loading state while fetching
+  }
+
+  if (error) {
+    return <div className="min-h-screen">{error}</div>; // Handle the error state
+  }
+
+  if (!flightData) {
+    return <div className="min-h-screen">No flight data found</div>; // Handle the case where no flight data is found
+  }
 
   return (
     <div className="max-w-6xl mx-auto px-4 my-8 md:my-16">
@@ -104,11 +98,19 @@ export default function SelectedFlightDetails() {
         {/* Left Side - Flight and Traveler Info */}
         <div className="col-span-2 space-y-6">
           {/* Dynamic Flight Details */}
-          {flightsData?.map((flight, index) => (
+          {flightData?.flightCombination?.map((flight, index) => (
             <div className="bg-slate-50 border rounded-lg" key={index}>
               <div className="border-b p-4 flex justify-between items-center">
                 <h4 className="font-bold text-lg text-sky-600">
-                  {flight.departureCityCode}-{flight.arrivalCityCode}
+                  {
+                    flight?.flightDetails?.[0]?.flightInformation?.location?.[0]
+                      ?.locationId
+                  }
+                  -
+                  {
+                    flight?.flightDetails?.[0]?.flightInformation?.location?.[1]
+                      ?.locationId
+                  }
                 </h4>
                 <button
                   onClick={() => toggleBaggageDetails(index)}
@@ -121,30 +123,44 @@ export default function SelectedFlightDetails() {
                 <div className="flex flex-col sm:flex-row justify-between md:items-center border-b pb-4">
                   <div className="flex items-center">
                     <Image
-                      src={flight.airlineLogo}
-                      alt={flight.airlineName}
+                      src={`https://fe-pub.s3.ap-southeast-1.amazonaws.com/airlineimages/128/${flight?.flightDetails?.[0]?.flightInformation?.companyId?.marketingCarrierCode}.png`}
+                      alt={
+                        flight?.flightDetails?.[0]?.flightInformation?.companyId
+                          ?.marketingCarrier
+                      }
                       width={60}
                       height={60}
                     />
                     <div className="ml-4">
                       <p className="text-slate-600 text-sm">
-                        {flight.airlineName}
+                        {
+                          flight?.flightDetails?.[0]?.flightInformation
+                            ?.companyId?.marketingCarrier
+                        }
                       </p>
                       <p className="text-lg font-semibold">
-                        {flight.flightNumber}
+                        {
+                          flight?.flightDetails?.[0]?.flightInformation
+                            ?.flightOrtrainNumber
+                        }
                       </p>
                       <div className="flex flex-col md:flex-row md:space-x-2">
                         <p className="text-sm font-medium">
-                          Aircraft: {flight.aircraft}
-                        </p>
-                        <p className="text-sm font-medium">
-                          Operated by: {flight.operatedBy}
+                          Aircraft:{" "}
+                          {
+                            flight?.flightDetails?.[0]?.flightInformation
+                              ?.productDetail?.equipmentType
+                          }
                         </p>
                       </div>
                     </div>
                   </div>
                   <p className="text-slate-800 text-sm mt-2 sm:mt-0">
-                    {flight.class}
+                    Class:{" "}
+                    {
+                      flight?.flightDetails?.[0]?.flightInformation
+                        ?.addProductDetail?.cabinClass
+                    }
                   </p>
                 </div>
 
@@ -152,20 +168,38 @@ export default function SelectedFlightDetails() {
                   <div className="text-start sm:text-left w-full">
                     <p className="text-sky-400 text-sm">Depart</p>
                     <p className="text-lg font-semibold">
-                      {flight.departureTime}
+                      {
+                        flight?.flightDetails?.[0]?.flightInformation
+                          ?.productDateTime?.timeOfDeparture
+                      }
                     </p>
                     <p className="text-sm font-bold text-sky-400">
-                      {flight.departureDate}
+                      {
+                        flight?.flightDetails?.[0]?.flightInformation
+                          ?.productDateTime?.dateOfDepartureString
+                      }
                     </p>
                     <p className="text-lg font-bold">
-                      {flight.departureCityCode}
+                      {
+                        flight?.flightDetails?.[0]?.flightInformation
+                          ?.location?.[0]?.locationId
+                      }
                     </p>
-                    <p className="text-slate-800">{flight.departureCity}</p>
+                    <p className="text-slate-800">
+                      {
+                        flight?.flightDetails?.[0]?.flightInformation
+                          ?.location?.[0]?.airportName
+                      }
+                    </p>
                   </div>
 
                   <div className="text-center my-4 sm:my-0 w-full">
-                    <p className="text-sky-400 text-sm">{flight.duration}</p>
-                    <p className="text-slate-800">{flight.stops}</p>
+                    <p className="text-sky-400 text-sm">
+                      {flight?.flightDetails?.[0]?.flightInformation
+                        ?.productDateTime?.journeyTime || 0}{" "}
+                      min
+                    </p>
+                    <p className="text-slate-800">1 Stop</p>
                     <Image
                       src="/plane.png"
                       alt="plane-image"
@@ -178,15 +212,29 @@ export default function SelectedFlightDetails() {
                   <div className="text-end w-full">
                     <p className="text-sky-400 text-sm">Arrive</p>
                     <p className="text-lg font-semibold">
-                      {flight.arrivalTime}
+                      {
+                        flight?.flightDetails?.[0]?.flightInformation
+                          ?.productDateTime?.timeOfArrival
+                      }
                     </p>
                     <p className="text-sm font-bold text-sky-400">
-                      {flight.arrivalDate}
+                      {
+                        flight?.flightDetails?.[0]?.flightInformation
+                          ?.productDateTime?.dateOfArrivalString
+                      }
                     </p>
                     <p className="text-lg font-bold">
-                      {flight.arrivalCityCode}
+                      {
+                        flight?.flightDetails?.[0]?.flightInformation
+                          ?.location?.[1]?.locationId
+                      }
                     </p>
-                    <p className="text-slate-800">{flight.arrivalCity}</p>
+                    <p className="text-slate-800">
+                      {
+                        flight?.flightDetails?.[0]?.flightInformation
+                          ?.location?.[1]?.airportName
+                      }
+                    </p>
                   </div>
                 </div>
 
@@ -195,7 +243,14 @@ export default function SelectedFlightDetails() {
                     <h5 className="font-semibold text-sky-600">
                       Baggage Details
                     </h5>
-                    <p className="text-slate-800 mt-2">{flight.baggage}</p>
+                    <p className="text-slate-800 mt-2">
+                      Checked Bags:{" "}
+                      {flightData?.baggage?.[0]?.ADT?.freeAllowance} x{" "}
+                      {flightData?.baggage?.[0]?.ADT?.unitQualifier}
+                    </p>
+                    <p className="text-slate-800">
+                      Carry-on: {flightData?.baggage?.[0]?.ADT?.cabinBaggage}
+                    </p>
                   </div>
                 )}
               </div>
@@ -205,7 +260,11 @@ export default function SelectedFlightDetails() {
           {/* Traveler Information */}
           <ContactDetails />
           {travelers.map((traveler, index) => (
-            <TravelerInfo key={index} travelerType={traveler.type} />
+            <TravelerInfo
+              key={index}
+              travelerType={traveler.type}
+              travelerId={index + 1}
+            />
           ))}
         </div>
 
@@ -214,9 +273,19 @@ export default function SelectedFlightDetails() {
           <div className="bg-slate-50 border rounded-lg p-6 mt-6 md:mt-0">
             <h4 className="text-xl font-semibold">Fare Summary</h4>
             <div className="space-y-2 mt-4">
-              <p className="">Base Fare: $200</p>
-              <p className="">Taxes: $50</p>
-              <p className="font-semibold">Total Fare: $250</p>
+              <p className="">
+                Base Fare: $
+                {(flightData?.fareSummary?.totalFareAmount || 0) / 100}
+              </p>
+              <p className="">
+                Taxes: ${(flightData?.fareSummary?.totalTaxAmount || 0) / 100}
+              </p>
+              <p className="font-semibold">
+                Total Fare: $
+                {((flightData?.fareSummary?.totalFareAmount || 0) +
+                  (flightData?.fareSummary?.totalTaxAmount || 0)) /
+                  100}
+              </p>
             </div>
           </div>
         </div>
