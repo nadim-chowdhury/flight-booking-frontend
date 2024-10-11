@@ -6,13 +6,13 @@ export default function AdminPage() {
   const adminSections = [
     { href: "/admin/airlines", label: "Airlines" },
     { href: "/admin/airports", label: "Airports" },
-    { href: "/admin/bookings", label: "Bookings" },
+    // { href: "/admin/bookings", label: "Bookings" },
     { href: "/admin/countries", label: "Countries" },
-    { href: "/admin/flights", label: "Flights" },
+    // { href: "/admin/flights", label: "Flights" },
     { href: "/admin/planes", label: "Planes" },
-    { href: "/admin/reports", label: "Reports" },
+    // { href: "/admin/reports", label: "Reports" },
     { href: "/admin/routes", label: "Routes" },
-    { href: "/admin/users", label: "Users" },
+    // { href: "/admin/users", label: "Users" },
   ];
 
   return (

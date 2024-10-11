@@ -2,17 +2,24 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import TravelerInfo from "@/components/TravelerInfo";
 import ContactDetails from "@/components/ContactDetails";
 import axios from "axios";
+import { useSelector } from "react-redux";
+import { useSearchParams } from "next/navigation";
 
 export default function SelectedFlightDetails() {
   const [flightData, setFlightData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [passengerData, setPassengerData] = useState({});
 
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const { flightId } = useParams(); // Get flightId from the URL
+  const view = searchParams.get("view");
+  const token = useSelector((state) => state.user.token);
 
   const [baggageOpen, setBaggageOpen] = useState([]);
 
@@ -53,7 +60,61 @@ export default function SelectedFlightDetails() {
     });
   };
 
-  const travelers = [{ type: "Adult" }, { type: "Child" }, { type: "Infant" }];
+  // const travelers = [{ type: "Adult" }, { type: "Child" }, { type: "Infant" }];
+  const travelers = [{ type: "Adult" }];
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+    // setSuccess(false);
+
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/passenger`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(passengerData),
+        }
+      );
+      const paxData = await response.json();
+      console.log("response--------", paxData);
+
+      if (response.ok) {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/bookings`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              flightId: flightId,
+              passengerId: paxData._id,
+              numberOfSeats: Math.floor(Math.random() * 10),
+            }),
+          }
+        );
+        const bookData = await res.json();
+        console.log("res--------", bookData);
+      }
+
+      // const data = await response.json();
+      // setSuccess(true);
+      // Optionally reset form or show confirmation message
+      setPassengerData({});
+      router.push("/bookings");
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   if (loading) {
     return <div className="min-h-screen">Loading...</div>; // Display a loading state while fetching
@@ -257,15 +318,20 @@ export default function SelectedFlightDetails() {
             </div>
           ))}
 
-          {/* Traveler Information */}
-          <ContactDetails />
-          {travelers.map((traveler, index) => (
-            <TravelerInfo
-              key={index}
-              travelerType={traveler.type}
-              travelerId={index + 1}
-            />
-          ))}
+          {view !== "bookings" && (
+            <>
+              {/* Traveler Information */}
+              <ContactDetails />
+              {travelers.map((traveler, index) => (
+                <TravelerInfo
+                  key={index}
+                  travelerType={traveler.type}
+                  travelerId={index + 1}
+                  setPassengerData={setPassengerData}
+                />
+              ))}
+            </>
+          )}
         </div>
 
         {/* Right Side - Fare Summary */}
@@ -291,9 +357,14 @@ export default function SelectedFlightDetails() {
         </div>
       </div>
 
-      <button className="bg-rose-600 text-white px-4 py-2 w-full mt-6 rounded transition duration-200 hover:bg-rose-700">
-        Confirm
-      </button>
+      {view !== "bookings" && (
+        <button
+          onClick={handleSubmit}
+          className="bg-rose-600 text-white px-4 py-2 w-full mt-6 rounded transition duration-200 hover:bg-rose-700"
+        >
+          Confirm
+        </button>
+      )}
     </div>
   );
 }

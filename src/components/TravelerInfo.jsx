@@ -1,8 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export default function TravelerInfo({ travelerType, travelerId }) {
+export default function TravelerInfo({
+  travelerType,
+  travelerId,
+  setPassengerData,
+}) {
   const [travelerDetails, setTravelerDetails] = useState({
     title: "",
     firstName: "",
@@ -19,6 +23,10 @@ export default function TravelerInfo({ travelerType, travelerId }) {
       [name]: value,
     }));
   };
+
+  useEffect(() => {
+    setPassengerData(travelerDetails);
+  }, [travelerDetails, setPassengerData]);
 
   return (
     <div className="mt-6 bg-slate-50 border rounded-lg p-4">

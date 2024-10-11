@@ -10,7 +10,7 @@ import { userLogout } from "@/redux/slices/userSlice"; // Import the logout acti
 
 const navLinks = [
   { href: "/bookings", label: "Bookings" },
-  { href: "/profile", label: "Profile" },
+  // { href: "/profile", label: "Profile" },
   { href: "/admin", label: "Admin Panel" },
   { href: "/login", label: "Login" },
 ];

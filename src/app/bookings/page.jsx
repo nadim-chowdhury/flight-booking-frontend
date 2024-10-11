@@ -1,63 +1,60 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import Calendar from "react-calendar";
+import { useSelector } from "react-redux";
 import "react-calendar/dist/Calendar.css"; // Import default calendar styles
-// import "./CalendarStyles.css"; // Custom styles for calendar
-
-// Mock data for booked flights
-const mocks = [
-  {
-    id: "booking1",
-    flight: {
-      airline: "Airline A",
-      from: "City A",
-      to: "City B",
-      departureTime: "2024-08-01T10:00:00Z",
-      arrivalTime: "2024-08-01T12:00:00Z",
-      duration: "2h",
-    },
-    bookingTime: "2024-07-25T15:30:00Z",
-  },
-  {
-    id: "booking2",
-    flight: {
-      airline: "Airline B",
-      from: "City C",
-      to: "City D",
-      departureTime: "2024-08-05T09:00:00Z",
-      arrivalTime: "2024-08-05T11:00:00Z",
-      duration: "2h",
-    },
-    bookingTime: "2024-07-26T16:45:00Z",
-  },
-];
-
-// Function to format flight date to just the day (ignore time)
-function formatDate(dateString) {
-  return new Date(dateString).toDateString();
-}
-
-// Extract flight dates for easy comparison
-const bookedDates = mocks.map((booking) =>
-  formatDate(booking.flight.departureTime)
-);
 
 export default function Bookings() {
+  const [bookings, setBookings] = useState([]);
+  const [filteredBookings, setFilteredBookings] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [searchTerm, setSearchTerm] = useState("");
-  const [filteredBookings, setFilteredBookings] = useState(mocks);
   const [order, setOrder] = useState("ASC");
   const [limit, setLimit] = useState(5); // Limit per page
   const [offset, setOffset] = useState(0); // Starting index
-  const [total, setTotal] = useState(mocks.length); // Total number of bookings
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const token = useSelector((state) => state.user.token);
 
-  // Search filter logic
+  // Fetch bookings data
   useEffect(() => {
-    const filtered = mocks.filter((booking) => {
-      const airline = booking.flight.airline.toLowerCase();
-      const from = booking.flight.from.toLowerCase();
-      const to = booking.flight.to.toLowerCase();
+    const fetchBookings = async () => {
+      setLoading(true);
+      setError(null);
+
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/bookings`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const responseData = await response.json();
+        setBookings(responseData);
+        setFilteredBookings(responseData); // Initially set filtered bookings to all bookings
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBookings();
+  }, [token]);
+
+  // Handle search term changes
+  useEffect(() => {
+    const filtered = bookings.filter((booking) => {
+      const airline = booking.flight.marketingCarrier.name.toLowerCase();
+      const from = booking.flight.flightSummary[0].fromCity.toLowerCase();
+      const to = booking.flight.flightSummary[0].toCity.toLowerCase();
+
       return (
         airline.includes(searchTerm.toLowerCase()) ||
         from.includes(searchTerm.toLowerCase()) ||
@@ -65,22 +62,31 @@ export default function Bookings() {
       );
     });
     setFilteredBookings(filtered);
-    setTotal(filtered.length);
     setOffset(0); // Reset to first page after filtering
-  }, [searchTerm]);
+  }, [searchTerm, bookings]);
 
-  // Sorting logic
+  // Handle sorting
   const handleSort = (e) => {
     const sortOrder = e.target.value;
     setOrder(sortOrder);
     const sortedBookings = [...filteredBookings].sort((a, b) => {
       if (sortOrder === "ASC") {
         return (
-          new Date(a.flight.departureTime) - new Date(b.flight.departureTime)
+          new Date(
+            a.flight.flightCombination[0].flightDetails[0].flightInformation.productDateTime.dateOfDepartureString
+          ) -
+          new Date(
+            b.flight.flightCombination[0].flightDetails[0].flightInformation.productDateTime.dateOfDepartureString
+          )
         );
       } else {
         return (
-          new Date(b.flight.departureTime) - new Date(a.flight.departureTime)
+          new Date(
+            b.flight.flightCombination[0].flightDetails[0].flightInformation.productDateTime.dateOfDepartureString
+          ) -
+          new Date(
+            a.flight.flightCombination[0].flightDetails[0].flightInformation.productDateTime.dateOfDepartureString
+          )
         );
       }
     });
@@ -89,7 +95,7 @@ export default function Bookings() {
 
   // Pagination logic
   const handlePageChange = (newOffset) => {
-    if (newOffset >= 0 && newOffset < total) {
+    if (newOffset >= 0 && newOffset < filteredBookings.length) {
       setOffset(newOffset);
     }
   };
@@ -97,10 +103,25 @@ export default function Bookings() {
   // Get current page bookings
   const paginatedBookings = filteredBookings.slice(offset, offset + limit);
 
+  // Handle date change in calendar
   const handleDateChange = (date) => {
     setSelectedDate(date);
   };
 
+  // Format date
+  const formatDate = (dateString) => {
+    return new Date(dateString).toDateString();
+  };
+
+  // Extract booked dates for flight departure times
+  const bookedDates = bookings.map((booking) =>
+    formatDate(
+      booking.flight.flightCombination[0].flightDetails[0].flightInformation
+        .productDateTime.dateOfDepartureString
+    )
+  );
+
+  // Check if a flight is on the selected date
   const isFlightOnDate = (date) => {
     const formattedDate = formatDate(date);
     return bookedDates.includes(formattedDate);
@@ -110,6 +131,7 @@ export default function Bookings() {
     <div className="max-w-6xl mx-auto px-4 my-16 min-h-[90vh]">
       <h2 className="text-2xl font-bold mb-4">Your Bookings</h2>
 
+      {/* Calendar */}
       <div className="mb-6 w-full">
         <Calendar
           onChange={handleDateChange}
@@ -119,7 +141,7 @@ export default function Bookings() {
               return isFlightOnDate(date) ? (
                 <p className="text-green-600 font-bold">Flight</p>
               ) : (
-                <p className="text-slate-500 hidden sm:block">No Flight</p>
+                <p className="text-slate-500">No Flight</p>
               );
             }
           }}
@@ -147,58 +169,81 @@ export default function Bookings() {
       </select>
 
       {/* Bookings Table */}
-      <div className="overflow-x-auto">
-        <table className="w-full border-collapse border">
-          <thead className="bg-slate-200">
-            <tr>
-              <th className="border px-4 py-2 text-left">Airline</th>
-              <th className="border px-4 py-2 text-left">From</th>
-              <th className="border px-4 py-2 text-left">To</th>
-              <th className="border px-4 py-2 text-left">Departure</th>
-              <th className="border px-4 py-2 text-left">Arrival</th>
-              <th className="border px-4 py-2 text-left">Duration</th>
-              <th className="border px-4 py-2 text-right">Booking Time</th>
-            </tr>
-          </thead>
+      {loading ? (
+        <p>Loading bookings...</p>
+      ) : error ? (
+        <p className="text-red-500">Error: {error}</p>
+      ) : (
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse border">
+            <thead className="bg-slate-200">
+              <tr>
+                <th className="border px-4 py-2 text-left">Airline</th>
+                <th className="border px-4 py-2 text-left">From</th>
+                <th className="border px-4 py-2 text-left">To</th>
+                <th className="border px-4 py-2 text-left">Departure</th>
+                <th className="border px-4 py-2 text-left">Arrival</th>
+                <th className="border px-4 py-2 text-left">Duration</th>
+                <th className="border px-4 py-2 text-right">Booking Time</th>
+              </tr>
+            </thead>
 
-          <tbody>
-            {paginatedBookings.length > 0 ? (
-              paginatedBookings.map((booking) => (
-                <tr key={booking.id} className="bg-white">
-                  <td className="border px-4 py-2 font-medium">
-                    {booking.flight.airline}
-                  </td>
-                  <td className="border px-4 py-2">{booking.flight.from}</td>
-                  <td className="border px-4 py-2">{booking.flight.to}</td>
-                  <td className="border px-4 py-2">
-                    {new Date(booking.flight.departureTime).toLocaleString()}
-                  </td>
-                  <td className="border px-4 py-2">
-                    {new Date(booking.flight.arrivalTime).toLocaleString()}
-                  </td>
-                  <td className="border px-4 py-2">
-                    {booking.flight.duration}
-                  </td>
-                  <td className="border px-4 py-2 text-right">
-                    {new Date(booking.bookingTime).toLocaleString()}
+            <tbody>
+              {paginatedBookings.length > 0 ? (
+                paginatedBookings.map((booking) => (
+                  <tr key={booking._id} className="bg-white">
+                    <td className="border px-4 py-2 font-medium">
+                      <Link
+                        href={`/flights/${booking.flight._id}?view=bookings`}
+                        className="hover:underline text-sky-600"
+                      >
+                        {booking.flight.marketingCarrier.name}
+                      </Link>
+                    </td>
+                    <td className="border px-4 py-2">
+                      {booking.flight.flightSummary[0].fromCity}
+                    </td>
+                    <td className="border px-4 py-2">
+                      {booking.flight.flightSummary[0].toCity}
+                    </td>
+                    <td className="border px-4 py-2">
+                      {new Date(
+                        booking.flight.flightCombination[0].flightDetails[0].flightInformation.productDateTime.dateOfDepartureString
+                      ).toLocaleString()}
+                    </td>
+                    <td className="border px-4 py-2">
+                      {new Date(
+                        booking.flight.flightCombination[0].flightDetails[0].flightInformation.productDateTime.dateOfArrivalString
+                      ).toLocaleString()}
+                    </td>
+                    <td className="border px-4 py-2">
+                      {
+                        booking.flight.flightCombination[0].flightDetails[0]
+                          .flightInformation.productDateTime.segmentTime
+                      }
+                    </td>
+                    <td className="border px-4 py-2 text-right">
+                      {new Date(booking.bookingDate).toLocaleString()}
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={7} className="text-center py-4">
+                    No bookings found.
                   </td>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={7} className="text-center py-4">
-                  No bookings found.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+              )}
+            </tbody>
+          </table>
+        </div>
+      )}
 
       {/* Pagination controls */}
       <div className="mt-4 flex justify-between items-center">
         <span className="">
-          Page {Math.floor(offset / limit) + 1} of {Math.ceil(total / limit)}
+          Page {Math.floor(offset / limit) + 1} of{" "}
+          {Math.ceil(filteredBookings.length / limit)}
         </span>
         <div className="space-x-2">
           <button
@@ -213,10 +258,10 @@ export default function Bookings() {
             Previous
           </button>
           <button
-            disabled={offset + limit >= total}
+            disabled={offset + limit >= filteredBookings.length}
             onClick={() => handlePageChange(offset + limit)}
             className={`px-4 py-2 border rounded-md ${
-              offset + limit >= total
+              offset + limit >= filteredBookings.length
                 ? "bg-slate-300 cursor-not-allowed"
                 : "bg-sky-500 text-white hover:bg-sky-700"
             }`}
