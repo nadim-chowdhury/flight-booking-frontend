@@ -20,8 +20,11 @@ import "swiper/css/scrollbar";
 export default function AllFlights() {
   const [searchPayload, setSearchPayload] = useState(null);
   const [flights, setFlights] = useState([]);
+  console.log("AllFlights ~ flights:", flights);
   const [sortOption, setSortOption] = useState("price-asc");
   const [filterOption, setFilterOption] = useState("all");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const searchParams = useSearchParams();
   const type = searchParams.get("type");
@@ -92,26 +95,30 @@ export default function AllFlights() {
     }
   }, [searchParams]);
 
+  const fetchFlights = async (searchPayload) => {
+    setLoading(true); // Start loading
+    setError(null); // Reset any previous error
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/flights/search`,
+        searchPayload,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      setFlights(response.data);
+      console.log("API Response:", response);
+    } catch (error) {
+      console.error("API call failed:", error);
+      setError("Failed to fetch flights. Please try again later.");
+    } finally {
+      setLoading(false); // Stop loading
+    }
+  };
+
   useEffect(() => {
-    const fetchFlights = async (searchPayload) => {
-      try {
-        const response = await axios.post(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/flights/search`,
-          searchPayload,
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        setFlights(response.data);
-        console.log("API Response:", response);
-      } catch (error) {
-        console.error("API call failed:", error);
-      }
-    };
-
     if (searchPayload) {
       fetchFlights(searchPayload);
     }
@@ -160,96 +167,44 @@ export default function AllFlights() {
       <h2 className="mt-10 text-4xl md:text-[2.5rem] font-bold mb-4">
         Search Results
       </h2>
-      {/* <div className="w-full mb-4">
-        <Swiper
-          modules={[Navigation, Pagination, Scrollbar, A11y]}
-          spaceBetween={8}
-          slidesPerView={12}
-          // centeredSlides={true}
-          navigation={{
-            prevEl: ".custom-prev", // Assign custom previous button
-            nextEl: ".custom-next", // Assign custom next button
-          }}
-          // pagination={{ clickable: true }}
-          // scrollbar={{ draggable: true }}
-          breakpoints={{
-            // when window width is >= 320px
-            320: {
-              slidesPerView: 3,
-              spaceBetween: 8,
-            },
-            // when window width is >= 640px
-            640: {
-              slidesPerView: 5,
-              spaceBetween: 8,
-            },
-            // when window width is >= 768px
-            768: {
-              slidesPerView: 8,
-              spaceBetween: 8,
-            },
-            // when window width is >= 1024px
-            1024: {
-              slidesPerView: 10,
-              spaceBetween: 12,
-            },
-            // when window width is >= 1280px
-            1280: {
-              slidesPerView: 12,
-              spaceBetween: 12,
-            },
-          }}
-          onSwiper={(swiper) => console.log(swiper)}
-          onSlideChange={() => console.log("slide change")}
-        >
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14].map((item, idx) => (
-            <SwiperSlide key={idx}>
-              <div className="bg-sky-50 border rounded-md px-2 py-1 flex items-center gap-2">
-                <Image
-                  src="https://fe-pub.s3.ap-southeast-1.amazonaws.com/airlineimages/128/BG.png"
-                  alt="air-logo"
-                  className="rounded"
-                  width={24}
-                  height={24}
-                />
-                <span>BG</span>
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </div> */}
+
+      {/* Loading and Error States */}
+      {loading && <p className="text-center text-2xl">Loading flights...</p>}
+      {error && <p className="text-red-500">{error}</p>}
 
       {/* Sort and Filter Options */}
-      <div className="flex justify-between items-center mb-4">
-        <div className="flex space-x-4">
-          <div>
-            <label className="font-semibold text-slate-600">Sort by:</label>
-            <select
-              value={sortOption}
-              onChange={(e) => setSortOption(e.target.value)}
-              className="ml-2 p-2 border rounded-md"
-            >
-              <option value="price-asc">Price: Low to High</option>
-              <option value="price-desc">Price: High to Low</option>
-              <option value="duration-asc">Duration: Shortest</option>
-              <option value="duration-desc">Duration: Longest</option>
-            </select>
-          </div>
-          <div>
-            <label className="font-semibold text-slate-600">Filter by:</label>
-            <select
-              value={filterOption}
-              onChange={(e) => setFilterOption(e.target.value)}
-              className="ml-2 p-2 border rounded-md"
-            >
-              <option value="all">All Airlines</option>
-              <option value="Airline1">Airline 1</option>
-              <option value="Airline2">Airline 2</option>
-              <option value="Airline3">Airline 3</option>
-            </select>
+      {!loading && !error && flights.length > 0 && (
+        <div className="flex justify-between items-center mb-4">
+          <div className="flex space-x-4">
+            <div>
+              <label className="font-semibold text-slate-600">Sort by:</label>
+              <select
+                value={sortOption}
+                onChange={(e) => setSortOption(e.target.value)}
+                className="ml-2 p-2 border rounded-md"
+              >
+                <option value="price-asc">Price: Low to High</option>
+                <option value="price-desc">Price: High to Low</option>
+                <option value="duration-asc">Duration: Shortest</option>
+                <option value="duration-desc">Duration: Longest</option>
+              </select>
+            </div>
+            <div>
+              <label className="font-semibold text-slate-600">Filter by:</label>
+              <select
+                value={filterOption}
+                onChange={(e) => setFilterOption(e.target.value)}
+                className="ml-2 p-2 border rounded-md"
+              >
+                <option value="all">All Airlines</option>
+                <option value="Airline1">Airline 1</option>
+                <option value="Airline2">Airline 2</option>
+                <option value="Airline3">Airline 3</option>
+              </select>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Flight List */}
       <div className="w-full">

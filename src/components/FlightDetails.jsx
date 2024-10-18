@@ -34,7 +34,7 @@ export default function FlightDetails({ flightData, searchPayload }) {
   const handleBookFlight = () => {};
 
   return (
-    <div className="flight-details bg-slate-50 rounded-lg border mb-4 py-4">
+    <div className="flight-details bg-gradient-to-br from-rose-50 to-sky-50 rounded-lg border mb-4 py-4">
       {flightDetailsData.map(({ flight, marketingCarrierLogo }, index) => (
         <div key={index} className="px-4">
           <div className="flight-content flex gap-8 justify-between items-center relative">
@@ -123,7 +123,7 @@ export default function FlightDetails({ flightData, searchPayload }) {
                 onClick={handleBookFlight}
                 className="view-details mb-4 absolute top-0 right-0 md:relative"
               >
-                <Link href={`/flights/${flightData?._id}`}>
+                <Link href={`/flights/${123}`}>
                   <Button
                     size="sm"
                     className="book-now-btn bg-sky-600 hover:bg-sky-700 text-white transition"
