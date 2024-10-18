@@ -29,7 +29,7 @@ export default function FlightDetails({ flightData, searchPayload }) {
     setDetailsOpen((prevState) => !prevState);
   };
 
-  const formattedPrice = `BDT ${fareSummary?.totalFareAmount || 0}`;
+  const formattedPrice = `$ ${fareSummary?.totalFareAmount || 0}`;
 
   const handleBookFlight = () => {};
 

@@ -34,6 +34,7 @@ import {
   SelectValue,
 } from "../components/ui/select";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function ReturnSearch() {
   const [departureCity, setDepartureCity] = useState("");
@@ -62,6 +63,8 @@ export default function ReturnSearch() {
 
   const router = useRouter();
   const searchParams = useSearchParams();
+  const dispatch = useDispatch();
+  const { isLoading, error } = useSelector((state) => state.searchFlights);
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -154,6 +157,7 @@ export default function ReturnSearch() {
   useEffect(() => {
     const fetchDepartureAirports = async () => {
       try {
+        
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/airports?offset=0&limit=10&order=ASC`
         );

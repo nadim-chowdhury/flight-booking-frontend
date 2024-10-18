@@ -33,9 +33,7 @@ export default function FareSummary({ fareSummary }) {
 
   return (
     <div className="my-3 border rounded-md">
-      <p className="border-b px-3 py-2 font-bold">
-        Fare Breakdown
-      </p>
+      <p className="border-b px-3 py-2 font-bold">Fare Breakdown</p>
 
       <div className="m-3 overflow-x-scroll whitespace-nowrap md:overflow-x-auto">
         <table className="table-auto w-full border-collapse">
@@ -63,17 +61,16 @@ export default function FareSummary({ fareSummary }) {
                 <tr className="text-sm" key={index}>
                   <td className="border px-2 py-2">{fare.type}</td>
                   <td className="border px-2 py-2">
-                    BDT {fare.baseFare.toLocaleString()}
+                    $ {fare.baseFare.toLocaleString()}
                   </td>
                   <td className="border px-2 py-2">
-                    BDT {fare.taxesAndFees.toLocaleString()}
+                    $ {fare.taxesAndFees.toLocaleString()}
                   </td>
                   <td className="border px-2 py-2">
-                    BDT ({fare.totalPerPassenger.toLocaleString()} x{" "}
-                    {fare.count})
+                    $ ({fare.totalPerPassenger.toLocaleString()} x {fare.count})
                   </td>
                   <td className="border px-2 py-2">
-                    BDT {fare.total.toLocaleString()}
+                    $ {fare.total.toLocaleString()}
                   </td>
                 </tr>
               ))
@@ -98,7 +95,7 @@ export default function FareSummary({ fareSummary }) {
               <td className="border px-2 py-2"></td>
               <td className="border px-2 py-2"></td>
               <td className="border px-2 py-2 font-bold text-sky-600">
-                BDT {totalFareAmount.toLocaleString()}
+                $ {totalFareAmount.toLocaleString()}
               </td>
             </tr>
           </tbody>

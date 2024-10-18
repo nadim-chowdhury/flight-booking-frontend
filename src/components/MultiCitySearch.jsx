@@ -39,6 +39,7 @@ import {
 } from "@/components/ui/select";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Separator } from "@/components/ui/separator";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function MultiCitySearch() {
   const [flights, setFlights] = useState([
@@ -63,6 +64,8 @@ export default function MultiCitySearch() {
 
   const router = useRouter();
   const searchParams = useSearchParams();
+  const dispatch = useDispatch();
+  const { isLoading, error } = useSelector((state) => state.searchFlights);
 
   useEffect(() => {
     const fetchDepartureAirports = async () => {

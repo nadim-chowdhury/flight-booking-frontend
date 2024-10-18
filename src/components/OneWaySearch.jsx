@@ -29,6 +29,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../components/ui/select";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function OneWaySearch() {
   const [departureCity, setDepartureCity] = useState("");
@@ -56,6 +57,8 @@ export default function OneWaySearch() {
 
   const router = useRouter();
   const searchParams = useSearchParams();
+  const dispatch = useDispatch();
+  const { isLoading, error } = useSelector((state) => state.searchFlights);
 
   useEffect(() => {
     const departureCityParam =

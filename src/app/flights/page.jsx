@@ -16,6 +16,11 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
+import {
+  searchFlightsStart,
+  searchFlightsSuccess,
+} from "@/redux/slices/searchFlightsSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function AllFlights() {
   const [searchPayload, setSearchPayload] = useState(null);
@@ -24,10 +29,11 @@ export default function AllFlights() {
   const [sortOption, setSortOption] = useState("price-asc");
   const [filterOption, setFilterOption] = useState("all");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
 
   const searchParams = useSearchParams();
   const type = searchParams.get("type");
+  const dispatch = useDispatch();
+  const { isLoading, error } = useSelector((state) => state.searchFlights);
 
   useEffect(() => {
     if (!searchParams) return;
@@ -95,34 +101,35 @@ export default function AllFlights() {
     }
   }, [searchParams]);
 
-  const fetchFlights = async (searchPayload) => {
-    setLoading(true); // Start loading
-    setError(null); // Reset any previous error
-    try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/flights/search`,
-        searchPayload,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      setFlights(response.data);
-      console.log("API Response:", response);
-    } catch (error) {
-      console.error("API call failed:", error);
-      setError("Failed to fetch flights. Please try again later.");
-    } finally {
-      setLoading(false); // Stop loading
-    }
-  };
-
   useEffect(() => {
     if (searchPayload) {
+      const fetchFlights = async (sPayload) => {
+        // setLoading(true); // Start loading
+        // setError(null); // Reset any previous error
+        dispatch(searchFlightsStart());
+        try {
+          const response = await axios.post(
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/flights/search`,
+            sPayload,
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          setFlights(response.data);
+          console.log("API Response:", response);
+        } catch (error) {
+          console.error("API call failed:", error);
+          // setError("Failed to fetch flights. Please try again later.");
+        } finally {
+          // setLoading(false); // Stop loading
+          dispatch(searchFlightsSuccess());
+        }
+      };
       fetchFlights(searchPayload);
     }
-  }, [searchPayload]);
+  }, [dispatch, searchPayload]);
 
   const handleFlightsFound = (foundFlights) => {
     setFlights(foundFlights);
@@ -169,8 +176,8 @@ export default function AllFlights() {
       </h2>
 
       {/* Loading and Error States */}
-      {loading && <p className="text-center text-2xl">Loading flights...</p>}
-      {error && <p className="text-red-500">{error}</p>}
+      {/* {loading && <p className="text-center text-2xl">Loading flights...</p>}
+      {error && <p className="text-red-500">{error}</p>} */}
 
       {/* Sort and Filter Options */}
       {!loading && !error && flights.length > 0 && (
@@ -208,7 +215,7 @@ export default function AllFlights() {
 
       {/* Flight List */}
       <div className="w-full">
-        {flights?.map((flight, idx) => (
+        {flights?.data?.map((flight, idx) => (
           <FlightDetails
             key={idx}
             flightData={flight}
