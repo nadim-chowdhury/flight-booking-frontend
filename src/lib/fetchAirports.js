@@ -42,6 +42,37 @@ export const fetchAirports = async (
     }
 
     const data = await res.json();
+    console.log("data:", data);
+    setAirportData(data?.data || []);
+  } catch (error) {
+    console.error("Failed to fetch airports:", error);
+  } finally {
+    if (setLoading) {
+      setLoading(false); // Call setLoading only if it's provided
+    }
+  }
+};
+
+export const fetchAllAirports = async (
+  searchTerm,
+  setAirportData,
+  setLoading = null // Default value is null if no function is passed
+) => {
+  if (setLoading) {
+    setLoading(true); // Call setLoading only if it's provided
+  }
+
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/amadeus/all-airports?keyword=${searchTerm}`
+    );
+
+    if (!res.ok) {
+      throw new Error(`API request failed with status ${res.status}`);
+    }
+
+    const data = await res.json();
+    console.log("data:", data);
     setAirportData(data?.data || []);
   } catch (error) {
     console.error("Failed to fetch airports:", error);

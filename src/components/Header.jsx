@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,7 @@ import SearchFlightsLoading from "@/components/SearchFlightsLoading";
 import { useSelector, useDispatch } from "react-redux";
 import { Power } from "lucide-react";
 import { userLogout } from "@/redux/slices/userSlice"; // Import the logout action
+import { fetchAllAirports } from "../redux/slices/airportSlice";
 
 const navLinks = [
   { href: "/bookings", label: "Bookings" },
@@ -19,11 +20,21 @@ const navLinks = [
 export default function Header() {
   const [navOpen, setNavOpen] = useState(false);
 
+  const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
   const isSearchFlights = useSelector((state) => state.searchFlights);
   console.log("Header ~ isSearchFlights:", isSearchFlights);
   const userInfo = useSelector((state) => state.user.userInfo);
-  const dispatch = useDispatch();
+  const {
+    data: airports,
+    loading,
+    error,
+  } = useSelector((state) => state.airports);
+  console.log("Header ~ airports:", airports);
+
+  // useEffect(() => {
+  //   dispatch(fetchAllAirports("")); // Dispatch the action when the searchTerm changes
+  // }, [dispatch]);
 
   const toggleNav = () => {
     setNavOpen(!navOpen);
