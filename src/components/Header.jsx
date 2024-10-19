@@ -146,7 +146,7 @@ export default function Header() {
       </div>
 
       {isSearchFlights.isLoading && (
-        <div className="absolute top-0 left-0 w-full h-screen bg-white/80 z-50 flex items-center justify-center">
+        <div className="absolute top-0 left-0 w-full h-screen bg-white z-50 flex items-center justify-center">
           <SearchFlightsLoading />
         </div>
       )}

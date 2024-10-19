@@ -47,7 +47,7 @@ export default function FlightDetails({ flightData, searchPayload }) {
                 <Image
                   src={marketingCarrierLogo}
                   alt="air-logo"
-                  className="rounded"
+                  className="rounded bg-white"
                   width={48}
                   height={48}
                 />
