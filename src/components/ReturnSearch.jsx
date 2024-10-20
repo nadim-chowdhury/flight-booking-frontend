@@ -584,6 +584,7 @@ export default function ReturnSearch() {
                     setDepartureDate(format(selectedDate, "yyyy-MM-dd"))
                   }
                   initialFocus
+                  disabled={(date) => date < new Date()}
                 />
               </PopoverContent>
             </Popover>
@@ -623,6 +624,7 @@ export default function ReturnSearch() {
                     setReturnDate(format(selectedDate, "yyyy-MM-dd"))
                   }
                   initialFocus
+                  disabled={(date) => date < new Date()}
                 />
               </PopoverContent>
             </Popover>

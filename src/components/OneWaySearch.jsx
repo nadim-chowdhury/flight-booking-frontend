@@ -703,6 +703,7 @@ export default function OneWaySearch() {
                     setDepartureDate(format(selectedDate, "yyyy-MM-dd"));
                   }}
                   initialFocus
+                  disabled={(date) => date < new Date()}
                 />
               </PopoverContent>
             </Popover>

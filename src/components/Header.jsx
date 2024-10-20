@@ -19,6 +19,9 @@ const navLinks = [
 
 export default function Header() {
   const [navOpen, setNavOpen] = useState(false);
+  const [allAirports, setallAirports] = useState([]);
+  console.log("Header ~ allAirports:", allAirports);
+  const [loadingAirports, setLoadingAirports] = useState(false);
 
   const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
@@ -35,6 +38,20 @@ export default function Header() {
   // useEffect(() => {
   //   dispatch(fetchAllAirports("")); // Dispatch the action when the searchTerm changes
   // }, [dispatch]);
+
+  useEffect(() => {
+    const defaultKeyword = "airport"; // Default search term for the initial load
+    fetchAllAirports(
+      defaultKeyword,
+      setallAirports,
+      setLoadingAirports,
+      "airports" // Updated to use "airports" type as per your backend API
+    );
+
+    if (allAirports.length > 0) {
+      localStorage.setItem("allAirportsData", JSON.stringify(allAirports));
+    }
+  }, [allAirports]);
 
   const toggleNav = () => {
     setNavOpen(!navOpen);

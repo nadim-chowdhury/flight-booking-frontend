@@ -45,33 +45,35 @@ export default function FlightDetails({ flightData, searchPayload }) {
             >
               <div className="air-logo">
                 <Image
-                  src={marketingCarrierLogo}
+                  src={marketingCarrierLogo || "/placeholder-airline-logo.png"} // Placeholder logo
                   alt="air-logo"
                   className="rounded bg-white"
                   width={48}
                   height={48}
                 />
                 <p className="mt-2 text-sm font-medium text-sky-600">
-                  {flight?.companyId?.marketingCarrier}
+                  {flight?.companyId?.marketingCarrier || "Airline Name"}
                 </p>
               </div>
 
               <div className="depart border-t pt-3 md:border-t-0 md:pt-0">
                 <p className="text-sm text-sky-600">Depart</p>
                 <p className="text-xl font-bold text-slate-800">
-                  {flight?.productDateTime?.timeOfDeparture}
+                  {flight?.productDateTime?.timeOfDeparture || "00:00"}
                 </p>
                 <p className="text-sm font-semibold text-slate-800">
-                  {flight?.productDateTime?.dateOfDepartureString}
+                  {flight?.productDateTime?.dateOfDepartureString ||
+                    "YYYY-MM-DD"}
                 </p>
                 <p className="text-sm font-medium text-slate-800">
-                  {flight?.location[0]?.city} ({flight?.location[0]?.cityCode})
+                  {flight?.location[0]?.city || "City"} (
+                  {flight?.location[0]?.cityCode || "ABC, Any City"})
                 </p>
               </div>
 
               <div className="non-stop text-center">
                 <p className="text-sm text-sky-600">
-                  {flight?.productDateTime?.segmentTime}
+                  {flight?.productDateTime?.segmentTime || "Duration"}
                 </p>
                 <p className="text-sm text-slate-800">Non Stop</p>
                 <Image
@@ -86,13 +88,14 @@ export default function FlightDetails({ flightData, searchPayload }) {
               <div className="arrive text-end">
                 <p className="text-sm text-sky-600">Arrive</p>
                 <p className="text-xl font-bold text-slate-800">
-                  {flight?.productDateTime?.timeOfArrival}
+                  {flight?.productDateTime?.timeOfArrival || "00:00"}
                 </p>
                 <p className="text-sm font-semibold text-slate-800">
-                  {flight?.productDateTime?.dateOfArrivalString}
+                  {flight?.productDateTime?.dateOfArrivalString || "YYYY-MM-DD"}
                 </p>
                 <p className="text-sm font-medium text-slate-800">
-                  {flight?.location[1]?.city} ({flight?.location[1]?.cityCode})
+                  {flight?.location[1]?.city || "City"} (
+                  {flight?.location[1]?.cityCode || "XYZ, Any City"})
                 </p>
               </div>
 
@@ -100,19 +103,19 @@ export default function FlightDetails({ flightData, searchPayload }) {
                 <div className="price text-start md:text-end">
                   <p className="text-sm text-sky-600">Price</p>
                   <p className="text-xl font-bold text-slate-800">
-                    {formattedPrice}
+                    {formattedPrice || "N/A"}
                   </p>
                   <p className="font-medium text-xs text-green-600">
                     {fareSummary?.refundable
                       ? "Refundable"
-                      : "Partially Refundable"}
+                      : "Partially Refundable"}{" "}
                   </p>
                 </div>
               ) : (
                 <div className="price text-end hidden md:block">
                   <p className="text-sm text-slate-50">Price</p>
                   <p className="text-xl font-bold text-slate-50">
-                    {formattedPrice}
+                    {formattedPrice || "N/A"}
                   </p>
                 </div>
               )}
@@ -156,42 +159,7 @@ export default function FlightDetails({ flightData, searchPayload }) {
           </div>
 
           <div className="accordion">
-            {/* <div className="flex items-center justify-between bg-white border rounded-full py-1 px-4">
-              <p className="font-medium text-xs text-green-600">
-                {fareSummary?.refundable
-                  ? "Refundable"
-                  : "Partially Refundable"}
-              </p>
-              <button
-                className="font-medium text-rose-600 flex items-center gap-1 text-xs"
-                onClick={() => toggleDetails(index)}
-              >
-                <span>Flight Details</span>
-                {detailsOpen[index] ? (
-                  <ChevronUp size={20} />
-                ) : (
-                  <ChevronDown size={20} />
-                )}
-              </button>
-            </div> */}
-
-            {/* {detailsOpen[index] && (
-              <Tabs defaultValue="flight-details" className="mt-4">
-                <TabsList className="grid w-full grid-cols-2 bg-slate-200 border">
-                  <TabsTrigger value="flight-details">
-                    Flight Details
-                  </TabsTrigger>
-                  <TabsTrigger value="fare-summary">Fare Summary</TabsTrigger>
-                </TabsList>
-
-                <TabsContent value="flight-details">
-                  <SearchFlightDetails searchFlightDetailsData={[flight]} />
-                </TabsContent>
-                <TabsContent value="fare-summary">
-                  <FareSummary fareSummary={fareSummary} />
-                </TabsContent>
-              </Tabs>
-            )} */}
+            {/* Accordion details code goes here */}
           </div>
         </div>
       ))}

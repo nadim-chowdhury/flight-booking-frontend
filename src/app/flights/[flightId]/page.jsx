@@ -116,17 +116,17 @@ export default function SelectedFlightDetails() {
     }
   };
 
-  if (loading) {
-    return <div className="min-h-screen">Loading...</div>; // Display a loading state while fetching
-  }
+  // if (loading) {
+  //   return <div className="min-h-screen">Loading...</div>; // Display a loading state while fetching
+  // }
 
-  if (error) {
-    return <div className="min-h-screen">{error}</div>; // Handle the error state
-  }
+  // if (error) {
+  //   return <div className="min-h-screen">{error}</div>; // Handle the error state
+  // }
 
-  if (!flightData) {
-    return <div className="min-h-screen">No flight data found</div>; // Handle the case where no flight data is found
-  }
+  // if (!flightData) {
+  //   return <div className="min-h-screen">No flight data found</div>; // Handle the case where no flight data is found
+  // }
 
   return (
     <div className="max-w-6xl mx-auto px-4 my-8 md:my-16">
@@ -159,19 +159,15 @@ export default function SelectedFlightDetails() {
         {/* Left Side - Flight and Traveler Info */}
         <div className="col-span-2 space-y-6">
           {/* Dynamic Flight Details */}
-          {flightData?.flightCombination?.map((flight, index) => (
+          {(flightData?.flightCombination || [1])?.map((flight, index) => (
             <div className="bg-slate-50 border rounded-lg" key={index}>
               <div className="border-b p-4 flex justify-between items-center">
                 <h4 className="font-bold text-lg text-sky-600">
-                  {
-                    flight?.flightDetails?.[0]?.flightInformation?.location?.[0]
-                      ?.locationId
-                  }
+                  {flight?.flightDetails?.[0]?.flightInformation?.location?.[0]
+                    ?.locationId || "Departure"}{" "}
                   -
-                  {
-                    flight?.flightDetails?.[0]?.flightInformation?.location?.[1]
-                      ?.locationId
-                  }
+                  {flight?.flightDetails?.[0]?.flightInformation?.location?.[1]
+                    ?.locationId || "Arrival"}
                 </h4>
                 <button
                   onClick={() => toggleBaggageDetails(index)}
@@ -184,44 +180,39 @@ export default function SelectedFlightDetails() {
                 <div className="flex flex-col sm:flex-row justify-between md:items-center border-b pb-4">
                   <div className="flex items-center">
                     <Image
-                      src={`https://fe-pub.s3.ap-southeast-1.amazonaws.com/airlineimages/128/${flight?.flightDetails?.[0]?.flightInformation?.companyId?.marketingCarrierCode}.png`}
+                      src={`https://fe-pub.s3.ap-southeast-1.amazonaws.com/airlineimages/128/${
+                        flight?.flightDetails?.[0]?.flightInformation?.companyId
+                          ?.marketingCarrierCode || "BG"
+                      }.png`}
                       alt={
                         flight?.flightDetails?.[0]?.flightInformation?.companyId
-                          ?.marketingCarrier
+                          ?.marketingCarrier || "Airline"
                       }
                       width={60}
                       height={60}
                     />
                     <div className="ml-4">
                       <p className="text-slate-600 text-sm">
-                        {
-                          flight?.flightDetails?.[0]?.flightInformation
-                            ?.companyId?.marketingCarrier
-                        }
+                        {flight?.flightDetails?.[0]?.flightInformation
+                          ?.companyId?.marketingCarrier || "Airline Name"}
                       </p>
                       <p className="text-lg font-semibold">
-                        {
-                          flight?.flightDetails?.[0]?.flightInformation
-                            ?.flightOrtrainNumber
-                        }
+                        {flight?.flightDetails?.[0]?.flightInformation
+                          ?.flightOrtrainNumber || "Flight Number"}
                       </p>
                       <div className="flex flex-col md:flex-row md:space-x-2">
                         <p className="text-sm font-medium">
                           Aircraft:{" "}
-                          {
-                            flight?.flightDetails?.[0]?.flightInformation
-                              ?.productDetail?.equipmentType
-                          }
+                          {flight?.flightDetails?.[0]?.flightInformation
+                            ?.productDetail?.equipmentType || "Aircraft Type"}
                         </p>
                       </div>
                     </div>
                   </div>
                   <p className="text-slate-800 text-sm mt-2 sm:mt-0">
                     Class:{" "}
-                    {
-                      flight?.flightDetails?.[0]?.flightInformation
-                        ?.addProductDetail?.cabinClass
-                    }
+                    {flight?.flightDetails?.[0]?.flightInformation
+                      ?.addProductDetail?.cabinClass || "Class"}
                   </p>
                 </div>
 
@@ -229,35 +220,27 @@ export default function SelectedFlightDetails() {
                   <div className="text-start sm:text-left w-full">
                     <p className="text-sky-400 text-sm">Depart</p>
                     <p className="text-lg font-semibold">
-                      {
-                        flight?.flightDetails?.[0]?.flightInformation
-                          ?.productDateTime?.timeOfDeparture
-                      }
+                      {flight?.flightDetails?.[0]?.flightInformation
+                        ?.productDateTime?.timeOfDeparture || "00:00"}
                     </p>
                     <p className="text-sm font-bold text-sky-400">
-                      {
-                        flight?.flightDetails?.[0]?.flightInformation
-                          ?.productDateTime?.dateOfDepartureString
-                      }
+                      {flight?.flightDetails?.[0]?.flightInformation
+                        ?.productDateTime?.dateOfDepartureString || "Date"}
                     </p>
                     <p className="text-lg font-bold">
-                      {
-                        flight?.flightDetails?.[0]?.flightInformation
-                          ?.location?.[0]?.locationId
-                      }
+                      {flight?.flightDetails?.[0]?.flightInformation
+                        ?.location?.[0]?.locationId || "Departure Location"}
                     </p>
                     <p className="text-slate-800">
-                      {
-                        flight?.flightDetails?.[0]?.flightInformation
-                          ?.location?.[0]?.airportName
-                      }
+                      {flight?.flightDetails?.[0]?.flightInformation
+                        ?.location?.[0]?.airportName || "Airport Name"}
                     </p>
                   </div>
 
                   <div className="text-center my-4 sm:my-0 w-full">
                     <p className="text-sky-400 text-sm">
                       {flight?.flightDetails?.[0]?.flightInformation
-                        ?.productDateTime?.journeyTime || 0}{" "}
+                        ?.productDateTime?.journeyTime || "Journey Time"}{" "}
                       min
                     </p>
                     <p className="text-slate-800">1 Stop</p>
@@ -273,28 +256,20 @@ export default function SelectedFlightDetails() {
                   <div className="text-end w-full">
                     <p className="text-sky-400 text-sm">Arrive</p>
                     <p className="text-lg font-semibold">
-                      {
-                        flight?.flightDetails?.[0]?.flightInformation
-                          ?.productDateTime?.timeOfArrival
-                      }
+                      {flight?.flightDetails?.[0]?.flightInformation
+                        ?.productDateTime?.timeOfArrival || "00:00"}
                     </p>
                     <p className="text-sm font-bold text-sky-400">
-                      {
-                        flight?.flightDetails?.[0]?.flightInformation
-                          ?.productDateTime?.dateOfArrivalString
-                      }
+                      {flight?.flightDetails?.[0]?.flightInformation
+                        ?.productDateTime?.dateOfArrivalString || "Date"}
                     </p>
                     <p className="text-lg font-bold">
-                      {
-                        flight?.flightDetails?.[0]?.flightInformation
-                          ?.location?.[1]?.locationId
-                      }
+                      {flight?.flightDetails?.[0]?.flightInformation
+                        ?.location?.[1]?.locationId || "Arrival Location"}
                     </p>
                     <p className="text-slate-800">
-                      {
-                        flight?.flightDetails?.[0]?.flightInformation
-                          ?.location?.[1]?.airportName
-                      }
+                      {flight?.flightDetails?.[0]?.flightInformation
+                        ?.location?.[1]?.airportName || "Airport Name"}
                     </p>
                   </div>
                 </div>
@@ -306,11 +281,12 @@ export default function SelectedFlightDetails() {
                     </h5>
                     <p className="text-slate-800 mt-2">
                       Checked Bags:{" "}
-                      {flightData?.baggage?.[0]?.ADT?.freeAllowance} x{" "}
-                      {flightData?.baggage?.[0]?.ADT?.unitQualifier}
+                      {flightData?.baggage?.[0]?.ADT?.freeAllowance || "N/A"} x{" "}
+                      {flightData?.baggage?.[0]?.ADT?.unitQualifier || "N/A"}
                     </p>
                     <p className="text-slate-800">
-                      Carry-on: {flightData?.baggage?.[0]?.ADT?.cabinBaggage}
+                      Carry-on:{" "}
+                      {flightData?.baggage?.[0]?.ADT?.cabinBaggage || "N/A"}
                     </p>
                   </div>
                 )}
@@ -325,7 +301,7 @@ export default function SelectedFlightDetails() {
               {travelers.map((traveler, index) => (
                 <TravelerInfo
                   key={index}
-                  travelerType={traveler.type}
+                  travelerType={traveler.type || "Traveler"}
                   travelerId={index + 1}
                   setPassengerData={setPassengerData}
                 />
@@ -348,9 +324,8 @@ export default function SelectedFlightDetails() {
               </p>
               <p className="font-semibold">
                 Total Fare: $
-                {((flightData?.fareSummary?.totalFareAmount || 0) +
-                  (flightData?.fareSummary?.totalTaxAmount || 0)) /
-                  100}
+                {(flightData?.fareSummary?.totalFareAmount +
+                  flightData?.fareSummary?.totalTaxAmount || 0) / 100}
               </p>
             </div>
           </div>

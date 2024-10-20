@@ -1020,6 +1020,7 @@ export default function MultiCitySearch() {
                           )
                         }
                         initialFocus
+                        disabled={(date) => date < new Date()}
                       />
                     </PopoverContent>
                   </Popover>

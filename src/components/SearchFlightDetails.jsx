@@ -27,11 +27,13 @@ export default function SearchFlightDetails({ searchFlightDetailsData }) {
                 index > 0 && "border-t"
               }`}
             >
-              {`${departureLocation?.city} to ${arrivalLocation?.city}, ${dateOfDepartureString}`}
+              {`${departureLocation?.city || "Departure City"} to ${
+                arrivalLocation?.city || "Arrival City"
+              }, ${dateOfDepartureString || "Date"}`}
             </h3>
             <div className="px-3 py-2 flex items-start border-b space-x-3 overflow-x-scroll whitespace-nowrap md:overflow-x-auto">
               <Image
-                src={marketingCarrierLogo}
+                src={marketingCarrierLogo || "/placeholder-airline-logo.png"}
                 alt="air-logo"
                 width={480}
                 height={480}
@@ -39,24 +41,31 @@ export default function SearchFlightDetails({ searchFlightDetailsData }) {
               />
               <div>
                 <p className="mb-1 font-bold">
-                  {flight?.companyId?.marketingCarrier}&nbsp;|&nbsp;
+                  {flight?.companyId?.marketingCarrier || "Airline"}
+                  &nbsp;|&nbsp;
                   <span className="">
-                    {flight?.companyId?.marketingCarrierCode}
+                    {flight?.companyId?.marketingCarrierCode || "Code"}
                     {flight?.productDetails?.flightNumber &&
-                      ` | ${flight?.productDetails?.flightNumber}`}
+                      ` | ${
+                        flight?.productDetails?.flightNumber || "Flight Number"
+                      }`}
                   </span>
                 </p>
                 <p className="text-sm font-bold">
-                  Aircraft: {flight?.productDetail?.equipmentType}
+                  Aircraft:{" "}
+                  {flight?.productDetail?.equipmentType || "Aircraft Type"}
                 </p>
                 <p className="text-xs font-bold">
-                  Operated by: {flight?.companyId?.operatingCarrier}
+                  Operated by:{" "}
+                  {flight?.companyId?.operatingCarrier || "Operating Carrier"}
                 </p>
                 <p className="text-xs font-bold">
-                  Flight Class: {flight?.addProductDetail?.cabinClass}
+                  Flight Class:{" "}
+                  {flight?.addProductDetail?.cabinClass || "Class"}
                 </p>
                 <p className="text-xs font-bold">
-                  Available Seats: {flight?.addProductDetail?.availableSeats}
+                  Available Seats:{" "}
+                  {flight?.addProductDetail?.availableSeats || "N/A"}
                 </p>
               </div>
             </div>
@@ -67,14 +76,15 @@ export default function SearchFlightDetails({ searchFlightDetailsData }) {
                 <div className="text-start text-wrap w-full">
                   <p className="text-xs font-bold text-sky-600">Departure:</p>
                   <p className="text-sm font-medium">
-                    {departureLocation?.airportName} (
-                    {departureLocation?.cityCode})
+                    {departureLocation?.airportName || "Departure Airport"} (
+                    {departureLocation?.cityCode || "ABC"})
                   </p>
                   <p className="text-sm font-medium">
-                    {departureLocation?.countryName}
+                    {departureLocation?.countryName || "Country"}
                   </p>
                   <p className="text-sm font-medium">
-                    {timeOfDeparture} - {dateOfDepartureString}
+                    {timeOfDeparture || "00:00"} -{" "}
+                    {dateOfDepartureString || "Date"}
                   </p>
                 </div>
 
@@ -83,19 +93,20 @@ export default function SearchFlightDetails({ searchFlightDetailsData }) {
                 <div className="text-end text-wrap w-full">
                   <p className="text-xs font-bold text-sky-600">Arrival:</p>
                   <p className="text-sm font-medium">
-                    {arrivalLocation?.airportName} ({arrivalLocation?.cityCode})
+                    {arrivalLocation?.airportName || "Arrival Airport"} (
+                    {arrivalLocation?.cityCode || "XYZ"})
                   </p>
                   <p className="text-sm font-medium">
-                    {arrivalLocation?.countryName}
+                    {arrivalLocation?.countryName || "Country"}
                   </p>
                   <p className="text-sm font-medium">
-                    {timeOfArrival} - {dateOfArrivalString}
+                    {timeOfArrival || "00:00"} - {dateOfArrivalString || "Date"}
                   </p>
                 </div>
               </div>
               <p className="text-xs font-bold capitalize text-center">
-                Baggage Info: {flight?.baggage?.checkIn} checked-in,{" "}
-                {flight?.baggage?.cabin} cabin
+                Baggage Info: {flight?.baggage?.checkIn || "N/A"} checked-in,{" "}
+                {flight?.baggage?.cabin || "N/A"} cabin
               </p>
             </div>
           </div>
