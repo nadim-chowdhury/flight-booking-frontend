@@ -30,6 +30,8 @@ export default function AllFlights() {
   const [sortOption, setSortOption] = useState("price-asc");
   const [filterOption, setFilterOption] = useState("all");
   const [loading, setLoading] = useState(false);
+  const [bookFLight, setBookFLight] = useState({});
+  console.log("AllFlights ~ bookFLight:", bookFLight);
 
   const searchParams = useSearchParams();
   const type = searchParams.get("type");
@@ -228,6 +230,8 @@ export default function AllFlights() {
             key={idx}
             flightData={flight}
             searchPayload={searchPayload}
+            bookFLight={bookFLight}
+            setBookFLight={setBookFLight}
           />
         ))}
       </div>

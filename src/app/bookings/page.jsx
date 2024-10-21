@@ -8,7 +8,9 @@ import "react-calendar/dist/Calendar.css"; // Import default calendar styles
 
 export default function Bookings() {
   const [bookings, setBookings] = useState([]);
+  console.log("Bookings ~ bookings:", bookings);
   const [filteredBookings, setFilteredBookings] = useState([]);
+  console.log("Bookings ~ filteredBookings:", filteredBookings);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [searchTerm, setSearchTerm] = useState("");
   const [order, setOrder] = useState("ASC");
@@ -26,7 +28,7 @@ export default function Bookings() {
 
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/bookings`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/flights/all`,
           {
             method: "GET",
             headers: {
@@ -35,7 +37,10 @@ export default function Bookings() {
             },
           }
         );
+
         const responseData = await response.json();
+        console.log("fetchBookings ~ responseData:", responseData);
+
         setBookings(responseData);
         setFilteredBookings(responseData); // Initially set filtered bookings to all bookings
       } catch (err) {
@@ -51,17 +56,16 @@ export default function Bookings() {
   // Handle search term changes
   useEffect(() => {
     const filtered = bookings.filter((booking) => {
-      const airline = booking.flight.marketingCarrier.name.toLowerCase();
-      const from = booking.flight.flightSummary[0].fromCity.toLowerCase();
-      const to = booking.flight.flightSummary[0].toCity.toLowerCase();
-
-      return (
-        airline.includes(searchTerm.toLowerCase()) ||
-        from.includes(searchTerm.toLowerCase()) ||
-        to.includes(searchTerm.toLowerCase())
-      );
+      // const airline = booking.flight.marketingCarrier.name.toLowerCase();
+      // const from = booking.flight.flightSummary[0].fromCity.toLowerCase();
+      // const to = booking.flight.flightSummary[0].toCity.toLowerCase();
+      //   return (
+      //     airline.includes(searchTerm.toLowerCase()) ||
+      //     from.includes(searchTerm.toLowerCase()) ||
+      //     to.includes(searchTerm.toLowerCase())
+      //   );
     });
-    setFilteredBookings(filtered);
+    setFilteredBookings(bookings);
     setOffset(0); // Reset to first page after filtering
   }, [searchTerm, bookings]);
 
@@ -102,6 +106,7 @@ export default function Bookings() {
 
   // Get current page bookings
   const paginatedBookings = filteredBookings.slice(offset, offset + limit);
+  console.log("Bookings ~ paginatedBookings:", paginatedBookings);
 
   // Handle date change in calendar
   const handleDateChange = (date) => {
@@ -116,7 +121,7 @@ export default function Bookings() {
   // Extract booked dates for flight departure times
   const bookedDates = bookings.map((booking) =>
     formatDate(
-      booking.flight.flightCombination[0].flightDetails[0].flightInformation
+      booking.flightCombination[0].flightDetails[0].flightInformation
         .productDateTime.dateOfDepartureString
     )
   );
@@ -183,8 +188,8 @@ export default function Bookings() {
                 <th className="border px-4 py-2 text-left">To</th>
                 <th className="border px-4 py-2 text-left">Departure</th>
                 <th className="border px-4 py-2 text-left">Arrival</th>
-                <th className="border px-4 py-2 text-left">Duration</th>
-                <th className="border px-4 py-2 text-right">Booking Time</th>
+                {/* <th className="border px-4 py-2 text-left">Duration</th>
+                <th className="border px-4 py-2 text-right">Booking Time</th> */}
               </tr>
             </thead>
 
@@ -194,37 +199,39 @@ export default function Bookings() {
                   <tr key={booking._id} className="bg-white">
                     <td className="border px-4 py-2 font-medium">
                       <Link
-                        href={`/flights/${booking.flight._id}?view=bookings`}
+                        href={`/flights/${booking._id}?view=bookings`}
                         className="hover:underline text-sky-600"
                       >
-                        {booking.flight.marketingCarrier.name}
+                        {booking.airline || "Airline Name"}
                       </Link>
                     </td>
                     <td className="border px-4 py-2">
-                      {booking.flight.flightSummary[0].fromCity}
+                      {booking.from || "Unknown"}
                     </td>
                     <td className="border px-4 py-2">
-                      {booking.flight.flightSummary[0].toCity}
+                      {booking.to || "Unknown"}
                     </td>
                     <td className="border px-4 py-2">
                       {new Date(
-                        booking.flight.flightCombination[0].flightDetails[0].flightInformation.productDateTime.dateOfDepartureString
+                        booking.flightCombination[0].flightDetails[0].flightInformation.productDateTime.dateOfDepartureString
                       ).toLocaleString()}
                     </td>
                     <td className="border px-4 py-2">
                       {new Date(
-                        booking.flight.flightCombination[0].flightDetails[0].flightInformation.productDateTime.dateOfArrivalString
+                        booking.flightCombination[0].flightDetails[0].flightInformation.productDateTime.dateOfArrivalString
                       ).toLocaleString()}
                     </td>
-                    <td className="border px-4 py-2">
+                    {/* <td className="border px-4 py-2">
                       {
-                        booking.flight.flightCombination[0].flightDetails[0]
-                          .flightInformation.productDateTime.segmentTime
+                        booking.flightCombination[0].flightDetails[0]
+                          .flightInformation.segmentTime
                       }
-                    </td>
-                    <td className="border px-4 py-2 text-right">
-                      {new Date(booking.bookingDate).toLocaleString()}
-                    </td>
+                    </td> */}
+                    {/* <td className="border px-4 py-2 text-right">
+                      {new Date(
+                        booking.bookingDate || booking._id.getTimestamp()
+                      ).toLocaleString()}
+                    </td> */}
                   </tr>
                 ))
               ) : (

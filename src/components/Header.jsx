@@ -185,9 +185,7 @@ export default function Header() {
 
       {(isSearchFlights.isLoading || loadingAirports) && (
         <div
-          className={`absolute top-0 left-0 w-full h-screen ${
-            loadingAirports ? "bg-white/60" : "bg-white"
-          } z-50 flex items-center justify-center`}
+          className={`absolute top-0 left-0 w-full h-screen bg-white z-50 flex items-center justify-center`}
         >
           <SearchFlightsLoading />
         </div>

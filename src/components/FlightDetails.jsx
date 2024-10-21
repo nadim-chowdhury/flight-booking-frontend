@@ -8,9 +8,17 @@ import FareSummary from "./FareSummary";
 import SearchFlightDetails from "./SearchFlightDetails";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "./ui/button";
+import { useSelector } from "react-redux";
 
-export default function FlightDetails({ flightData, searchPayload }) {
+export default function FlightDetails({
+  flightData,
+  searchPayload,
+  bookFLight,
+  setBookFLight,
+}) {
   const [detailsOpen, setDetailsOpen] = useState(false);
+
+  const token = useSelector((state) => state.user.token);
 
   const { flightCombination, fareSummary } = flightData;
 
@@ -31,7 +39,35 @@ export default function FlightDetails({ flightData, searchPayload }) {
 
   const formattedPrice = `$ ${fareSummary?.totalFareAmount || 0}`;
 
-  const handleBookFlight = () => {};
+  // Function to handle "Book Now" button click
+  const handleBookFlight = async () => {
+    setBookFLight(flightData); // Set flight data for booking
+
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/flights/book`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(flightData),
+        }
+      );
+      console.log("handleBookFlight ~ res:", res);
+
+      if (!res.ok) {
+        throw new Error(`API request failed with status ${res.status}`);
+      }
+
+      const data = await res.json();
+      console.log("Flight booked successfully:", data);
+      return data; // Return the booked flight data if necessary
+    } catch (error) {
+      console.error("Failed to book flight:", error);
+    }
+  };
 
   return (
     <div className="flight-details bg-gradient-to-br from-rose-50 to-sky-50 rounded-lg border mb-4 py-4">
@@ -123,17 +159,18 @@ export default function FlightDetails({ flightData, searchPayload }) {
 
             {index === 0 ? (
               <div
-                onClick={handleBookFlight}
+                // onClick={handleBookFlight}
                 className="view-details mb-4 absolute top-0 right-0 md:relative"
               >
-                <Link href={`/flights/${123}`}>
-                  <Button
-                    size="sm"
-                    className="book-now-btn bg-sky-600 hover:bg-sky-700 text-white transition"
-                  >
-                    Book Now
-                  </Button>
-                </Link>
+                {/* <Link href={`/flights/${123}`}> */}
+                <Button
+                  size="sm"
+                  onClick={handleBookFlight}
+                  className="book-now-btn bg-sky-600 hover:bg-sky-700 text-white transition"
+                >
+                  Book Now
+                </Button>
+                {/* </Link> */}
                 <button
                   className="font-medium text-white bg-orange-600 rounded-md pl-3 pr-2 flex items-center gap-1 text-xs mt-2 w-full justify-center"
                   onClick={() => toggleDetails(index)}
@@ -150,16 +187,13 @@ export default function FlightDetails({ flightData, searchPayload }) {
               <div className="view-details mb-4 hidden md:block">
                 <Button
                   size="sm"
+                  onClick={handleBookFlight}
                   className="book-now-btn bg-slate-50 hover:bg-slate-50 text-white transition cursor-default"
                 >
                   Book Now
                 </Button>
               </div>
             )}
-          </div>
-
-          <div className="accordion">
-            {/* Accordion details code goes here */}
           </div>
         </div>
       ))}
