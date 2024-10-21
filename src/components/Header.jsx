@@ -8,7 +8,9 @@ import SearchFlightsLoading from "@/components/SearchFlightsLoading";
 import { useSelector, useDispatch } from "react-redux";
 import { Power } from "lucide-react";
 import { userLogout } from "@/redux/slices/userSlice"; // Import the logout action
-import { fetchAllAirports } from "../redux/slices/airportSlice";
+import { setAirports, setLoading } from "../redux/slices/airportSlice";
+import { fetchAllAirports } from "@/lib/fetchAirports";
+import { getUniqueAirports } from "../lib/getUniqueAirports";
 
 const navLinks = [
   { href: "/bookings", label: "Bookings" },
@@ -22,6 +24,7 @@ export default function Header() {
   const [allAirports, setallAirports] = useState([]);
   console.log("Header ~ allAirports:", allAirports);
   const [loadingAirports, setLoadingAirports] = useState(false);
+  console.log("Header ~ loadingAirports:", loadingAirports);
 
   const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
@@ -33,6 +36,7 @@ export default function Header() {
     loading,
     error,
   } = useSelector((state) => state.airports);
+  console.log("Header ~ loading:", loading);
   console.log("Header ~ airports:", airports);
 
   // useEffect(() => {
@@ -47,11 +51,17 @@ export default function Header() {
       setLoadingAirports,
       "airports" // Updated to use "airports" type as per your backend API
     );
+  }, []);
 
-    if (allAirports.length > 0) {
-      localStorage.setItem("allAirportsData", JSON.stringify(allAirports));
+  useEffect(() => {
+    if (allAirports && allAirports.length > 0) {
+      // Filter out duplicate airports by iataCode
+      const uniqueAirports = getUniqueAirports(allAirports);
+
+      // Dispatch the unique airports to the Redux store
+      dispatch(setAirports(uniqueAirports));
     }
-  }, [allAirports]);
+  }, [allAirports, dispatch]);
 
   const toggleNav = () => {
     setNavOpen(!navOpen);
@@ -173,8 +183,12 @@ export default function Header() {
         )}
       </div>
 
-      {isSearchFlights.isLoading && (
-        <div className="absolute top-0 left-0 w-full h-screen bg-white z-50 flex items-center justify-center">
+      {(isSearchFlights.isLoading || loadingAirports) && (
+        <div
+          className={`absolute top-0 left-0 w-full h-screen ${
+            loadingAirports ? "bg-white/60" : "bg-white"
+          } z-50 flex items-center justify-center`}
+        >
           <SearchFlightsLoading />
         </div>
       )}

@@ -1,7 +1,7 @@
 export default function SearchFlightsLoading() {
   return (
     <div className="flex items-center justify-center">
-      <span class="flight_search_loader"></span>
+      <span className="flight_search_loader"></span>
     </div>
   );
 }

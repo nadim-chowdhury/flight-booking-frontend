@@ -36,7 +36,9 @@ import { searchFlightsStart } from "@/redux/slices/searchFlightsSlice";
 
 export default function OneWaySearch() {
   const [departureCity, setDepartureCity] = useState("");
+  console.log("OneWaySearch ~ departureCity:", departureCity);
   const [departureCityFullName, setDepartureCityFullName] = useState("");
+  console.log("OneWaySearch ~ departureCityFullName:", departureCityFullName);
   const [destinationCity, setDestinationCity] = useState("");
   const [destinationCityFullName, setDestinationCityFullName] = useState("");
   const [departureDate, setDepartureDate] = useState("");
@@ -67,6 +69,11 @@ export default function OneWaySearch() {
   const searchParams = useSearchParams();
   const dispatch = useDispatch();
   // const { isLoading, error } = useSelector((state) => state.searchFlights);
+  const {
+    data: airports,
+    loading,
+    error,
+  } = useSelector((state) => state.airports);
 
   useEffect(() => {
     const departureCityParam =
@@ -102,198 +109,25 @@ export default function OneWaySearch() {
     if (seatTypeParam) setSeatType(seatTypeParam);
   }, [searchParams]);
 
-  // useEffect(() => {
-  //   const fetchDepartureAirports = async () => {
-  //     try {
-  //       const res = await fetch(
-  //         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/airports?offset=0&limit=10&order=ASC`
-  //       );
-  //       const data = await res.json();
-  //       setDepartureAirportsData(data?.airports || []);
-  //       setDestinationAirportsData(data?.airports || []);
-  //     } catch (error) {
-  //       console.error("Failed to fetch departure airports:", error);
-  //     }
-  //   };
-
-  //   fetchDepartureAirports();
-  // }, []);
-
-  // useEffect(() => {
-  //   const fetchDepartureAirports = async () => {
-  //     try {
-  //       // Fetch access token from Amadeus
-  //       const token = await fetchAmadeusAccessToken();
-  //       if (!token) {
-  //         console.error("Failed to get Amadeus access token");
-  //         return;
-  //       }
-
-  //       // Use a default keyword if none is provided
-  //       const defaultKeyword = "airport"; // or some other relevant default value
-
-  //       // Fetch airports from Amadeus API
-  //       const res = await fetch(
-  //         `https://test.api.amadeus.com/v1/reference-data/locations?subType=AIRPORT&keyword=${defaultKeyword}&page%5Blimit%5D=10`,
-  //         {
-  //           headers: {
-  //             Authorization: `Bearer ${token}`,
-  //           },
-  //         }
-  //       );
-  //       const data = await res.json();
-
-  //       // Set both departure and destination airports data
-  //       setDepartureAirportsData(data?.data || []);
-  //       setDestinationAirportsData(data?.data || []);
-  //     } catch (error) {
-  //       console.error("Failed to fetch airports from Amadeus:", error);
-  //     }
-  //   };
-
-  //   fetchDepartureAirports();
-  // }, []);
-
-  // useEffect(() => {
-  //   if (!debouncedSearchDeparture) return;
-
-  //   const fetchDepartureAirports = async () => {
-  //     setLoadingDepartureAirports(true);
-  //     try {
-  //       const res = await fetch(
-  //         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/airports?offset=0&limit=10&order=ASC&search=${debouncedSearchDeparture}`
-  //       );
-  //       const data = await res.json();
-  //       setDepartureAirportsData(data?.airports || []);
-  //     } catch (error) {
-  //       console.error("Failed to fetch departure airports:", error);
-  //     } finally {
-  //       setLoadingDepartureAirports(false);
-  //     }
-  //   };
-
-  //   fetchDepartureAirports();
-  // }, [debouncedSearchDeparture]);
-
-  // useEffect(() => {
-  //   if (!debouncedSearchDestination) return;
-
-  //   const fetchDestinationAirports = async () => {
-  //     setLoadingDestinationAirports(true);
-  //     try {
-  //       const res = await fetch(
-  //         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/airports?offset=0&limit=10&order=ASC&search=${debouncedSearchDestination}`
-  //       );
-  //       const data = await res.json();
-  //       setDestinationAirportsData(data?.airports || []);
-  //     } catch (error) {
-  //       console.error("Failed to fetch destination airports:", error);
-  //     } finally {
-  //       setLoadingDestinationAirports(false);
-  //     }
-  //   };
-
-  //   fetchDestinationAirports();
-  // }, [debouncedSearchDestination]);
-
-  // useEffect(() => {
-  //   if (!debouncedSearchDeparture) return;
-
-  //   const fetchDepartureAirports = async () => {
-  //     setLoadingDepartureAirports(true);
-  //     try {
-  //       // Fetch access token only if necessary
-  //       const token = await fetchAmadeusAccessToken();
-  //       if (!token) {
-  //         throw new Error("Failed to retrieve Amadeus access token");
-  //       }
-
-  //       const res = await fetch(
-  //         `https://test.api.amadeus.com/v1/reference-data/locations?subType=AIRPORT&keyword=${debouncedSearchDeparture}&page%5Blimit%5D=10`,
-  //         {
-  //           headers: {
-  //             Authorization: `Bearer ${token}`,
-  //           },
-  //         }
-  //       );
-
-  //       if (!res.ok) {
-  //         throw new Error(`API request failed with status ${res.status}`);
-  //       }
-
-  //       const data = await res.json();
-  //       setDepartureAirportsData(data?.data || []);
-  //     } catch (error) {
-  //       console.error(
-  //         "Failed to fetch departure airports from Amadeus:",
-  //         error
-  //       );
-  //     } finally {
-  //       setLoadingDepartureAirports(false);
-  //     }
-  //   };
-
-  //   fetchDepartureAirports();
-  // }, [debouncedSearchDeparture]);
-
-  // useEffect(() => {
-  //   if (!debouncedSearchDestination) return;
-
-  //   const fetchDestinationAirports = async () => {
-  //     setLoadingDestinationAirports(true);
-  //     try {
-  //       // Fetch access token only if necessary
-  //       const token = await fetchAmadeusAccessToken();
-  //       if (!token) {
-  //         throw new Error("Failed to retrieve Amadeus access token");
-  //       }
-
-  //       const res = await fetch(
-  //         `https://test.api.amadeus.com/v1/reference-data/locations?subType=AIRPORT&keyword=${debouncedSearchDestination}&page%5Blimit%5D=10`,
-  //         {
-  //           headers: {
-  //             Authorization: `Bearer ${token}`,
-  //           },
-  //         }
-  //       );
-
-  //       if (!res.ok) {
-  //         throw new Error(`API request failed with status ${res.status}`);
-  //       }
-
-  //       const data = await res.json();
-  //       setDestinationAirportsData(data?.data || []);
-  //     } catch (error) {
-  //       console.error(
-  //         "Failed to fetch destination airports from Amadeus:",
-  //         error
-  //       );
-  //     } finally {
-  //       setLoadingDestinationAirports(false);
-  //     }
-  //   };
-
-  //   fetchDestinationAirports();
-  // }, [debouncedSearchDestination]);
-
-  // Initial default fetch of airports on component mount
-
   // Fetch default airports for initial load (both departure and destination)
   useEffect(() => {
-    const defaultKeyword = "airport"; // Default search term for the initial load
-    fetchAirports(
-      defaultKeyword,
-      setDepartureAirportsData,
-      setLoadingDepartureAirports,
-      "airports" // Updated to use "airports" type as per your backend API
-    );
-    fetchAirports(
-      defaultKeyword,
-      setDestinationAirportsData,
-      setLoadingDestinationAirports,
-      "airports" // Updated to use "airports" type as per your backend API
-    );
-  }, []);
+    // const defaultKeyword = "airport"; // Default search term for the initial load
+    // fetchAirports(
+    //   defaultKeyword,
+    //   setDepartureAirportsData,
+    //   setLoadingDepartureAirports,
+    //   "airports" // Updated to use "airports" type as per your backend API
+    // );
+    // fetchAirports(
+    //   defaultKeyword,
+    //   setDestinationAirportsData,
+    //   setLoadingDestinationAirports,
+    //   "airports" // Updated to use "airports" type as per your backend API
+    // );
+
+    setDepartureAirportsData(airports);
+    setDestinationAirportsData(airports);
+  }, [airports]);
 
   // Fetch departure airports based on search input
   useEffect(() => {
@@ -368,154 +202,6 @@ export default function OneWaySearch() {
       <form onSubmit={handleOneWaySearch}>
         <div className="flex flex-col md:grid md:grid-cols-4 md:items-end gap-4">
           {/* Departure City */}
-          {/* <div className="w-full">
-            <Label
-              htmlFor="departureCity"
-              className="block text-sm text-start font-medium mb-2 text-slate-700"
-            >
-              Departure City
-            </Label>
-            <Popover open={openDeparture} onOpenChange={setOpenDeparture}>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  role="combobox"
-                  aria-expanded={openDeparture}
-                  className="w-full text-black/60 justify-start"
-                >
-                  <span className="truncate">
-                    {departureCityFullName && departureCityFullName}
-                    {departureCity
-                      ? departureAirportsData?.find(
-                          (airport) => airport?.iata === departureCity
-                        )?.name
-                      : "Select City"}
-                  </span>
-                </Button>
-              </PopoverTrigger>
-
-              <PopoverContent className="w-[310px] p-0">
-                <Command>
-                  <div className="flex items-center border-b">
-                    <Search className="h-4 w-4 mx-3" />
-                    <Input
-                      placeholder="Search Airport"
-                      value={searchDepartureAirport}
-                      onChange={(e) =>
-                        setSearchDepartureAirport(e.target.value)
-                      }
-                      className="w-full border-l rounded-none border-r-0 border-t-0 border-b-0 focus:ring-0 focus:outline-0 focus-visible:ring-0 focus-visible:ring-offset-0"
-                    />
-                  </div>
-
-                  <CommandList>
-                    {loadingDepartureAirports ? (
-                      <CommandEmpty><span class="loader_wave"></span></CommandEmpty>
-                    ) : departureAirportsData?.length > 0 ? (
-                      <CommandGroup>
-                        {departureAirportsData?.map((airport) => (
-                          <CommandItem
-                            key={airport?.id}
-                            value={airport?.iata}
-                            onSelect={(iata) => {
-                              setDepartureCity(
-                                iata === departureCity ? "" : iata
-                              );
-                              setOpenDeparture(false);
-                              setDepartureCityFullName(airport.name);
-                              setSearchDepartureAirport("");
-                            }}
-                            className=""
-                          >
-                            {airport?.name} ({airport?.iata && airport?.iata}) -{" "}
-                            {airport?.city}
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
-                    ) : (
-                      <CommandEmpty>No airports found.</CommandEmpty>
-                    )}
-                  </CommandList>
-                </Command>
-              </PopoverContent>
-            </Popover>
-          </div> */}
-
-          {/* Destination City */}
-          {/* <div className="w-full">
-            <Label
-              htmlFor="destinationCity"
-              className="block text-sm text-start font-medium mb-2 text-slate-700"
-            >
-              Destination City
-            </Label>
-            <Popover open={openDestination} onOpenChange={setOpenDestination}>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  role="combobox"
-                  aria-expanded={openDestination}
-                  className="w-full text-black/60 justify-start"
-                >
-                  <span className="truncate">
-                    {destinationCityFullName && destinationCityFullName}
-                    {destinationCity
-                      ? destinationAirportsData?.find(
-                          (airport) => airport?.iata === destinationCity
-                        )?.name
-                      : "Select City"}
-                  </span>
-                </Button>
-              </PopoverTrigger>
-
-              <PopoverContent className="w-[310px] p-0">
-                <Command>
-                  <div className="flex items-center border-b">
-                    <Search className="h-4 w-4 mx-3" />
-                    <Input
-                      placeholder="Search Airport"
-                      value={searchDestinationAirport}
-                      onChange={(e) =>
-                        setSearchDestinationAirport(e.target.value)
-                      }
-                      className="w-full border-l rounded-none border-r-0 border-t-0 border-b-0 focus:ring-0 focus:outline-0 focus-visible:ring-0 focus-visible:ring-offset-0"
-                    />
-                  </div>
-
-                  <CommandList>
-                    {loadingDestinationAirports ? (
-                      <CommandEmpty><span class="loader_wave"></span></CommandEmpty>
-                    ) : destinationAirportsData?.length > 0 ? (
-                      <CommandGroup>
-                        {destinationAirportsData?.map((airport) => (
-                          <CommandItem
-                            key={airport?.id}
-                            value={airport?.iata}
-                            onSelect={(iata) => {
-                              setDestinationCity(
-                                iata === destinationCity ? "" : iata
-                              );
-                              setOpenDestination(false);
-                              setDestinationCityFullName(airport.name);
-                              setSearchDestinationAirport("");
-                            }}
-                            className=""
-                          >
-                            {airport?.name} ({airport?.iata && airport?.iata}) -{" "}
-                            {airport?.city}
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
-                    ) : (
-                      <CommandEmpty>No airports found.</CommandEmpty>
-                    )}
-                  </CommandList>
-                </Command>
-              </PopoverContent>
-            </Popover>
-          </div> */}
-
-          {/* Departure City */}
           <div className="w-full">
             <Label
               htmlFor="departureCity"
@@ -532,8 +218,9 @@ export default function OneWaySearch() {
                   className="w-full text-black/60 justify-start"
                 >
                   <span className="truncate">
-                    {departureCityFullName && departureCityFullName}
-                    {departureCity
+                    {departureCityFullName
+                      ? departureCityFullName
+                      : departureCity
                       ? departureAirportsData?.find(
                           (airport) => airport?.iataCode === departureCity
                         )?.name
@@ -557,9 +244,9 @@ export default function OneWaySearch() {
                   </div>
 
                   <CommandList>
-                    {loadingDepartureAirports ? (
+                    {loadingDepartureAirports || loading ? (
                       <CommandEmpty>
-                        <span class="loader_wave"></span>
+                        <span className="loader_wave"></span>
                       </CommandEmpty>
                     ) : departureAirportsData?.length > 0 ? (
                       <CommandGroup>
@@ -576,6 +263,32 @@ export default function OneWaySearch() {
                               setSearchDepartureAirport("");
                             }}
                             className=""
+                          >
+                            {airport?.name} ({airport?.iataCode}) -{" "}
+                            {airport?.address?.cityName}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    ) : !searchDepartureAirport ? (
+                      <CommandGroup>
+                        {airports?.map((airport) => (
+                          <CommandItem
+                            key={airport?.id}
+                            value={airport?.iataCode}
+                            onSelect={(iataCode) => {
+                              handleFlightChange(
+                                index,
+                                "departureCity",
+                                iataCode,
+                                airport?.name
+                              );
+                              handleSearchInputChange(
+                                index,
+                                "departureCity",
+                                ""
+                              );
+                              togglePopover(index, "departureCity", false);
+                            }}
                           >
                             {airport?.name} ({airport?.iataCode}) -{" "}
                             {airport?.address?.cityName}
@@ -608,8 +321,9 @@ export default function OneWaySearch() {
                   className="w-full text-black/60 justify-start"
                 >
                   <span className="truncate">
-                    {destinationCityFullName && destinationCityFullName}
-                    {destinationCity
+                    {destinationCityFullName
+                      ? destinationCityFullName
+                      : destinationCity
                       ? destinationAirportsData?.find(
                           (airport) => airport?.iataCode === destinationCity
                         )?.name
@@ -633,9 +347,9 @@ export default function OneWaySearch() {
                   </div>
 
                   <CommandList>
-                    {loadingDestinationAirports ? (
+                    {loadingDestinationAirports || loading ? (
                       <CommandEmpty>
-                        <span class="loader_wave"></span>
+                        <span className="loader_wave"></span>
                       </CommandEmpty>
                     ) : destinationAirportsData?.length > 0 ? (
                       <CommandGroup>
@@ -652,6 +366,32 @@ export default function OneWaySearch() {
                               setSearchDestinationAirport("");
                             }}
                             className=""
+                          >
+                            {airport?.name} ({airport?.iataCode}) -{" "}
+                            {airport?.address?.cityName}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    ) : !searchDestinationAirport ? (
+                      <CommandGroup>
+                        {airports?.map((airport) => (
+                          <CommandItem
+                            key={airport?.id}
+                            value={airport?.iataCode}
+                            onSelect={(iataCode) => {
+                              handleFlightChange(
+                                index,
+                                "departureCity",
+                                iataCode,
+                                airport?.name
+                              );
+                              handleSearchInputChange(
+                                index,
+                                "departureCity",
+                                ""
+                              );
+                              togglePopover(index, "departureCity", false);
+                            }}
                           >
                             {airport?.name} ({airport?.iataCode}) -{" "}
                             {airport?.address?.cityName}

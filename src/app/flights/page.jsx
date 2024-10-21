@@ -24,6 +24,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 export default function AllFlights() {
   const [searchPayload, setSearchPayload] = useState(null);
+  console.log("AllFlights ~ searchPayload:", searchPayload);
   const [flights, setFlights] = useState([]);
   console.log("AllFlights ~ flights:", flights);
   const [sortOption, setSortOption] = useState("price-asc");
@@ -120,6 +121,7 @@ export default function AllFlights() {
           setFlights(response.data);
           console.log("API Response:", response);
         } catch (error) {
+          setFlights([]);
           console.error("API call failed:", error);
           // setError("Failed to fetch flights. Please try again later.");
         } finally {
@@ -171,9 +173,15 @@ export default function AllFlights() {
         </div>
       </div>
 
-      <h2 className="mt-10 text-4xl md:text-[2.5rem] font-bold mb-4">
-        Search Results
-      </h2>
+      {flights.length < 1 ? (
+        <h2 className="mt-10 text-4xl md:text-[2.5rem] font-bold mb-4 text-rose-500">
+          No Results Found
+        </h2>
+      ) : (
+        <h2 className="mt-10 text-4xl md:text-[2.5rem] font-bold mb-4">
+          Search Results
+        </h2>
+      )}
 
       {/* Loading and Error States */}
       {/* {loading && <p className="text-center text-2xl">Loading flights...</p>}
