@@ -11,9 +11,11 @@ import { useSearchParams } from "next/navigation";
 
 export default function SelectedFlightDetails() {
   const [flightData, setFlightData] = useState(null);
+  console.log("SelectedFlightDetails ~ flightData:", flightData);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [passengerData, setPassengerData] = useState({});
+  const [passengerData, setPassengerData] = useState([]);
+  console.log("SelectedFlightDetails ~ passengerData:", passengerData);
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -52,6 +54,13 @@ export default function SelectedFlightDetails() {
     }
   }, [flightId]);
 
+  // Initialize the array based on the number of travelers (flightData.baggage)
+  useEffect(() => {
+    if (flightData?.baggage) {
+      setPassengerData(new Array(flightData.baggage.length).fill({}));
+    }
+  }, [flightData]);
+
   const toggleBaggageDetails = (index) => {
     setBaggageOpen((prev) => {
       const updated = [...prev];
@@ -59,9 +68,6 @@ export default function SelectedFlightDetails() {
       return updated;
     });
   };
-
-  // const travelers = [{ type: "Adult" }, { type: "Child" }, { type: "Infant" }];
-  const travelers = [{ type: "Adult" }];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -71,7 +77,7 @@ export default function SelectedFlightDetails() {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/passenger`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/passenger/bulk`,
         {
           method: "POST",
           headers: {
@@ -84,30 +90,30 @@ export default function SelectedFlightDetails() {
       const paxData = await response.json();
       console.log("response--------", paxData);
 
-      if (response.ok) {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/bookings`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({
-              flightId: flightId,
-              passengerId: paxData._id,
-              numberOfSeats: Math.floor(Math.random() * 10),
-            }),
-          }
-        );
-        const bookData = await res.json();
-        console.log("res--------", bookData);
-      }
+      // if (response.ok) {
+      //   const res = await fetch(
+      //     `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/bookings`,
+      //     {
+      //       method: "POST",
+      //       headers: {
+      //         "Content-Type": "application/json",
+      //         Authorization: `Bearer ${token}`,
+      //       },
+      //       body: JSON.stringify({
+      //         flightId: flightId,
+      //         passengerId: paxData._id,
+      //         numberOfSeats: Math.floor(Math.random() * 10),
+      //       }),
+      //     }
+      //   );
+      //   const bookData = await res.json();
+      //   console.log("res--------", bookData);
+      // }
 
       // const data = await response.json();
       // setSuccess(true);
       // Optionally reset form or show confirmation message
-      setPassengerData({});
+      setPassengerData([]);
       router.push("/bookings");
     } catch (err) {
       setError(err.message);
@@ -298,12 +304,19 @@ export default function SelectedFlightDetails() {
             <>
               {/* Traveler Information */}
               <ContactDetails />
-              {travelers.map((traveler, index) => (
+              {flightData?.baggage?.map((traveler, index) => (
                 <TravelerInfo
                   key={index}
-                  travelerType={traveler.type || "Traveler"}
+                  travelerType={traveler.travelerType || "Traveler"}
                   travelerId={index + 1}
-                  setPassengerData={setPassengerData}
+                  setPassengerData={(details) => {
+                    // Update the passenger data at the specific index
+                    setPassengerData((prevData) => {
+                      const updatedData = [...prevData];
+                      updatedData[index] = details;
+                      return updatedData;
+                    });
+                  }}
                 />
               ))}
             </>

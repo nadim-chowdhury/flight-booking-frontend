@@ -25,6 +25,8 @@ export default function Header() {
   console.log("Header ~ allAirports:", allAirports);
   const [loadingAirports, setLoadingAirports] = useState(false);
   console.log("Header ~ loadingAirports:", loadingAirports);
+  const [windowLoaded, setWindowLoaded] = useState(false);
+  console.log("Header ~ windowLoaded:", windowLoaded);
 
   const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
@@ -51,6 +53,14 @@ export default function Header() {
       setLoadingAirports,
       "airports" // Updated to use "airports" type as per your backend API
     );
+
+    // Listen to the window load event
+    window.addEventListener("load", handleWindowLoad);
+
+    // Clean up the event listener on component unmount
+    return () => {
+      window.removeEventListener("load", handleWindowLoad);
+    };
   }, []);
 
   useEffect(() => {
@@ -69,6 +79,10 @@ export default function Header() {
 
   const handleLogout = () => {
     dispatch(userLogout());
+  };
+
+  const handleWindowLoad = () => {
+    setWindowLoaded(false);
   };
 
   return (
@@ -183,7 +197,7 @@ export default function Header() {
         )}
       </div>
 
-      {(isSearchFlights.isLoading || loadingAirports) && (
+      {(isSearchFlights.isLoading || loadingAirports || windowLoaded) && (
         <div
           className={`absolute top-0 left-0 w-full h-screen bg-white z-50 flex items-center justify-center`}
         >

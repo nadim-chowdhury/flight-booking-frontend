@@ -26,7 +26,8 @@ export default function TravelerInfo({
 
   useEffect(() => {
     setPassengerData(travelerDetails);
-  }, [travelerDetails, setPassengerData]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [travelerDetails]);
 
   return (
     <div className="mt-6 bg-slate-50 border rounded-lg p-4">

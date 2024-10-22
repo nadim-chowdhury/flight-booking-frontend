@@ -2,8 +2,9 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import Calendar from "react-calendar";
+import { redirect } from "next/navigation";
 import { useSelector } from "react-redux";
+import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css"; // Import default calendar styles
 
 export default function Bookings() {
@@ -18,7 +19,16 @@ export default function Bookings() {
   const [offset, setOffset] = useState(0); // Starting index
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
   const token = useSelector((state) => state.user.token);
+  const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
+  // const userInfo = useSelector((state) => state.user.userInfo);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      return redirect("/login");
+    }
+  }, [isAuthenticated]);
 
   // Fetch bookings data
   useEffect(() => {

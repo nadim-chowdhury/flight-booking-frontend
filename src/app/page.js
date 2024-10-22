@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { Button } from "../components/ui/button";
 import FlightSearch from "../components/FlightSearch";
 // import FlightList from "../components/FlightList";
@@ -27,7 +28,7 @@ export default function Home() {
           {/* <p className="mb-8">
             Find the best deals on flights to your favorite destinations.
           </p> */}
-          <div className="bg-white rounded-lg border">
+          <div className="bg-gradient-to-tr from-sky-50 to-white rounded-lg border">
             <FlightSearch onFlightsFound={handleFlightsFound} />
           </div>
         </div>
@@ -84,14 +85,32 @@ export default function Home() {
                 &quot;This platform made booking my flight so easy and
                 stress-free!&quot;
               </p>
-              <p className="font-semibold">- John Doe</p>
+              <div className="flex items-center justify-center gap-2">
+                <Image
+                  src="https://i.pravatar.cc/150?img=3"
+                  alt="User"
+                  width={32}
+                  height={32}
+                  className="rounded-full bg-white w-8 h-8 object-cover"
+                />
+                <p className="font-semibold">- John Doe</p>
+              </div>
             </div>
             <div className="bg-sky-50 border p-6 rounded-lg">
               <p className="mb-4">
                 &quot;I found the best deal on my flight thanks to this
                 site!&quot;
               </p>
-              <p className="font-semibold">- Jane Smith</p>
+              <div className="flex items-center justify-center gap-2">
+                <Image
+                  src="https://i.pravatar.cc/150?img=5"
+                  alt="User"
+                  width={32}
+                  height={32}
+                  className="rounded-full bg-white w-8 h-8 obje"
+                />
+                <p className="font-semibold">- Jane Smith</p>
+              </div>
             </div>
           </div>
         </div>

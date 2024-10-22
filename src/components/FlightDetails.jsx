@@ -3,12 +3,13 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import FareSummary from "./FareSummary";
 import SearchFlightDetails from "./SearchFlightDetails";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "./ui/button";
-import { useSelector } from "react-redux";
+import { useSelector, useStore } from "react-redux";
 
 export default function FlightDetails({
   flightData,
@@ -17,7 +18,9 @@ export default function FlightDetails({
   setBookFLight,
 }) {
   const [detailsOpen, setDetailsOpen] = useState(false);
+  const [bookLoading, setBookLoading] = useState(false);
 
+  const router = useRouter();
   const token = useSelector((state) => state.user.token);
 
   const { flightCombination, fareSummary } = flightData;
@@ -44,6 +47,7 @@ export default function FlightDetails({
     setBookFLight(flightData); // Set flight data for booking
 
     try {
+      setBookLoading(true);
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/flights/book`,
         {
@@ -62,10 +66,14 @@ export default function FlightDetails({
       }
 
       const data = await res.json();
-      console.log("Flight booked successfully:", data);
-      return data; // Return the booked flight data if necessary
+      console.log("handleBookFlight ~ data:", data);
+      alert("Flight booked successfully");
+      // return data; // Return the booked flight data if necessary
+      router.push(`/flights/${data._id}`);
     } catch (error) {
-      console.error("Failed to book flight:", error);
+      console.error("Failed to book flight");
+    } finally {
+      setBookLoading(false);
     }
   };
 
@@ -166,6 +174,7 @@ export default function FlightDetails({
                 <Button
                   size="sm"
                   onClick={handleBookFlight}
+                  disabled={bookLoading}
                   className="book-now-btn bg-sky-600 hover:bg-sky-700 text-white transition"
                 >
                   Book Now
@@ -187,7 +196,8 @@ export default function FlightDetails({
               <div className="view-details mb-4 hidden md:block">
                 <Button
                   size="sm"
-                  onClick={handleBookFlight}
+                  // onClick={handleBookFlight}
+                  // disabled={bookLoading}
                   className="book-now-btn bg-slate-50 hover:bg-slate-50 text-white transition cursor-default"
                 >
                   Book Now
