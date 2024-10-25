@@ -15,7 +15,7 @@ import {
   useStripe,
   useElements,
 } from "@stripe/react-stripe-js";
-import StripeComponent from "../../../components/StripeComponent";
+import StripeComponent from "@/components/StripeComponent";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY);
 
