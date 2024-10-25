@@ -6,7 +6,7 @@ import "react-phone-input-2/lib/style.css";
 
 export default function ContactDetails() {
   const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("+880");
+  const [phone, setPhone] = useState("+1");
 
   return (
     <div className="bg-slate-50 border rounded-lg p-4 mt-6">
@@ -75,7 +75,7 @@ export default function ContactDetails() {
               Contact Number <span className="text-rose-500">*</span>
             </label>
             <PhoneInput
-              country={"bd"}
+              country={"us"}
               value={phone}
               onChange={setPhone}
               inputClass="form-control px-4 py-2 w-full"
