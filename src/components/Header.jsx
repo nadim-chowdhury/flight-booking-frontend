@@ -11,6 +11,10 @@ import { userLogout } from "@/redux/slices/userSlice"; // Import the logout acti
 import { setAirports, setLoading } from "../redux/slices/airportSlice";
 import { fetchAllAirports } from "@/lib/fetchAirports";
 import { getUniqueAirports } from "../lib/getUniqueAirports";
+import { allAirlinesDataMain } from "@/utils/all-airlines-data";
+import { allAirportsDataMain } from "@/utils/all-airports-data";
+import { allCountriesDataMain } from "@/utils/all-countries-data";
+import { allPlanesDataMain } from "@/utils/all-planes-data";
 
 const navLinks = [
   { href: "/bookings", label: "Bookings" },
@@ -38,7 +42,6 @@ export default function Header() {
     loading,
     error,
   } = useSelector((state) => state.airports);
-  console.log("Header ~ loading:", loading);
   console.log("Header ~ airports:", airports);
 
   // useEffect(() => {
@@ -52,6 +55,23 @@ export default function Header() {
       setallAirports,
       setLoadingAirports,
       "airports" // Updated to use "airports" type as per your backend API
+    );
+
+    localStorage.setItem(
+      "allAirlinesDataMain",
+      JSON.stringify(allAirlinesDataMain)
+    );
+    localStorage.setItem(
+      "allAirportsDataMain",
+      JSON.stringify(allAirportsDataMain)
+    );
+    localStorage.setItem(
+      "allCountriesDataMain",
+      JSON.stringify(allCountriesDataMain)
+    );
+    localStorage.setItem(
+      "allPlanesDataMain",
+      JSON.stringify(allPlanesDataMain)
     );
 
     // Listen to the window load event

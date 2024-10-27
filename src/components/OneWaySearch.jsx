@@ -64,6 +64,8 @@ export default function OneWaySearch() {
   const [debouncedSearchDeparture, setDebouncedSearchDeparture] = useState("");
   const [debouncedSearchDestination, setDebouncedSearchDestination] =
     useState("");
+  // const [allAirportsInfo, setAllAirportsInfo] = useState([]);
+  // console.log("allAirportsInfo:", allAirportsInfo);
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -107,6 +109,8 @@ export default function OneWaySearch() {
     if (childrenParam) setChildren(Number(childrenParam));
     if (infantsParam) setInfants(Number(infantsParam));
     if (seatTypeParam) setSeatType(seatTypeParam);
+
+    // setAllAirportsInfo(JSON.parse(localStorage.getItem("allAirportsDataMain")));
   }, [searchParams]);
 
   // Fetch default airports for initial load (both departure and destination)
@@ -127,6 +131,9 @@ export default function OneWaySearch() {
 
     setDepartureAirportsData(airports);
     setDestinationAirportsData(airports);
+
+    // setDepartureAirportsData(allAirportsInfo);
+    // setDestinationAirportsData(allAirportsInfo);
   }, [airports]);
 
   // Fetch departure airports based on search input
@@ -219,11 +226,13 @@ export default function OneWaySearch() {
                 >
                   <span className="truncate">
                     {departureCityFullName
-                      ? departureCityFullName
+                      ? `${departureCityFullName} - ${departureCity}`
                       : departureCity
-                      ? departureAirportsData?.find(
-                          (airport) => airport?.iataCode === departureCity
-                        )?.name
+                      ? `${
+                          departureAirportsData?.find(
+                            (airport) => airport?.iataCode === departureCity
+                          )?.name
+                        } - ${departureCity}`
                       : "Select City"}
                   </span>
                 </Button>
@@ -322,11 +331,13 @@ export default function OneWaySearch() {
                 >
                   <span className="truncate">
                     {destinationCityFullName
-                      ? destinationCityFullName
+                      ? `${destinationCityFullName} - ${destinationCity}`
                       : destinationCity
-                      ? destinationAirportsData?.find(
-                          (airport) => airport?.iataCode === destinationCity
-                        )?.name
+                      ? `${
+                          destinationAirportsData?.find(
+                            (airport) => airport?.iataCode === destinationCity
+                          )?.name || "Unknown Airport"
+                        }`
                       : "Select City"}
                   </span>
                 </Button>

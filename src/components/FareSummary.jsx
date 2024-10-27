@@ -1,32 +1,50 @@
 import React from "react";
 
 export default function FareSummary({ fareSummary }) {
+  console.log("FareSummary ~ fareSummary:", fareSummary);
+
   const {
-    totalFareAmount = 0,
-    breakdown = {},
+    price: { grandTotal = 0 } = {},
+    travelerPricings = [],
     refundable = false,
     lastTicketDate = "",
     refundPenalty = 0,
   } = fareSummary || {};
 
-  const breakdownData = Object.entries(breakdown).map(([typeKey, fare]) => {
+  // Grouping traveler pricing data by type
+  const breakdownData = travelerPricings.reduce((acc, traveler) => {
     const typeLabels = {
-      ADT: "Adult",
-      CH: "Child",
-      INF: "Infant",
+      ADULT: "Adult",
+      CHILD: "Child",
+      INFANT: "Infant",
     };
 
-    return {
-      type: typeLabels[typeKey] || typeKey,
-      baseFare: fare?.baseFareAmount || 0,
-      taxesAndFees: fare?.taxAmount || 0,
-      totalPerPassenger: fare?.fareAmount || 0,
-      count: fare?.paxCount || 0,
-      total: fare?.fareAmount || 0,
-    };
-  });
+    const travelerType =
+      typeLabels[traveler.travelerType] || traveler.travelerType;
 
-  const totalTravelers = breakdownData.reduce(
+    if (!acc[travelerType]) {
+      acc[travelerType] = {
+        type: travelerType,
+        baseFare: 0,
+        taxesAndFees: 0,
+        totalPerPassenger: 0,
+        count: 0,
+        total: 0,
+      };
+    }
+
+    acc[travelerType].baseFare += parseFloat(traveler.price.base);
+    acc[travelerType].taxesAndFees +=
+      parseFloat(traveler.price.total) - parseFloat(traveler.price.base);
+    acc[travelerType].totalPerPassenger = parseFloat(traveler.price.total);
+    acc[travelerType].count += 1;
+    acc[travelerType].total += parseFloat(traveler.price.total);
+
+    return acc;
+  }, {});
+
+  const breakdownArray = Object.values(breakdownData);
+  const totalTravelers = breakdownArray.reduce(
     (acc, fare) => acc + fare.count,
     0
   );
@@ -56,8 +74,8 @@ export default function FareSummary({ fareSummary }) {
           </thead>
 
           <tbody>
-            {breakdownData.length > 0 ? (
-              breakdownData.map((fare, index) => (
+            {breakdownArray.length > 0 ? (
+              breakdownArray.map((fare, index) => (
                 <tr className="text-sm" key={index}>
                   <td className="border px-2 py-2">{fare.type}</td>
                   <td className="border px-2 py-2">
@@ -88,14 +106,13 @@ export default function FareSummary({ fareSummary }) {
             {/* Total Row */}
             <tr className="text-sm">
               <td className="border px-2 py-2 font-bold text-sky-600">
-                Total ({totalTravelers} Traveler
-                {totalTravelers > 1 ? "s" : ""})
+                Total ({totalTravelers} Traveler{totalTravelers > 1 ? "s" : ""})
               </td>
               <td className="border px-2 py-2"></td>
               <td className="border px-2 py-2"></td>
               <td className="border px-2 py-2"></td>
               <td className="border px-2 py-2 font-bold text-sky-600">
-                $ {totalFareAmount.toLocaleString()}
+                $ {grandTotal.toLocaleString()}
               </td>
             </tr>
           </tbody>
@@ -104,9 +121,6 @@ export default function FareSummary({ fareSummary }) {
 
       {/* Additional Fare Information */}
       <div className="m-3">
-        {/* <p className="text-sm font-medium text-slate-600">
-          Last Ticket Date: {lastTicketDate || "N/A"}
-        </p> */}
         <p className="text-sm font-medium text-slate-600">
           Refundable: {refundable ? "Yes" : "No"}
         </p>

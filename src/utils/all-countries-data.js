@@ -1,4 +1,4 @@
-export const allCountriesData = [
+export const allCountriesDataMain = [
   {
     country_name: "Bonaire, Saint Eustatius and Saba",
     country_code: "BQ",

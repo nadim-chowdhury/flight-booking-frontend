@@ -1,4 +1,4 @@
-export const allPlanesData = [
+export const allPlanesDataMain = [
   {
     plane_name: "Aerospatiale (Nord) 262",
     icao_code: "ND2",

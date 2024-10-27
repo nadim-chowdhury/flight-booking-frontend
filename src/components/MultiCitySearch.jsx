@@ -381,7 +381,14 @@ export default function MultiCitySearch() {
                       >
                         <span className="truncate">
                           {flight?.departureCityFullName
-                            ? flight.departureCityFullName
+                            ? `${flight.departureCityFullName} - ${flight.departureCity}`
+                            : flight.departureCity
+                            ? `${
+                                departureAirportsData.find(
+                                  (airport) =>
+                                    airport.iataCode === flight.departureCity
+                                )?.name || "Unknown Airport"
+                              } - ${flight.departureCity}`
                             : "Select City"}
                         </span>
                       </Button>
@@ -506,7 +513,14 @@ export default function MultiCitySearch() {
                       >
                         <span className="truncate">
                           {flight?.destinationCityFullName
-                            ? flight.destinationCityFullName
+                            ? `${flight.destinationCityFullName} - ${flight.destinationCity}`
+                            : flight.destinationCity
+                            ? `${
+                                destinationAirportsData.find(
+                                  (airport) =>
+                                    airport.iataCode === flight.destinationCity
+                                )?.name || "Unknown Airport"
+                              } - ${flight.destinationCity}`
                             : "Select City"}
                         </span>
                       </Button>

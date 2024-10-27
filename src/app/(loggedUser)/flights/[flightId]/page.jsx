@@ -24,23 +24,24 @@ export default function SelectedFlightDetails() {
   console.log("SelectedFlightDetails ~ flightData:", flightData);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  console.log("SelectedFlightDetails ~ error:", error);
   const [passengerData, setPassengerData] = useState([]);
   console.log("SelectedFlightDetails ~ passengerData:", passengerData);
   const [stripeToken, setStripeToken] = useState(null);
-  console.log("SelectedFlightDetails ~ stripeToken:", stripeToken);
   const [stripeModalOpen, setStripeModalOpen] = useState(false);
   const [bookingData, setBookingData] = useState({});
+  const [allAirportsInfo, setAllAirportsInfo] = useState([]);
+  console.log("SelectedFlightDetails ~ allAirportsInfo:", allAirportsInfo);
+  const [baggageOpen, setBaggageOpen] = useState([]);
+  const [createFlightError, setcreateFlightError] = useState({});
+  console.log("SelectedFlightDetails ~ createFlightError:", createFlightError);
 
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { flightId } = useParams(); // Get flightId from the URL
-  console.log("SelectedFlightDetails ~ flightId:", flightId);
+  const { flightId } = useParams();
   const view = searchParams.get("view");
   const token = useSelector((state) => state.user.token);
   const userInfo = useSelector((state) => state.user.userInfo);
-  console.log("SelectedFlightDetails ~ userInfo:", userInfo);
-
-  const [baggageOpen, setBaggageOpen] = useState([]);
 
   useEffect(() => {
     const fetchFlightById = async () => {
@@ -69,6 +70,8 @@ export default function SelectedFlightDetails() {
     if (flightId) {
       fetchFlightById();
     }
+
+    setAllAirportsInfo(JSON.parse(localStorage.getItem("allAirportsDataMain")));
   }, [flightId]); // Only re-run if flightId changes
 
   // Initialize the array based on the number of travelers (flightData.baggage)
@@ -85,250 +88,6 @@ export default function SelectedFlightDetails() {
       return updated;
     });
   };
-
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   setLoading(true);
-  //   setError("");
-
-  //   try {
-  //     // Step 1: Save Passenger Data
-  //     const passengerResponse = await fetch(
-  //       `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/passenger/bulk`,
-  //       {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //         body: JSON.stringify(passengerData),
-  //       }
-  //     );
-  //     // const savedPassengerData = await passengerResponse.json();
-  //     // console.log("Passenger Data Saved:", savedPassengerData);
-
-  //     // Step 2: Create Flight Order using confirmed flight offers
-  //     const flightOrderResponse = await fetch(
-  //       `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/amadeus/create-flight-order`,
-  //       {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //         body: JSON.stringify({
-  //           flightOffers: flightData.flightOffers, // Send the confirmed flight offers from the state
-  //           travelers: passengerData.map((passenger, index) => ({
-  //             id: `${index + 1}`,
-  //             dateOfBirth: passenger.dateOfBirth,
-  //             name: {
-  //               firstName: passenger.firstName,
-  //               lastName: passenger.lastName,
-  //             },
-  //             gender: passenger.title === "Mr" ? "MALE" : "FEMALE",
-  //             contact: {
-  //               emailAddress: "example@mail.com", // Add a dynamic email here based on your app
-  //               phones: [
-  //                 {
-  //                   deviceType: "MOBILE",
-  //                   countryCallingCode: "1", // Set based on passenger's country code
-  //                   number: "1234567890", // Replace with passenger's actual number
-  //                 },
-  //               ],
-  //             },
-  //             documents: passenger.passportNumber
-  //               ? [
-  //                   {
-  //                     documentType: "PASSPORT",
-  //                     number: passenger.passportNumber,
-  //                     expiryDate: passenger.passportExpiry,
-  //                     issuanceCountry: "US", // Set based on your logic
-  //                     nationality: "US", // Set based on your logic
-  //                     holder: true,
-  //                   },
-  //                 ]
-  //               : [],
-  //           })),
-  //         }),
-  //       }
-  //     );
-
-  //     // Check for errors in flight order response
-  //     if (!flightOrderResponse.ok) {
-  //       throw new Error(
-  //         `Booking API request failed with status ${flightOrderResponse.status}`
-  //       );
-  //     }
-
-  //     const bookingData = await flightOrderResponse.json();
-  //     console.log("Booking Data:", bookingData);
-
-  //     const bookFLight = await fetch(
-  //       `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/bookings`,
-  //       {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //         body: JSON.stringify(bookingData.data),
-  //       }
-  //     );
-  //     console.log("handleSubmit ~ bookFLight:", bookFLight.data);
-
-  //     // Reset state and redirect
-  //     setPassengerData([]);
-  //     router.push("/bookings"); // Redirect to the bookings page after successful booking
-  //   } catch (err) {
-  //     setError(err.message);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   setLoading(true);
-  //   setError("");
-
-  //   try {
-  //     // Step 1: Save Passenger Data
-  //     const passengerResponse = await fetch(
-  //       `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/passenger/bulk`,
-  //       {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //         body: JSON.stringify(passengerData),
-  //       }
-  //     );
-  //     console.log("handleSubmit ~ passengerResponse:", passengerResponse);
-
-  //     // Step 2: Create Flight Order using confirmed flight offers
-  //     const flightOrderResponse = await fetch(
-  //       `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/amadeus/create-flight-order`,
-  //       {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //         body: JSON.stringify({
-  //           flightOffers: flightData.flightOffers,
-  //           travelers: passengerData.map((passenger, index) => ({
-  //             id: `${index + 1}`,
-  //             dateOfBirth: passenger.dateOfBirth,
-  //             name: {
-  //               firstName: passenger.firstName,
-  //               lastName: passenger.lastName,
-  //             },
-  //             gender: passenger.title === "Mr" ? "MALE" : "FEMALE",
-  //             contact: {
-  //               emailAddress: passenger.email || "test@email.com", // Use dynamic email based on passenger data
-  //               phones: [
-  //                 {
-  //                   deviceType: "MOBILE",
-  //                   countryCallingCode: passenger.countryCode || "1", // Set based on passenger's country code
-  //                   number: passenger.phoneNumber || "1234567890", // Replace with passenger's actual number
-  //                 },
-  //               ],
-  //             },
-  //             documents: passenger.passportNumber
-  //               ? [
-  //                   {
-  //                     documentType: "PASSPORT",
-  //                     number: passenger.passportNumber || "ABC54321", // Ensure the number is provided
-  //                     expiryDate: passenger.passportExpiry,
-  //                     issuanceCountry: passenger.issuanceCountry || "US", // Ensure this field is set
-  //                     nationality: passenger.nationality || "US", // Ensure this field is set
-  //                     holder: true,
-  //                   },
-  //                 ]
-  //               : [],
-  //           })),
-  //         }),
-  //       }
-  //     );
-
-  //     if (!flightOrderResponse.ok) {
-  //       throw new Error(
-  //         `Booking API request failed with status ${flightOrderResponse.status}`
-  //       );
-  //     }
-
-  //     const bookingData = await flightOrderResponse.json();
-  //     console.log("Booking Data:", bookingData);
-
-  //     // // Step 3: Create a Payment Intent using Stripe API
-  //     // const paymentIntentResponse = await fetch(
-  //     //   `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/payments/process`,
-  //     //   {
-  //     //     method: "POST",
-  //     //     headers: {
-  //     //       "Content-Type": "application/json",
-  //     //       Authorization: `Bearer ${token}`,
-  //     //     },
-  //     //     body: JSON.stringify({
-  //     //       userId: userInfo.id, // Replace with the logged-in user's ID
-  //     //       bookingId: bookingData.data.bookingId, // Use booking ID from the booking data response
-  //     //       token: stripeToken.id, // Assume you've collected the Stripe token client-side
-  //     //     }),
-  //     //   }
-  //     // );
-  //     // console.log(
-  //     //   "handleSubmit ~ paymentIntentResponse:",
-  //     //   paymentIntentResponse
-  //     // );
-
-  //     // if (!paymentIntentResponse.ok) {
-  //     //   throw new Error(
-  //     //     `Payment processing failed with status ${paymentIntentResponse.status}`
-  //     //   );
-  //     // }
-
-  //     // const paymentResult = await paymentIntentResponse.json();
-  //     // console.log("Payment Result:", paymentResult);
-
-  //     localStorage.setItem("bookingDataBookingId", bookingData.data.bookingId);
-
-  //     // Step 4: Save the booking details in your database
-  //     const bookFlightResponse = await fetch(
-  //       `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/bookings`,
-  //       {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //         body: JSON.stringify({
-  //           ...bookingData.data,
-  //           // paymentId: paymentResult._id, // Save payment ID for reference
-  //         }),
-  //       }
-  //     );
-  //     console.log(
-  //       "handleSubmit ~ bookFlightResponse:",
-  //       bookFlightResponse.json().data
-  //     );
-
-  //     if (!bookFlightResponse.ok) {
-  //       throw new Error(
-  //         `Booking save request failed with status ${bookFlightResponse.status}`
-  //       );
-  //     }
-
-  //     // Reset state and redirect to bookings page
-  //     setPassengerData([]);
-  //     // router.push("/bookings"); // Redirect to the bookings page after successful booking
-  //   } catch (err) {
-  //     console.log("handleSubmit ~ err:", err);
-  //     setError(err.message);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -417,36 +176,6 @@ export default function SelectedFlightDetails() {
   };
 
   const handlestripePayment = async () => {
-    // Step 3: Create a Payment Intent using Stripe API if the Stripe token exists
-    // if (stripeToken) {
-    //   const paymentIntentResponse = await fetch(
-    //     `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/payments/process`,
-    //     {
-    //       method: "POST",
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //         Authorization: `Bearer ${token}`,
-    //       },
-    //       body: JSON.stringify({
-    //         userId: userInfo.id,
-    //         bookingId: bookingData.data.bookingId,
-    //         token: stripeToken, // Use the Stripe token collected from the child component
-    //       }),
-    //     }
-    //   );
-
-    //   if (!paymentIntentResponse.ok) {
-    //     throw new Error(
-    //       `Payment processing failed with status ${paymentIntentResponse.status}`
-    //     );
-    //   }
-
-    //   const paymentResult = await paymentIntentResponse.json();
-    //   console.log("Payment Result:", paymentResult);
-    // } else {
-    //   throw new Error("Stripe token not found. Please submit your payment.");
-    // }
-
     // Step 4: Save the booking details in your database
     const bookFlightResponse = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/bookings`,
@@ -472,6 +201,23 @@ export default function SelectedFlightDetails() {
     // Reset state and redirect to bookings page
     setPassengerData([]);
     router.push("/bookings");
+  };
+
+  const getAirportDetailsByIATA = (iataCode) => {
+    const airport = allAirportsInfo.find(
+      (airport) => airport.iata_code === iataCode
+    );
+    return airport
+      ? {
+          name: airport.name,
+          city: airport.city,
+          country: airport.country,
+        }
+      : {
+          name: "Airport Name",
+          city: "City",
+          country: "Country",
+        };
   };
 
   return (
@@ -506,7 +252,7 @@ export default function SelectedFlightDetails() {
           {/* Left Side - Flight and Traveler Info */}
           <div className="col-span-2 space-y-6">
             {/* Dynamic Flight Details */}
-            {flightData?.flightOffers?.map((offer, index) => (
+            {/* {flightData?.flightOffers?.map((offer, index) => (
               <div className="bg-slate-50 border rounded-lg" key={index}>
                 <div className="border-b p-4 flex justify-between items-center">
                   <h4 className="font-bold text-lg text-sky-600">
@@ -641,7 +387,164 @@ export default function SelectedFlightDetails() {
                   )}
                 </div>
               </div>
-            ))}
+            ))} */}
+
+            {flightData?.flightOffers?.map((offer, index) => {
+              const segment = offer?.itineraries?.[0]?.segments?.[0];
+
+              const departureTime = new Date(
+                segment?.departure?.at
+              ).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: false,
+              });
+
+              const departureDate = new Date(
+                segment?.departure?.at
+              ).toLocaleDateString([], {
+                day: "numeric",
+                month: "short",
+                year: "numeric",
+              });
+
+              const arrivalTime = new Date(
+                segment?.arrival?.at
+              ).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: false,
+              });
+
+              const arrivalDate = new Date(
+                segment?.arrival?.at
+              ).toLocaleDateString([], {
+                day: "numeric",
+                month: "short",
+                year: "numeric",
+              });
+
+              // Get details for departure and arrival airports
+              const departureDetails = getAirportDetailsByIATA(
+                segment?.departure?.iataCode
+              );
+              const arrivalDetails = getAirportDetailsByIATA(
+                segment?.arrival?.iataCode
+              );
+
+              return (
+                <div className="bg-slate-50 border rounded-lg" key={index}>
+                  <div className="border-b p-4 flex justify-between items-center">
+                    <h4 className="font-bold text-lg text-sky-600">
+                      {segment?.departure?.iataCode || "Departure"} -{" "}
+                      {segment?.arrival?.iataCode || "Arrival"}
+                    </h4>
+                    <button
+                      onClick={() => toggleBaggageDetails(index)}
+                      className="bg-rose-600 text-white px-3 py-1 rounded transition duration-200 hover:bg-rose-700"
+                    >
+                      {baggageOpen[index] ? "Hide Baggage" : "View Baggage"}
+                    </button>
+                  </div>
+
+                  <div className="p-4">
+                    {/* Flight Information */}
+                    <div className="flex flex-col sm:flex-row justify-between items-center border-b pb-4">
+                      <div className="flex items-center">
+                        <Image
+                          src={`https://fe-pub.s3.ap-southeast-1.amazonaws.com/airlineimages/128/${
+                            segment?.carrierCode || "BG"
+                          }.png`}
+                          alt={segment?.carrierCode || "Airline"}
+                          width={60}
+                          height={60}
+                        />
+                        <div className="ml-4">
+                          <p className="text-slate-600 text-sm">
+                            {segment?.carrierCode || "Airline"}
+                          </p>
+                          <p className="text-lg font-semibold">
+                            {segment?.number || "Flight Number"}
+                          </p>
+                          <p className="text-sm font-medium">
+                            Aircraft: {segment?.aircraft?.code || "Type"}
+                          </p>
+                        </div>
+                      </div>
+                      <p className="text-slate-800 text-sm mt-2 sm:mt-0">
+                        Class: Economy
+                      </p>
+                    </div>
+
+                    {/* Departure and Arrival Information */}
+                    <div className="flex flex-col sm:flex-row justify-between gap-4 md:gap-8 items-center pt-4">
+                      {/* Departure */}
+                      <div className="text-start w-full">
+                        <p className="text-sky-400 text-sm">Depart</p>
+                        <p className="text-lg font-semibold">{departureTime}</p>
+                        <p className="text-sm font-bold text-sky-400">
+                          {departureDate}
+                        </p>
+                        <p className="font-medium">
+                          {segment?.departure?.iataCode} -{" "}
+                          {departureDetails.name}, {departureDetails.city},{" "}
+                          {departureDetails.country}
+                        </p>
+                        {/* <p className="text-slate-800">
+                          {segment?.departure?.terminal || "Terminal"}
+                        </p> */}
+                      </div>
+
+                      {/* Flight Duration and Stops */}
+                      <div className="text-center my-4 w-full">
+                        <p className="text-sky-400 text-sm">
+                          {segment?.duration || "N/A"}
+                        </p>
+                        <p className="text-slate-800">1 Stop</p>
+                        <Image
+                          src="/plane.png"
+                          alt="plane-image"
+                          className="rounded"
+                          width={1280}
+                          height={720}
+                        />
+                      </div>
+
+                      {/* Arrival */}
+                      <div className="text-end w-full">
+                        <p className="text-sky-400 text-sm">Arrive</p>
+                        <p className="text-lg font-semibold">{arrivalTime}</p>
+                        <p className="text-sm font-bold text-sky-400">
+                          {arrivalDate}
+                        </p>
+                        <p className="font-medium">
+                          {segment?.arrival?.iataCode} - {arrivalDetails.name},{" "}
+                          {arrivalDetails.city}, {arrivalDetails.country}
+                        </p>
+                        {/* <p className="text-slate-800">
+                          {segment?.arrival?.terminal || "Terminal"}
+                        </p> */}
+                      </div>
+                    </div>
+
+                    {/* Baggage Details */}
+                    {baggageOpen[index] && (
+                      <div className="mt-4 p-4 bg-white border rounded-lg">
+                        <h5 className="font-semibold text-sky-600">
+                          Baggage Details
+                        </h5>
+                        <p className="text-slate-800 mt-2">
+                          Checked Bags:{" "}
+                          {offer?.pricingOptions?.includedCheckedBagsOnly
+                            ? "Yes"
+                            : "No"}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
 
             {view !== "bookings" && (
               <>
@@ -733,10 +636,15 @@ export default function SelectedFlightDetails() {
           <button
             disabled={loading}
             onClick={handleSubmit}
-            className="bg-rose-600 text-white px-4 py-2 w-full mt-6 rounded transition duration-200 hover:bg-rose-700 h-10 flex justify-center items-center"
+            className="bg-rose-600 text-white px-4 py-2 w-full mt-6 rounded transition duration-200 hover:bg-rose-700 h-10 flex justify-center items-center disabled:bg-rose-400 disabled:hover:bg-rose-400"
           >
             {loading ? <span className="loader_css_xtype"></span> : "Confirm"}
           </button>
+        )}
+        {error && (
+          <p className="mt-2 text-sm font-medium text-center text-rose-600">
+            {error}
+          </p>
         )}
         <p className="mt-2 text-sm text-center text-sky-600">
           Disable All Ad Blocker Before Payment

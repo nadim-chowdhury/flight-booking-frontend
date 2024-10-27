@@ -156,7 +156,7 @@ export default function Bookings() {
       </select>
 
       {/* Bookings Table */}
-      {loading ? (
+      {/* {loading ? (
         <p>Loading bookings...</p>
       ) : error ? (
         <p className="text-red-500">Error: {error}</p>
@@ -208,6 +208,124 @@ export default function Bookings() {
               ) : (
                 <tr>
                   <td colSpan={5} className="text-center py-4">
+                    No bookings found.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      )} */}
+
+      {/* Bookings Table */}
+      {loading ? (
+        <p>Loading bookings...</p>
+      ) : error ? (
+        <p className="text-red-500">Error: {error}</p>
+      ) : (
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse border">
+            <thead className="bg-slate-200">
+              <tr>
+                <th className="border px-4 py-2 text-left">Id</th>
+                <th className="border px-4 py-2 text-left">From</th>
+                <th className="border px-4 py-2 text-left">To</th>
+                <th className="border px-4 py-2 text-left">Departure</th>
+                <th className="border px-4 py-2 text-left">Arrival</th>
+                <th className="border px-4 py-2 text-left whitespace-nowrap">
+                  Flight Number
+                </th>
+                <th className="border px-4 py-2 text-left whitespace-nowrap">
+                  Price (USD)
+                </th>
+                <th className="border px-4 py-2 text-left">Duration</th>
+              </tr>
+            </thead>
+
+            <tbody className="whitespace-nowrap">
+              {paginatedBookings.length > 0 ? (
+                paginatedBookings.map((booking, idx) => {
+                  const itinerary = booking.flightOffers[0]?.itineraries[0];
+                  const segments = itinerary?.segments || [];
+                  const firstSegment = segments[0];
+                  const lastSegment = segments[segments.length - 1];
+
+                  return (
+                    <tr key={booking._id} className="bg-white">
+                      <td className="border px-4 py-2 font-medium">
+                        <Link
+                          href={`/bookings/${booking._id}?view=bookings`}
+                          className="hover:underline text-sky-600"
+                        >
+                          {booking._id || "Unknown"}
+                        </Link>
+                      </td>
+                      <td className="border px-4 py-2">
+                        {firstSegment?.departure.iataCode || "Unknown"}
+                      </td>
+                      <td className="border px-4 py-2">
+                        {lastSegment?.arrival.iataCode || "Unknown"}
+                      </td>
+                      <td className="border px-4 py-2">
+                        {firstSegment?.departure.at
+                          ? new Date(firstSegment.departure.at).toLocaleString(
+                              "en-US",
+                              {
+                                day: "2-digit",
+                                month: "short",
+                                year: "numeric",
+                              }
+                            )
+                          : "N/A"}
+                        ,{" "}
+                        {firstSegment?.departure.at
+                          ? new Date(
+                              firstSegment.departure.at
+                            ).toLocaleTimeString("en-US", {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })
+                          : "N/A"}
+                      </td>
+                      <td className="border px-4 py-2">
+                        {lastSegment?.arrival.at
+                          ? new Date(lastSegment.arrival.at).toLocaleString(
+                              "en-US",
+                              {
+                                day: "2-digit",
+                                month: "short",
+                                year: "numeric",
+                              }
+                            )
+                          : "N/A"}
+                        ,{" "}
+                        {lastSegment?.arrival.at
+                          ? new Date(lastSegment.arrival.at).toLocaleTimeString(
+                              "en-US",
+                              {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              }
+                            )
+                          : "N/A"}
+                      </td>
+                      <td className="border px-4 py-2">
+                        {`${firstSegment?.carrierCode || ""} ${
+                          firstSegment?.number || "N/A"
+                        }`}
+                      </td>
+                      <td className="border px-4 py-2">
+                        {booking.flightOffers[0]?.price?.total || "N/A"}
+                      </td>
+                      <td className="border px-4 py-2">
+                        {firstSegment?.duration || "N/A"}
+                      </td>
+                    </tr>
+                  );
+                })
+              ) : (
+                <tr>
+                  <td colSpan={8} className="text-center py-4">
                     No bookings found.
                   </td>
                 </tr>

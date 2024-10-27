@@ -221,11 +221,13 @@ export default function ReturnSearch() {
                 >
                   <span className="truncate">
                     {departureCityFullName
-                      ? departureCityFullName
+                      ? `${departureCityFullName} - ${departureCity}`
                       : departureCity
-                      ? departureAirportsData?.find(
-                          (airport) => airport?.iataCode === departureCity
-                        )?.name
+                      ? `${
+                          departureAirportsData?.find(
+                            (airport) => airport?.iataCode === departureCity
+                          )?.name
+                        } - ${departureCity}`
                       : "Select City"}
                   </span>
                 </Button>
@@ -324,11 +326,13 @@ export default function ReturnSearch() {
                 >
                   <span className="truncate">
                     {destinationCityFullName
-                      ? destinationCityFullName
+                      ? `${destinationCityFullName} - ${destinationCity}`
                       : destinationCity
-                      ? destinationAirportsData?.find(
-                          (airport) => airport?.iataCode === destinationCity
-                        )?.name
+                      ? `${
+                          destinationAirportsData?.find(
+                            (airport) => airport?.iataCode === destinationCity
+                          )?.name || "Unknown Airport"
+                        }`
                       : "Select City"}
                   </span>
                 </Button>
