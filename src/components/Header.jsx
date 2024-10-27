@@ -18,7 +18,7 @@ import { allPlanesDataMain } from "@/utils/all-planes-data";
 
 const navLinks = [
   { href: "/bookings", label: "Bookings" },
-  // { href: "/profile", label: "Profile" },
+  { href: "/profile", label: "Profile" },
   { href: "/admin", label: "Admin Panel" },
   { href: "/login", label: "Login" },
 ];
@@ -118,7 +118,7 @@ export default function Header() {
         <div className="flex items-center gap-6">
           {/* Desktop Navigation */}
           {isAuthenticated && (
-            <nav className="hidden md:flex space-x-8 font-medium">
+            <nav className="hidden md:flex space-x-6 font-medium">
               {navLinks.slice(0, -1).map((link) => (
                 <Link
                   key={link.href}
@@ -145,8 +145,8 @@ export default function Header() {
                 onClick={handleLogout}
                 size="sm"
               >
-                <Power className="w-5 h-5 mr-2" />
-                Log Out
+                <Power className="w-5 h-5" />
+                {/* Log Out */}
               </Button>
             ) : (
               <Link href="/login">
@@ -207,8 +207,8 @@ export default function Header() {
                     className="bg-sky-600 hover:bg-sky-700 text-white"
                     onClick={handleLogout}
                   >
-                    <Power className="w-5 h-5 mr-2" />
-                    Log Out
+                    <Power className="w-5 h-5" />
+                    {/* Log Out */}
                   </Button>
                 </li>
               )}

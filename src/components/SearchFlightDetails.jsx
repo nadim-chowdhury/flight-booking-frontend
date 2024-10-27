@@ -202,8 +202,16 @@ export default function SearchFlightDetails({
                     {departureAirport.city} {", "} {departureAirport.country}
                   </p>
                   <p className="text-sm font-medium">
-                    {new Date(departure.at).toLocaleTimeString() || "00:00"} -{" "}
-                    {new Date(departure.at).toLocaleDateString() || "Date"}
+                    {new Date(departure.at).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    }) || "00:00"}{" "}
+                    -{" "}
+                    {new Date(departure.at).toLocaleDateString("en-US", {
+                      day: "2-digit",
+                      month: "short",
+                      year: "numeric",
+                    }) || "Date"}
                   </p>
                 </div>
 
@@ -218,8 +226,16 @@ export default function SearchFlightDetails({
                     {arrivalAirport.city} {", "} {arrivalAirport.country}
                   </p>
                   <p className="text-sm font-medium">
-                    {new Date(arrival.at).toLocaleTimeString() || "00:00"} -{" "}
-                    {new Date(arrival.at).toLocaleDateString() || "Date"}
+                    {new Date(arrival.at).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    }) || "00:00"}{" "}
+                    -{" "}
+                    {new Date(arrival.at).toLocaleDateString("en-US", {
+                      day: "2-digit",
+                      month: "short",
+                      year: "numeric",
+                    }) || "Date"}
                   </p>
                 </div>
               </div>

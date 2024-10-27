@@ -186,6 +186,7 @@ export default function SelectedFlightDetails() {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
+          userId: userInfo.id,
           ...bookingData.data,
           paymentId: stripeToken, // Save payment ID for reference
         }),
@@ -252,143 +253,6 @@ export default function SelectedFlightDetails() {
           {/* Left Side - Flight and Traveler Info */}
           <div className="col-span-2 space-y-6">
             {/* Dynamic Flight Details */}
-            {/* {flightData?.flightOffers?.map((offer, index) => (
-              <div className="bg-slate-50 border rounded-lg" key={index}>
-                <div className="border-b p-4 flex justify-between items-center">
-                  <h4 className="font-bold text-lg text-sky-600">
-                    {offer?.itineraries?.[0]?.segments?.[0]?.departure
-                      ?.iataCode || "Departure"}{" "}
-                    -{" "}
-                    {offer?.itineraries?.[0]?.segments?.[0]?.arrival
-                      ?.iataCode || "Arrival"}
-                  </h4>
-                  <button
-                    onClick={() => toggleBaggageDetails(index)}
-                    className="bg-rose-600 text-white px-3 py-1 rounded transition duration-200 hover:bg-rose-700"
-                  >
-                    {baggageOpen[index] ? "Hide Baggage" : "View Baggage"}
-                  </button>
-                </div>
-
-                <div className="p-4">
-                  <div className="flex flex-col sm:flex-row justify-between md:items-center border-b pb-4">
-                    <div className="flex items-center">
-                      <Image
-                        src={`https://fe-pub.s3.ap-southeast-1.amazonaws.com/airlineimages/128/${
-                          offer?.itineraries?.[0]?.segments?.[0]?.carrierCode ||
-                          "BG"
-                        }.png`}
-                        alt={
-                          offer?.itineraries?.[0]?.segments?.[0]?.carrierCode ||
-                          "Airline"
-                        }
-                        width={60}
-                        height={60}
-                      />
-                      <div className="ml-4">
-                        <p className="text-slate-600 text-sm">
-                          {offer?.itineraries?.[0]?.segments?.[0]
-                            ?.carrierCode || "Airline"}
-                        </p>
-                        <p className="text-lg font-semibold">
-                          {offer?.itineraries?.[0]?.segments?.[0]?.number ||
-                            "Flight Number"}
-                        </p>
-                        <p className="text-sm font-medium">
-                          Aircraft:{" "}
-                          {offer?.itineraries?.[0]?.segments?.[0]?.aircraft
-                            ?.code || "Aircraft Type"}
-                        </p>
-                      </div>
-                    </div>
-                    <p className="text-slate-800 text-sm mt-2 sm:mt-0">
-                      Class: Economy
-                    </p>
-                  </div>
-
-                  <div className="flex flex-col sm:flex-row justify-between items-center pt-4">
-                    <div className="text-start sm:text-left w-full">
-                      <p className="text-sky-400 text-sm">Depart</p>
-                      <p className="text-lg font-semibold">
-                        {new Date(
-                          offer?.itineraries?.[0]?.segments?.[0]?.departure?.at
-                        ).toLocaleTimeString()}
-                      </p>
-                      <p className="text-sm font-bold text-sky-400">
-                        {new Date(
-                          offer?.itineraries?.[0]?.segments?.[0]?.departure?.at
-                        ).toLocaleDateString()}
-                      </p>
-                      <p className="text-lg font-bold">
-                        {
-                          offer?.itineraries?.[0]?.segments?.[0]?.departure
-                            ?.iataCode
-                        }
-                      </p>
-                      <p className="text-slate-800">
-                        {offer?.itineraries?.[0]?.segments?.[0]?.departure
-                          ?.terminal || "Terminal"}
-                      </p>
-                    </div>
-
-                    <div className="text-center my-4 sm:my-0 w-full">
-                      <p className="text-sky-400 text-sm">
-                        {offer?.itineraries?.[0]?.segments?.[0]?.duration ||
-                          "Duration"}{" "}
-                        min
-                      </p>
-                      <p className="text-slate-800">1 Stop</p>
-                      <Image
-                        src="/plane.png"
-                        alt="plane-image"
-                        className="rounded"
-                        width={1280}
-                        height={720}
-                      />
-                    </div>
-
-                    <div className="text-end w-full">
-                      <p className="text-sky-400 text-sm">Arrive</p>
-                      <p className="text-lg font-semibold">
-                        {new Date(
-                          offer?.itineraries?.[0]?.segments?.[0]?.arrival?.at
-                        ).toLocaleTimeString()}
-                      </p>
-                      <p className="text-sm font-bold text-sky-400">
-                        {new Date(
-                          offer?.itineraries?.[0]?.segments?.[0]?.arrival?.at
-                        ).toLocaleDateString()}
-                      </p>
-                      <p className="text-lg font-bold">
-                        {
-                          offer?.itineraries?.[0]?.segments?.[0]?.arrival
-                            ?.iataCode
-                        }
-                      </p>
-                      <p className="text-slate-800">
-                        {offer?.itineraries?.[0]?.segments?.[0]?.arrival
-                          ?.terminal || "Terminal"}
-                      </p>
-                    </div>
-                  </div>
-
-                  {baggageOpen[index] && (
-                    <div className="mt-4 p-4 bg-white border rounded-lg">
-                      <h5 className="font-semibold text-sky-600">
-                        Baggage Details
-                      </h5>
-                      <p className="text-slate-800 mt-2">
-                        Checked Bags:{" "}
-                        {offer?.pricingOptions?.includedCheckedBagsOnly
-                          ? "Yes"
-                          : "No"}
-                      </p>
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))} */}
-
             {flightData?.flightOffers?.map((offer, index) => {
               const segment = offer?.itineraries?.[0]?.segments?.[0];
 
@@ -643,7 +507,7 @@ export default function SelectedFlightDetails() {
         )}
         {error && (
           <p className="mt-2 text-sm font-medium text-center text-rose-600">
-            {error}
+            {error} {" - "} Check your provided data Again.
           </p>
         )}
         <p className="mt-2 text-sm text-center text-sky-600">
@@ -662,16 +526,16 @@ export default function SelectedFlightDetails() {
               <StripeComponent setStripeToken={setStripeToken} />
 
               {/* Modal Actions */}
-              <div className="flex justify-end mt-6">
+              <div className="flex justify-center md:justify-end mt-6">
                 <button
                   onClick={() => setStripeModalOpen(false)}
-                  className="px-4 py-2 bg-slate-200 rounded mr-2 hover:bg-slate-100 w-full"
+                  className="px-4 py-2 bg-slate-200 rounded mr-2 hover:bg-slate-100 md:w-full"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handlestripePayment}
-                  className="px-4 py-2 bg-rose-600 text-white rounded hover:bg-rose-700 w-full"
+                  className="px-4 py-2 bg-rose-600 text-white rounded hover:bg-rose-700 md:w-full"
                 >
                   Confirm Payment
                 </button>
