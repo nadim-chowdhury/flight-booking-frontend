@@ -33,7 +33,6 @@ export default function CreateAirline() {
       }
 
       const data = await response.json();
-      console.log("Airline Created:", data);
 
       alert("Airline created successfully!");
       router.push("/admin/airlines");

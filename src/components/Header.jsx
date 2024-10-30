@@ -26,23 +26,18 @@ const navLinks = [
 export default function Header() {
   const [navOpen, setNavOpen] = useState(false);
   const [allAirports, setallAirports] = useState([]);
-  console.log("Header ~ allAirports:", allAirports);
   const [loadingAirports, setLoadingAirports] = useState(false);
-  console.log("Header ~ loadingAirports:", loadingAirports);
   const [windowLoaded, setWindowLoaded] = useState(false);
-  console.log("Header ~ windowLoaded:", windowLoaded);
 
   const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
   const isSearchFlights = useSelector((state) => state.searchFlights);
-  console.log("Header ~ isSearchFlights:", isSearchFlights);
   const userInfo = useSelector((state) => state.user.userInfo);
   const {
     data: airports,
     loading,
     error,
   } = useSelector((state) => state.airports);
-  console.log("Header ~ airports:", airports);
 
   // useEffect(() => {
   //   dispatch(fetchAllAirports("")); // Dispatch the action when the searchTerm changes

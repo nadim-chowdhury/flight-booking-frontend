@@ -21,20 +21,15 @@ const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY);
 
 export default function SelectedFlightDetails() {
   const [flightData, setFlightData] = useState(null);
-  console.log("SelectedFlightDetails ~ flightData:", flightData);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  console.log("SelectedFlightDetails ~ error:", error);
   const [passengerData, setPassengerData] = useState([]);
-  console.log("SelectedFlightDetails ~ passengerData:", passengerData);
   const [stripeToken, setStripeToken] = useState(null);
   const [stripeModalOpen, setStripeModalOpen] = useState(false);
   const [bookingData, setBookingData] = useState({});
   const [allAirportsInfo, setAllAirportsInfo] = useState([]);
-  console.log("SelectedFlightDetails ~ allAirportsInfo:", allAirportsInfo);
   const [baggageOpen, setBaggageOpen] = useState([]);
   const [createFlightError, setcreateFlightError] = useState({});
-  console.log("SelectedFlightDetails ~ createFlightError:", createFlightError);
 
   const router = useRouter();
   const searchParams = useSearchParams();

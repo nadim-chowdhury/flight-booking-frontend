@@ -7,7 +7,6 @@ import { toast } from "react-toastify";
 
 export default function Profile() {
   const [userDetails, setUserDetails] = useState(null);
-  console.log("Profile ~ userDetails:", userDetails);
   const [isEditing, setIsEditing] = useState(false);
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");

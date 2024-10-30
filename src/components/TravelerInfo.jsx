@@ -37,7 +37,6 @@ export default function TravelerInfo({
     fareBasis: "",
     includedCheckedBags: 1,
   });
-  console.log("travelerDetails:", travelerDetails);
   const [searchPax, setSearchPax] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const [searchedTravellers, setSearchedTravellers] = useState([]);
@@ -75,7 +74,6 @@ export default function TravelerInfo({
         if (!response.ok) throw new Error("Search failed");
 
         const searchResult = await response.json();
-        console.log("searchPassenger ~ searchResult:", searchResult);
 
         setSearchedTravellers(searchResult);
 

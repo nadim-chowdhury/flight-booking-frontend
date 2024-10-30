@@ -38,7 +38,6 @@ export default function CreateAirport() {
       }
 
       const data = await response.json();
-      console.log("Airport Created:", data);
 
       alert("Airport created successfully!");
       router.push("/admin/airports");

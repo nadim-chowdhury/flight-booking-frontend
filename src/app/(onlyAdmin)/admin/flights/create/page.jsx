@@ -33,7 +33,6 @@ export default function CreateFlight() {
       }
 
       const data = await response.json();
-      console.log("Flight Created:", data);
 
       alert("Flight created successfully!");
       router.push("/admin/flights");

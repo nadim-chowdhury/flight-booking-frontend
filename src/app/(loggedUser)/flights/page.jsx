@@ -24,14 +24,11 @@ import { useDispatch, useSelector } from "react-redux";
 
 export default function AllFlights() {
   const [searchPayload, setSearchPayload] = useState(null);
-  console.log("AllFlights ~ searchPayload:", searchPayload);
   const [flights, setFlights] = useState([]);
-  console.log("AllFlights ~ flights:", flights);
   const [sortOption, setSortOption] = useState("price-asc");
   const [filterOption, setFilterOption] = useState("all");
   const [loading, setLoading] = useState(false);
   const [bookFLight, setBookFLight] = useState({});
-  console.log("AllFlights ~ bookFLight:", bookFLight);
 
   const searchParams = useSearchParams();
   const type = searchParams.get("type");
@@ -100,7 +97,6 @@ export default function AllFlights() {
 
     if (Object.keys(payload).length > 0) {
       setSearchPayload(payload);
-      console.log("Payload for API call:", payload);
     }
   }, [searchParams]);
 
@@ -121,7 +117,6 @@ export default function AllFlights() {
             }
           );
           setFlights(response.data);
-          console.log("API Response:", response);
         } catch (error) {
           setFlights([]);
           console.error("API call failed:", error);
@@ -138,28 +133,6 @@ export default function AllFlights() {
   const handleFlightsFound = (foundFlights) => {
     setFlights(foundFlights);
   };
-
-  // const sortFlights = (flights) => {
-  //   return flights.sort((a, b) => {
-  //     console.log("fetchFlights ~ response:", response);
-  //     console.log("fetchFlights ~ response:", response);
-  //     if (sortOption === "price-asc") {
-  //       return a.price - b.price;
-  //     } else if (sortOption === "price-desc") {
-  //       return b.price - a.price;
-  //     } else if (sortOption === "duration-asc") {
-  //       return a.duration - b.duration;
-  //     } else if (sortOption === "duration-desc") {
-  //       return b.duration - a.duration;
-  //     }
-  //     return 0;
-  //   });
-  // };
-
-  // const filterFlights = (flights) => {
-  //   if (filterOption === "all") return flights;
-  //   return flights.filter((flight) => flight.airline === filterOption);
-  // };
 
   return (
     <div className="max-w-6xl mx-auto px-4 flex flex-col gap-2 mb-16">

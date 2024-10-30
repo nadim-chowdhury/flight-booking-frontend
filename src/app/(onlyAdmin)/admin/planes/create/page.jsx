@@ -37,7 +37,6 @@ export default function CreatePlane() {
       }
 
       const responseData = await response.json();
-      console.log("Plane Created:", responseData);
 
       alert("Plane created successfully!");
       router.push("/admin/planes"); // Redirect to planes list after success

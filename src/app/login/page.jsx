@@ -33,7 +33,6 @@ export default function Login() {
           password,
         }
       );
-      console.log("response:", response);
       const { access_token, user } = response.data;
 
       dispatch(userLogin({ access_token, user }));

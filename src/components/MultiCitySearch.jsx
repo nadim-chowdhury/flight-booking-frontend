@@ -59,20 +59,11 @@ export default function MultiCitySearch() {
   const [seatType, setSeatType] = useState("economy");
   const [openPopovers, setOpenPopovers] = useState({});
   const [searchInput, setSearchInput] = useState({});
-  console.log("MultiCitySearch ~ searchInput:", searchInput);
   const [airportData, setAirportData] = useState({});
   const [loadingAirports, setLoadingAirports] = useState({});
   const [loadingInitialAirports, setLoadingInitialAirports] = useState({});
   const [departureAirportsData, setDepartureAirportsData] = useState([]);
-  console.log(
-    "MultiCitySearch ~ departureAirportsData:",
-    departureAirportsData
-  );
   const [destinationAirportsData, setDestinationAirportsData] = useState([]);
-  console.log(
-    "MultiCitySearch ~ destinationAirportsData:",
-    destinationAirportsData
-  );
 
   const router = useRouter();
   const searchParams = useSearchParams();

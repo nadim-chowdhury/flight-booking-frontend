@@ -32,7 +32,6 @@ export default function Register() {
           password,
         }
       );
-      console.log("response:", response);
       toast.success("Registration successful! Redirecting to login...");
       router.push("/login");
     } catch (error) {

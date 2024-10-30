@@ -1,8 +1,6 @@
 import React from "react";
 
 export default function FareSummary({ fareSummary }) {
-  console.log("FareSummary ~ fareSummary:", fareSummary);
-
   const {
     price: { grandTotal = 0 } = {},
     travelerPricings = [],

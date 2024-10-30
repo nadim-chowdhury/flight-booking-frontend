@@ -44,7 +44,6 @@ export const fetchAirports = async (
     }
 
     const data = await res.json();
-    console.log("data:", data);
     setAirportData(getUniqueAirports(data?.data) || []);
   } catch (error) {
     console.error("Failed to fetch airports:", error);
@@ -74,7 +73,6 @@ export const fetchAllAirports = async (
     }
 
     const data = await res.json();
-    console.log("data:", data);
     setAirportData(getUniqueAirports(data?.data) || []);
   } catch (error) {
     console.error("Failed to fetch airports:", error);

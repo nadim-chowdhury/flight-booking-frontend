@@ -36,9 +36,7 @@ import { searchFlightsStart } from "@/redux/slices/searchFlightsSlice";
 
 export default function OneWaySearch() {
   const [departureCity, setDepartureCity] = useState("");
-  console.log("OneWaySearch ~ departureCity:", departureCity);
   const [departureCityFullName, setDepartureCityFullName] = useState("");
-  console.log("OneWaySearch ~ departureCityFullName:", departureCityFullName);
   const [destinationCity, setDestinationCity] = useState("");
   const [destinationCityFullName, setDestinationCityFullName] = useState("");
   const [departureDate, setDepartureDate] = useState("");
@@ -49,12 +47,7 @@ export default function OneWaySearch() {
   const [openDeparture, setOpenDeparture] = useState(false);
   const [openDestination, setOpenDestination] = useState(false);
   const [departureAirportsData, setDepartureAirportsData] = useState([]);
-  console.log("OneWaySearch ~ departureAirportsData:", departureAirportsData);
   const [destinationAirportsData, setDestinationAirportsData] = useState([]);
-  console.log(
-    "OneWaySearch ~ destinationAirportsData:",
-    destinationAirportsData
-  );
   const [loadingDepartureAirports, setLoadingDepartureAirports] =
     useState(false);
   const [loadingDestinationAirports, setLoadingDestinationAirports] =
@@ -64,8 +57,6 @@ export default function OneWaySearch() {
   const [debouncedSearchDeparture, setDebouncedSearchDeparture] = useState("");
   const [debouncedSearchDestination, setDebouncedSearchDestination] =
     useState("");
-  // const [allAirportsInfo, setAllAirportsInfo] = useState([]);
-  // console.log("allAirportsInfo:", allAirportsInfo);
 
   const router = useRouter();
   const searchParams = useSearchParams();

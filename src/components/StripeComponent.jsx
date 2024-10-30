@@ -27,7 +27,6 @@ export default function StripeComponent({ setStripeToken }) {
       type: "card",
       card: elements.getElement(CardElement),
     });
-    console.log("handleSubmit ~ paymentMethod:", paymentMethod);
 
     if (error) {
       console.error(error);

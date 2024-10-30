@@ -18,7 +18,6 @@ export default function FlightDetails({
   setBookFLight,
   viewBookings,
 }) {
-  console.log("flightData:", flightData);
   const [detailsOpen, setDetailsOpen] = useState(false);
   const [bookLoading, setBookLoading] = useState(false);
   const [pricingResponse, setPricingResponse] = useState({});
@@ -28,7 +27,7 @@ export default function FlightDetails({
 
   const router = useRouter();
   const token = useSelector((state) => state.user.token);
-  const flightDetailsData = flightData?.itineraries?.[0]?.segments || []; // Fallback to an empty array
+  const flightDetailsData = flightData?.itineraries?.[0]?.segments || [];
 
   useEffect(() => {
     setAllAirportsInfo(JSON.parse(localStorage.getItem("allAirportsDataMain")));

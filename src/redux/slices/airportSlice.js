@@ -9,7 +9,6 @@
 //       const response = await axios.get(
 //         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/amadeus/airports?keyword=${searchTerm}`
 //       );
-//       console.log("response:", response);
 //       return response.data.data || []; // Returning the airport data
 //     } catch (error) {
 //       console.error("Failed to fetch airports:", error);

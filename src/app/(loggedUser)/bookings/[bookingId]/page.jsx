@@ -15,7 +15,6 @@ import SearchFlightsLoading from "@/components/SearchFlightsLoading";
 
 export default function SelectedBookedFlightDetails() {
   const [flightData, setFlightData] = useState(null);
-  console.log("SelectedBookedFlightDetails ~ flightData:", flightData);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [passengerData, setPassengerData] = useState([]);

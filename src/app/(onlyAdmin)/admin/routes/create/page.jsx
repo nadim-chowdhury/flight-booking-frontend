@@ -36,7 +36,6 @@ export default function CreateRoute() {
       }
 
       const responseData = await response.json();
-      console.log("Route Created:", responseData);
 
       alert("Route created successfully!");
       router.push("/admin/routes");

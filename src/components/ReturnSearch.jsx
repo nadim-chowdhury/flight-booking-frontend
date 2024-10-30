@@ -72,7 +72,6 @@ export default function ReturnSearch() {
     loading,
     error,
   } = useSelector((state) => state.airports);
-  console.log("ReturnSearch ~ loading:", loading);
 
   useEffect(() => {
     const handler = setTimeout(() => {
