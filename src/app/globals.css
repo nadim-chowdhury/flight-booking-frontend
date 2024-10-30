@@ -221,3 +221,16 @@ table td {
     color: rgba(255, 255, 255, 0.8);
   }
 }
+
+.mapboxgl-control-container {
+  display: none !important;
+}
+
+.airport-marker {
+  font-size: 12px;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 2px 5px;
+  border-radius: 4px;
+  display: inline-block;
+  text-align: center;
+}

@@ -9,6 +9,7 @@ import {
   Check,
   Trash,
   Search,
+  MapPin,
 } from "lucide-react";
 import { cn } from "../lib/utils";
 import { Calendar } from "@/components/ui/calendar";
@@ -42,6 +43,15 @@ import { Separator } from "@/components/ui/separator";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAirports } from "@/lib/fetchAirports";
 import { searchFlightsStart } from "@/redux/slices/searchFlightsSlice";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import MapboxExample from "./MapBox";
 
 export default function MultiCitySearch() {
   const [flights, setFlights] = useState([
@@ -352,12 +362,35 @@ export default function MultiCitySearch() {
               <div className="flex flex-col md:grid md:grid-cols-4 md:grow gap-4">
                 {/* Departure City */}
                 <div className="w-full">
-                  <Label
-                    htmlFor="departureCity"
-                    className="block text-sm text-start font-medium mb-2 text-slate-700"
-                  >
-                    Departure City
-                  </Label>
+                  <div className="flex items-center justify-start gap-2 mb-2">
+                    <Label
+                      htmlFor="departureCity"
+                      className="block text-sm text-start font-medium text-slate-700"
+                    >
+                      Departure City
+                    </Label>
+
+                    <Dialog>
+                      <DialogTrigger>
+                        <div className="bg-rose-500 text-white rounded-full p-1 hover:bg-rose-700 transition-all duration-300 flex items-center justify-center">
+                          <MapPin className="h-4 w-4" />
+                        </div>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>Are you absolutely sure?</DialogTitle>
+                          <DialogDescription>
+                            This action cannot be undone. This will permanently
+                            delete your account and remove your data from our
+                            servers.
+                          </DialogDescription>
+                        </DialogHeader>
+
+                        <MapboxExample />
+                      </DialogContent>
+                    </Dialog>
+                  </div>
+
                   <Popover
                     open={openPopovers[`${index}-departureCity`] || false}
                     onOpenChange={(open) =>
@@ -484,12 +517,35 @@ export default function MultiCitySearch() {
 
                 {/* Destination City */}
                 <div className="w-full">
-                  <Label
-                    htmlFor="destinationCity"
-                    className="block text-sm text-start font-medium mb-2 text-slate-700"
-                  >
-                    Destination City
-                  </Label>
+                  <div className="flex items-center justify-start gap-2 mb-2">
+                    <Label
+                      htmlFor="departureCity"
+                      className="block text-sm text-start font-medium text-slate-700"
+                    >
+                      Destination City
+                    </Label>
+
+                    <Dialog>
+                      <DialogTrigger>
+                        <div className="bg-rose-500 text-white rounded-full p-1 hover:bg-rose-700 transition-all duration-300 flex items-center justify-center">
+                          <MapPin className="h-4 w-4" />
+                        </div>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>Are you absolutely sure?</DialogTitle>
+                          <DialogDescription>
+                            This action cannot be undone. This will permanently
+                            delete your account and remove your data from our
+                            servers.
+                          </DialogDescription>
+                        </DialogHeader>
+
+                        <MapboxExample />
+                      </DialogContent>
+                    </Dialog>
+                  </div>
+
                   <Popover
                     open={openPopovers[`${index}-destinationCity`] || false}
                     onOpenChange={(open) =>
