@@ -12,6 +12,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import FlightDetails from "@/components/FlightDetails";
 import SearchFlightsLoading from "@/components/SearchFlightsLoading";
+import TripChecklist from "@/components/TripChecklist";
 
 export default function SelectedBookedFlightDetails() {
   const [flightData, setFlightData] = useState(null);
@@ -115,6 +116,8 @@ export default function SelectedBookedFlightDetails() {
           />
         ))}
       </div>
+
+      <TripChecklist />
     </div>
   );
 }
