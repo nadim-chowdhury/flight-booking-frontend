@@ -40,6 +40,10 @@ import { fetchAmadeusAccessToken } from "@/lib/fetchAmadeusAccessToken";
 import { fetchAirports } from "@/lib/fetchAirports";
 import { searchFlightsStart } from "@/redux/slices/searchFlightsSlice";
 import {
+  setDepartureAirport,
+  setDestinationAirport,
+} from "@/redux/slices/selectAirportSlice";
+import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -48,6 +52,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import MapboxExample from "./MapBox";
+import FlightMap from "./FlightMap";
+import MapModal from "./MapModal";
 
 export default function OneWaySearch() {
   const [departureCity, setDepartureCity] = useState("");
@@ -72,6 +78,8 @@ export default function OneWaySearch() {
   const [debouncedSearchDeparture, setDebouncedSearchDeparture] = useState("");
   const [debouncedSearchDestination, setDebouncedSearchDestination] =
     useState("");
+  const [depMapModalOpen, setDepMapModalOpen] = useState(false);
+  const [desMapModalOpen, setDesMapModalOpen] = useState(false);
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -82,6 +90,21 @@ export default function OneWaySearch() {
     loading,
     error,
   } = useSelector((state) => state.airports);
+  const selectedAirportData = useSelector((state) => state.selectAirport);
+  console.log("OneWaySearch ~ selectedAirportData:", selectedAirportData);
+
+  useEffect(() => {
+    if (selectedAirportData.departureAirport) {
+      setDepartureCity(selectedAirportData.departureAirport.iata_code);
+      setDepartureCityFullName(selectedAirportData.departureAirport.city);
+      setDepMapModalOpen(false);
+    }
+    if (selectedAirportData.destinationAirport) {
+      setDestinationCity(selectedAirportData.destinationAirport.iata_code);
+      setDestinationCityFullName(selectedAirportData.destinationAirport.city);
+      setDesMapModalOpen(false);
+    }
+  }, [selectedAirportData]);
 
   useEffect(() => {
     const departureCityParam =
@@ -184,6 +207,14 @@ export default function OneWaySearch() {
     };
   }, [searchDestinationAirport]);
 
+  const handleSelectDepAirport = (airport) => {
+    dispatch(setDepartureAirport(airport));
+  };
+
+  const handleSelectDesAirport = (airport) => {
+    dispatch(setDestinationAirport(airport));
+  };
+
   const handleOneWaySearch = (e) => {
     e.preventDefault();
 
@@ -224,24 +255,20 @@ export default function OneWaySearch() {
                 Departure City
               </Label>
 
-              <Dialog>
-                <DialogTrigger>
-                  <div className="bg-rose-500 text-white rounded-full p-1 hover:bg-rose-700 transition-all duration-300 flex items-center justify-center">
-                    <MapPin className="h-4 w-4" />
-                  </div>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Are you absolutely sure?</DialogTitle>
-                    <DialogDescription>
-                      This action cannot be undone. This will permanently delete
-                      your account and remove your data from our servers.
-                    </DialogDescription>
-                  </DialogHeader>
+              <div
+                onClick={() => setDepMapModalOpen(true)}
+                className="bg-rose-500 text-white rounded-full p-1 hover:bg-rose-700 transition-all duration-300 flex items-center justify-center cursor-pointer"
+              >
+                <MapPin className="h-4 w-4" />
+              </div>
 
-                  <MapboxExample />
-                </DialogContent>
-              </Dialog>
+              <MapModal
+                isOpen={depMapModalOpen}
+                onClose={() => setDepMapModalOpen(false)}
+                title="Select Depurture Airport"
+              >
+                <FlightMap setSelectedAirport={handleSelectDepAirport} />
+              </MapModal>
             </div>
 
             <Popover open={openDeparture} onOpenChange={setOpenDeparture}>
@@ -351,24 +378,20 @@ export default function OneWaySearch() {
                 Destination City
               </Label>
 
-              <Dialog>
-                <DialogTrigger>
-                  <div className="bg-rose-500 text-white rounded-full p-1 hover:bg-rose-700 transition-all duration-300 flex items-center justify-center">
-                    <MapPin className="h-4 w-4" />
-                  </div>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Are you absolutely sure?</DialogTitle>
-                    <DialogDescription>
-                      This action cannot be undone. This will permanently delete
-                      your account and remove your data from our servers.
-                    </DialogDescription>
-                  </DialogHeader>
+              <div
+                onClick={() => setDesMapModalOpen(true)}
+                className="bg-rose-500 text-white rounded-full p-1 hover:bg-rose-700 transition-all duration-300 flex items-center justify-center cursor-pointer"
+              >
+                <MapPin className="h-4 w-4" />
+              </div>
 
-                  <MapboxExample />
-                </DialogContent>
-              </Dialog>
+              <MapModal
+                isOpen={desMapModalOpen}
+                onClose={() => setDesMapModalOpen(false)}
+                title="Select Destination Airport"
+              >
+                <FlightMap setSelectedAirport={handleSelectDesAirport} />
+              </MapModal>
             </div>
 
             <Popover open={openDestination} onOpenChange={setOpenDestination}>
@@ -551,6 +574,7 @@ export default function OneWaySearch() {
                     <Button
                       variant="outline"
                       onClick={() => setAdults(Math.max(1, adults - 1))}
+                      className="rounded-full"
                     >
                       <Minus className="w-4 h-4" />
                     </Button>
@@ -565,6 +589,7 @@ export default function OneWaySearch() {
                     <Button
                       variant="outline"
                       onClick={() => setAdults(adults + 1)}
+                      className="rounded-full"
                     >
                       <Plus className="w-4 h-4" />
                     </Button>
@@ -583,6 +608,7 @@ export default function OneWaySearch() {
                     <Button
                       variant="outline"
                       onClick={() => setChildren(Math.max(0, children - 1))}
+                      className="rounded-full"
                     >
                       <Minus className="w-4 h-4" />
                     </Button>
@@ -596,6 +622,7 @@ export default function OneWaySearch() {
                     <Button
                       variant="outline"
                       onClick={() => setChildren(children + 1)}
+                      className="rounded-full"
                     >
                       <Plus className="w-4 h-4" />
                     </Button>
@@ -614,6 +641,7 @@ export default function OneWaySearch() {
                     <Button
                       variant="outline"
                       onClick={() => setInfants(Math.max(0, infants - 1))}
+                      className="rounded-full"
                     >
                       <Minus className="w-4 h-4" />
                     </Button>
@@ -627,6 +655,7 @@ export default function OneWaySearch() {
                     <Button
                       variant="outline"
                       onClick={() => setInfants(infants + 1)}
+                      className="rounded-full"
                     >
                       <Plus className="w-4 h-4" />
                     </Button>
@@ -669,7 +698,7 @@ export default function OneWaySearch() {
             type="submit"
             className="bg-sky-600 hover:bg-sky-700 text-white rounded-md md:hidden"
           >
-            Search flights
+            Search Flights
           </Button>
         </div>
 
@@ -679,7 +708,7 @@ export default function OneWaySearch() {
             type="submit"
             className="bg-sky-600 hover:bg-sky-700 text-white rounded-md mt-6"
           >
-            Search flights
+            Search Flights
           </Button>
         </div>
       </form>

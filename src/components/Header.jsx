@@ -136,7 +136,7 @@ export default function Header() {
           <div className="hidden md:flex gap-2">
             {isAuthenticated ? (
               <Button
-                className="bg-sky-600 hover:bg-sky-700 text-white"
+                className="bg-sky-600 hover:bg-sky-700 text-white rounded-full"
                 onClick={handleLogout}
                 size="sm"
               >
@@ -199,7 +199,7 @@ export default function Header() {
               {isAuthenticated && (
                 <li>
                   <Button
-                    className="bg-sky-600 hover:bg-sky-700 text-white"
+                    className="bg-sky-600 hover:bg-sky-700 text-white rounded-full"
                     onClick={handleLogout}
                   >
                     <Power className="w-5 h-5" />

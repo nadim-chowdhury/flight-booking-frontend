@@ -74,6 +74,7 @@ export default function MultiCitySearch() {
   const [loadingInitialAirports, setLoadingInitialAirports] = useState({});
   const [departureAirportsData, setDepartureAirportsData] = useState([]);
   const [destinationAirportsData, setDestinationAirportsData] = useState([]);
+  const [mapModalOpen, setMapModalOpen] = useState({});
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -369,26 +370,6 @@ export default function MultiCitySearch() {
                     >
                       Departure City
                     </Label>
-
-                    <Dialog>
-                      <DialogTrigger>
-                        <div className="bg-rose-500 text-white rounded-full p-1 hover:bg-rose-700 transition-all duration-300 flex items-center justify-center">
-                          <MapPin className="h-4 w-4" />
-                        </div>
-                      </DialogTrigger>
-                      <DialogContent>
-                        <DialogHeader>
-                          <DialogTitle>Are you absolutely sure?</DialogTitle>
-                          <DialogDescription>
-                            This action cannot be undone. This will permanently
-                            delete your account and remove your data from our
-                            servers.
-                          </DialogDescription>
-                        </DialogHeader>
-
-                        <MapboxExample />
-                      </DialogContent>
-                    </Dialog>
                   </div>
 
                   <Popover
@@ -524,26 +505,6 @@ export default function MultiCitySearch() {
                     >
                       Destination City
                     </Label>
-
-                    <Dialog>
-                      <DialogTrigger>
-                        <div className="bg-rose-500 text-white rounded-full p-1 hover:bg-rose-700 transition-all duration-300 flex items-center justify-center">
-                          <MapPin className="h-4 w-4" />
-                        </div>
-                      </DialogTrigger>
-                      <DialogContent>
-                        <DialogHeader>
-                          <DialogTitle>Are you absolutely sure?</DialogTitle>
-                          <DialogDescription>
-                            This action cannot be undone. This will permanently
-                            delete your account and remove your data from our
-                            servers.
-                          </DialogDescription>
-                        </DialogHeader>
-
-                        <MapboxExample />
-                      </DialogContent>
-                    </Dialog>
                   </div>
 
                   <Popover
@@ -773,6 +734,7 @@ export default function MultiCitySearch() {
                             <Button
                               variant="outline"
                               onClick={() => setAdults(Math.max(1, adults - 1))}
+                              className="rounded-full"
                             >
                               <Minus className="w-4 h-4" />
                             </Button>
@@ -787,6 +749,7 @@ export default function MultiCitySearch() {
                             <Button
                               variant="outline"
                               onClick={() => setAdults(adults + 1)}
+                              className="rounded-full"
                             >
                               <Plus className="w-4 h-4" />
                             </Button>
@@ -807,6 +770,7 @@ export default function MultiCitySearch() {
                               onClick={() =>
                                 setChildren(Math.max(0, children - 1))
                               }
+                              className="rounded-full"
                             >
                               <Minus className="w-4 h-4" />
                             </Button>
@@ -820,6 +784,7 @@ export default function MultiCitySearch() {
                             <Button
                               variant="outline"
                               onClick={() => setChildren(children + 1)}
+                              className="rounded-full"
                             >
                               <Plus className="w-4 h-4" />
                             </Button>
@@ -840,6 +805,7 @@ export default function MultiCitySearch() {
                               onClick={() =>
                                 setInfants(Math.max(0, infants - 1))
                               }
+                              className="rounded-full"
                             >
                               <Minus className="w-4 h-4" />
                             </Button>
@@ -853,6 +819,7 @@ export default function MultiCitySearch() {
                             <Button
                               variant="outline"
                               onClick={() => setInfants(infants + 1)}
+                              className="rounded-full"
                             >
                               <Plus className="w-4 h-4" />
                             </Button>
@@ -906,7 +873,7 @@ export default function MultiCitySearch() {
                 <Button
                   type="button"
                   onClick={() => removeFlightSegment(index)}
-                  className="bg-rose-600/90 hover:bg-rose-600 text-white"
+                  className="bg-rose-600/90 hover:bg-rose-600 text-white rounded-full"
                 >
                   <Trash className="w-4 h-4" />
                 </Button>
@@ -917,7 +884,7 @@ export default function MultiCitySearch() {
                 <Button
                   type="button"
                   onClick={addFlightSegment}
-                  className="bg-slate-800 hover:bg-slate-700 text-white rounded-md hidden md:block"
+                  className="bg-slate-800 hover:bg-slate-700 text-white hidden md:block rounded-full"
                 >
                   <Plus className="w-4 h-4" />
                 </Button>
@@ -928,7 +895,7 @@ export default function MultiCitySearch() {
                 <Button
                   type="button"
                   onClick={addFlightSegment}
-                  className="bg-slate-800 hover:bg-slate-700 text-white rounded-md md:hidden"
+                  className="bg-slate-800 hover:bg-slate-700 text-white rounded-full md:hidden"
                 >
                   <Plus className="w-4 h-4" />
                 </Button>
@@ -940,7 +907,7 @@ export default function MultiCitySearch() {
                   type="submit"
                   className="bg-sky-600 hover:bg-sky-700 text-white rounded-md md:hidden"
                 >
-                  Search flights
+                  Search Flights
                 </Button>
               )}
             </div>
@@ -953,7 +920,7 @@ export default function MultiCitySearch() {
             type="submit"
             className="bg-sky-600 hover:bg-sky-700 text-white rounded-md"
           >
-            Search flights
+            Search Flights
           </Button>
         </div>
       </form>
