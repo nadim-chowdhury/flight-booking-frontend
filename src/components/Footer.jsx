@@ -40,7 +40,7 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-slate-900 text-slate-300 pt-16 pb-4">
+    <footer className="bg-slate-900 text-slate-300 pt-16 pb-4 rounded-xl mt-4 md:mt-6 mx-4 mb-4 md:mx-6 md:mb-6">
       <div className="max-w-6xl px-4 mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 text-left">
           {/* About Section */}

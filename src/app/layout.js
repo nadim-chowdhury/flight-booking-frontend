@@ -24,7 +24,9 @@ export default function RootLayout({ children }) {
         <StoreProviderWrapper>
           <CookieProvider>
             <Header />
-            <Suspense>{children}</Suspense>
+            <main className="px-4 pb-4 md:px-6 md:pb-6">
+              <Suspense>{children}</Suspense>
+            </main>
             <Footer />
             {/* <div className="bg-slate-900 text-white py-4 text-center">
               <p>
