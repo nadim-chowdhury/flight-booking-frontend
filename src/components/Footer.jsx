@@ -76,7 +76,9 @@ export default function Footer() {
               {footerData.quickLinks.map((link, index) => (
                 <li key={index}>
                   <Link href={link.href}>
-                    <span className="hover:text-white">{link.name}</span>
+                    <span className="hover:text-white hover:underline">
+                      {link.name}
+                    </span>
                   </Link>
                 </li>
               ))}
@@ -90,7 +92,9 @@ export default function Footer() {
               {footerData.supportLinks.map((link, index) => (
                 <li key={index}>
                   <Link href={link.href}>
-                    <span className="hover:text-white">{link.name}</span>
+                    <span className="hover:text-white hover:underline">
+                      {link.name}
+                    </span>
                   </Link>
                 </li>
               ))}

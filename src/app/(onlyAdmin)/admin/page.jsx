@@ -26,7 +26,7 @@ export default function AdminPage() {
         {adminSections.map((section) => (
           <li key={section.href}>
             <Link href={section.href}>
-              <div className="text-sky-600 font-medium hover:underline bg-gradient-to-br from-sky-50 to-white border p-6 rounded-md">
+              <div className="text-sky-600 font-medium hover:underline bg-gradient-to-br from-rose-50 to-sky-50 border p-6 rounded-md">
                 {section.label}
               </div>
             </Link>
