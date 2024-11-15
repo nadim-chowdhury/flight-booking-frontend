@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setLocalStorageAirports } from "@/redux/slices/localStorageAirportsSlice";
+import { landmarksGeoJSON } from "@/utils/all-landmark-location";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
@@ -51,7 +52,7 @@ const FlightMap = ({ routes, setSelectedAirport }) => {
     const map = new mapboxgl.Map({
       container: mapContainerRef.current,
       style: "mapbox://styles/mapbox/streets-v11",
-      center: [-74.006, 40.7128],
+      center: [-98.35, 39.5],
       zoom: 2,
     });
 
@@ -106,15 +107,26 @@ const FlightMap = ({ routes, setSelectedAirport }) => {
 
       map.addLayer({
         id: "unclustered-point",
-        type: "circle",
+        type: "symbol", // Use symbol for icons
         source: "airports",
         filter: ["!", ["has", "point_count"]],
-        paint: {
-          "circle-color": "#11b4da",
-          "circle-radius": 6,
-          "circle-stroke-width": 1,
-          "circle-stroke-color": "#fff",
+        layout: {
+          "icon-image": "airport-15", // Use the airport icon
+          "icon-size": 1.2, // Adjust the icon size
+          "text-field": ["get", "name"], // Optional: Display airport names
+          "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
+          "text-offset": [0, 1.5],
+          "text-anchor": "top",
+          "text-size": 12,
         },
+        // paint: {
+        //   "text-color": "#333",
+        //   "text-halo-color": "#ffffff",
+        //   "text-halo-width": 1,
+        //   "text-halo-blur": 1,
+        // },
+        minzoom: 0, // Ensure it is visible from the minimum zoom level
+        maxzoom: 22, // Ensure it remains visible at all zoom levels
       });
 
       map.addLayer({
@@ -138,7 +150,29 @@ const FlightMap = ({ routes, setSelectedAirport }) => {
         minzoom: 8, // Adjust this zoom level as desired
       });
 
-      // Click event for unclustered airports to show airport name
+      map.addSource("landmarks", {
+        type: "geojson",
+        data: landmarksGeoJSON,
+        cluster: true,
+        clusterMaxZoom: 8,
+        clusterRadius: 75,
+      });
+
+      map.addLayer({
+        id: "landmarks",
+        type: "symbol",
+        source: "landmarks",
+        layout: {
+          "icon-image": ["get", "icon"], // Dynamically fetch the icon name
+          "icon-size": 1.5,
+          "text-field": ["get", "name"],
+          "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
+          "text-offset": [0, 1.2],
+          "text-anchor": "top",
+          "text-size": 12,
+        },
+      });
+
       map.on("click", "unclustered-point", (e) => {
         const coordinates = e.features[0].geometry.coordinates.slice();
         const { id, name, city, country } = e.features[0].properties;
@@ -176,6 +210,37 @@ const FlightMap = ({ routes, setSelectedAirport }) => {
               zoom: zoom,
             });
           });
+      });
+
+      map.on("click", "landmarks", (e) => {
+        const coordinates = e.features[0].geometry.coordinates.slice();
+        const { name, description, wikipedia } = e.features[0].properties;
+
+        new mapboxgl.Popup({
+          offset: 15,
+          closeButton: true,
+          className: "landmark-popup",
+        })
+          .setLngLat(coordinates)
+          .setHTML(
+            `
+      <div style="text-align:center;">
+        <strong style="font-size: 14px; color:#262626">${name}</strong><br>
+        <span style="font-size: 12px; color: #666;">${description}</span><br>
+        <a href="${wikipedia}" target="_blank" style="font-size: 12px; color: #007bff; text-decoration: underline;">Read more on Wikipedia</a>
+      </div>
+      `
+          )
+          .addTo(map);
+      });
+
+      // Add hover event for landmarks
+      map.on("mouseenter", "landmarks", () => {
+        map.getCanvas().style.cursor = "pointer";
+      });
+
+      map.on("mouseleave", "landmarks", () => {
+        map.getCanvas().style.cursor = "";
       });
 
       if (routes && routes.length > 0) {
