@@ -21,6 +21,7 @@ import {
   searchFlightsSuccess,
 } from "@/redux/slices/searchFlightsSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { demoFlightsSearchResults } from "@/utils/flights-demo-data";
 
 export default function AllFlights() {
   const [searchPayload, setSearchPayload] = useState(null);
