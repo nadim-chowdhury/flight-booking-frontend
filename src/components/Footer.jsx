@@ -134,6 +134,9 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} {footerData.about.title}. All
             rights reserved.
           </p>
+          <Link href={"https://nadim.vercel.app"}>
+            <p className="text-sm">Developed by Nadim Chowdhury</p>
+          </Link>
         </div>
       </div>
     </footer>
