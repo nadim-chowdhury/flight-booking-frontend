@@ -100,7 +100,7 @@ export default function FlightDetails({
             >
               <div className="air-logo">
                 <Image
-                  src={`https://fe-pub.s3.ap-southeast-1.amazonaws.com/airlineimages/128/${segment?.carrierCode}.png`}
+                  src={`https://storage.googleapis.com/gz-flight-prod-booking-data/carrier/airline-logos/${segment?.carrierCode}.png`}
                   alt="air-logo"
                   className="rounded bg-white"
                   width={48}

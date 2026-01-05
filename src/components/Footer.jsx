@@ -135,7 +135,12 @@ export default function Footer() {
             rights reserved.
           </p>
           <Link href={"https://nadim.vercel.app"}>
-            <p className="text-sm">Developed by Nadim Chowdhury</p>
+            <p className="text-sm">
+              Developed by{" "}
+              <span className="text-blue-300 hover:underline">
+                Nadim Chowdhury.
+              </span>
+            </p>
           </Link>
         </div>
       </div>
