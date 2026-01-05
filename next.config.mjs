@@ -5,6 +5,7 @@ const nextConfig = {
       "images.unsplash.com",
       "fe-pub.s3.ap-southeast-1.amazonaws.com",
       "i.pravatar.cc",
+      "storage.googleapis.com",
     ],
   },
 };
