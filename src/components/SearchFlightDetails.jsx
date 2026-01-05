@@ -34,7 +34,7 @@ export default function SearchFlightDetails({
           (airline) => airline.iata === flight.carrierCode
         ) || { name: "Unknown Airline", id: "Unknown" };
 
-        const marketingCarrierLogo = `https://fe-pub.s3.ap-southeast-1.amazonaws.com/airlineimages/128/${flight.carrierCode}.png`;
+        const marketingCarrierLogo = `https://storage.googleapis.com/gz-flight-prod-booking-data/carrier/airline-logos/${flight.carrierCode}.png`;
 
         return (
           <div key={index}>

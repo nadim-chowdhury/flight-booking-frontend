@@ -311,7 +311,7 @@ export default function SelectedFlightDetails() {
                     <div className="flex flex-col sm:flex-row justify-between items-center border-b pb-4">
                       <div className="flex items-center">
                         <Image
-                          src={`https://fe-pub.s3.ap-southeast-1.amazonaws.com/airlineimages/128/${
+                          src={`https://storage.googleapis.com/gz-flight-prod-booking-data/carrier/airline-logos/${
                             segment?.carrierCode || "BG"
                           }.png`}
                           alt={segment?.carrierCode || "Airline"}
